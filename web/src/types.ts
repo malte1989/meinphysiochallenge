@@ -25,3 +25,7 @@ export interface Fall {
 export interface AusfallInfo { id: string; therapeutName: string; von: string; bis: string }
 export interface FaelleAntwort { ausfall: AusfallInfo; jetzt: string; exportStand: '0800' | '0805' | null; faelle: Fall[] }
 export interface OutboxEintrag { id: number; appointmentId: string; kanal: 'sms' | 'email'; empfaenger: string; betreff: string | null; text: string; createdAt: string }
+export interface Diagnosegruppe {
+  code: string; kurz: string; bezeichnung: string; ziffer_hinweis: string | null; quellen: string[];
+  verifikation: { gruppe: string; ziffer: string }; hinweis: string;
+}

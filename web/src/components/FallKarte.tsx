@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { api, ApiError } from '../api';
 import { LEISTUNG, PRAXIS, STUFE_LABEL, tag, tagZeit, zeit } from '../format';
-import type { Fall, Slot } from '../types';
+import type { Diagnosegruppe, Fall, Slot } from '../types';
 import { MatchVergleich } from './MatchVergleich';
 import { SlotPicker } from './SlotPicker';
 
@@ -17,7 +17,7 @@ const STATUS: Record<Exclude<Fall['status'], 'offen'>, string> = {
   umgebucht: '✓ umgebucht', abgesagt: '✓ abgesagt', selbst_gebucht: '✓ selbst gebucht, kein Anruf nötig',
 };
 
-export function FallKarte({ fall, jetzt, onChanged, onHinweis }: { fall: Fall; jetzt: string; onChanged: () => void; onHinweis: (t: string) => void }) {
+export function FallKarte({ fall, jetzt, diagnosen, onChanged, onHinweis }: { fall: Fall; jetzt: string; diagnosen?: Record<string, Diagnosegruppe>; onChanged: () => void; onHinweis: (t: string) => void }) {
   const [picker, setPicker] = useState(false);
   const a = fall.appointment;
   const tel = fall.patient?.telefon ?? a.patient.phone;
@@ -52,6 +52,11 @@ export function FallKarte({ fall, jetzt, onChanged, onHinweis }: { fall: Fall; j
         {mail && <span>✉ {mail}</span>}
       </div>
       <div className="chips">
+        {fall.verordnung && (() => {
+          const d = diagnosen?.[fall.verordnung.diagnosegruppe];
+          const titel = d ? `${d.bezeichnung}. ${d.ziffer_hinweis ?? 'Bedeutung der Ziffer nicht belegt.'} ${d.hinweis} Quellen: ${d.quellen.join(' ')}` : undefined;
+          return <span className="chip diagnose" title={titel}>{fall.verordnung.diagnosegruppe}{d ? ` · ${d.kurz}` : ''}</span>;
+        })()}
         {fall.gruende.map((g) => <span key={g} className="chip">{g}</span>)}
         {fall.warnungen.map((w) => <span key={w.code} className={`chip warnung ${w.code}`} title={w.text}>⚠ {w.text}</span>)}
       </div>

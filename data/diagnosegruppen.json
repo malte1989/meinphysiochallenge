@@ -1,0 +1,82 @@
+[
+  {
+    "code": "EX2",
+    "kurz": "Extremitäten",
+    "bezeichnung": "Erkrankungen der Extremitäten und des Beckens",
+    "ziffer_hinweis": "Ziffer 2: laut Suchergebnis prognostisch mittelfristiger Behandlungsbedarf",
+    "quellen": [
+      "https://tinana.de/blog/diagnosegruppen-heilmittelkatalog",
+      "https://heilmittelkatalog.de/aenderungen/heilmittelrichtlinie-01-01-2021/",
+      "https://www.g-ba.de/downloads/17-98-1085/RL-Heilmittel-Katalog-04-12-21.pdf"
+    ],
+    "verifikation": {
+      "gruppe": "gruppe_sekundaer_belegt",
+      "ziffer": "nicht_primaer_geprueft"
+    },
+    "hinweis": "Gruppenbezeichnung aus Zweitquelle (tinana.de) belegt. Die Ziffernbedeutung stammt aus einer Suchergebnis-Zusammenfassung und wurde nicht gegen den G-BA-Heilmittelkatalog geprüft (die PDF ließ sich maschinell nicht auslesen). Vor fachlicher Nutzung im Katalog nachschlagen."
+  },
+  {
+    "code": "EX3",
+    "kurz": "Extremitäten",
+    "bezeichnung": "Erkrankungen der Extremitäten und des Beckens",
+    "ziffer_hinweis": "Ziffer 3: laut Suchergebnis prognostisch längerfristiger Behandlungsbedarf",
+    "quellen": [
+      "https://tinana.de/blog/diagnosegruppen-heilmittelkatalog",
+      "https://heilmittelkatalog.de/aenderungen/heilmittelrichtlinie-01-01-2021/",
+      "https://www.g-ba.de/downloads/17-98-1085/RL-Heilmittel-Katalog-04-12-21.pdf"
+    ],
+    "verifikation": {
+      "gruppe": "gruppe_sekundaer_belegt",
+      "ziffer": "nicht_primaer_geprueft"
+    },
+    "hinweis": "Gruppenbezeichnung aus Zweitquelle (tinana.de) belegt. Die Ziffernbedeutung stammt aus einer Suchergebnis-Zusammenfassung und wurde nicht gegen den G-BA-Heilmittelkatalog geprüft (die PDF ließ sich maschinell nicht auslesen). Vor fachlicher Nutzung im Katalog nachschlagen."
+  },
+  {
+    "code": "LY2",
+    "kurz": "Lymphe",
+    "bezeichnung": "Lymphabflussstörungen",
+    "ziffer_hinweis": null,
+    "quellen": [
+      "https://tinana.de/blog/diagnosegruppen-heilmittelkatalog",
+      "https://heilmittelkatalog.de/aenderungen/heilmittelrichtlinie-01-01-2021/",
+      "https://www.g-ba.de/downloads/17-98-1085/RL-Heilmittel-Katalog-04-12-21.pdf"
+    ],
+    "verifikation": {
+      "gruppe": "gruppe_sekundaer_belegt",
+      "ziffer": "nicht_belegt"
+    },
+    "hinweis": "Gruppenbezeichnung aus Zweitquelle (tinana.de) belegt. Die Ziffernbedeutung stammt aus einer Suchergebnis-Zusammenfassung und wurde nicht gegen den G-BA-Heilmittelkatalog geprüft (die PDF ließ sich maschinell nicht auslesen). Vor fachlicher Nutzung im Katalog nachschlagen."
+  },
+  {
+    "code": "WS1",
+    "kurz": "Wirbelsäule",
+    "bezeichnung": "Erkrankungen der Wirbelsäule",
+    "ziffer_hinweis": "Ziffer 1: laut Suchergebnis prognostisch kurzzeitiger Behandlungsbedarf",
+    "quellen": [
+      "https://tinana.de/blog/diagnosegruppen-heilmittelkatalog",
+      "https://heilmittelkatalog.de/aenderungen/heilmittelrichtlinie-01-01-2021/",
+      "https://www.g-ba.de/downloads/17-98-1085/RL-Heilmittel-Katalog-04-12-21.pdf"
+    ],
+    "verifikation": {
+      "gruppe": "gruppe_sekundaer_belegt",
+      "ziffer": "nicht_primaer_geprueft"
+    },
+    "hinweis": "Gruppenbezeichnung aus Zweitquelle (tinana.de) belegt. Die Ziffernbedeutung stammt aus einer Suchergebnis-Zusammenfassung und wurde nicht gegen den G-BA-Heilmittelkatalog geprüft (die PDF ließ sich maschinell nicht auslesen). Vor fachlicher Nutzung im Katalog nachschlagen."
+  },
+  {
+    "code": "WS2",
+    "kurz": "Wirbelsäule",
+    "bezeichnung": "Erkrankungen der Wirbelsäule",
+    "ziffer_hinweis": "Ziffer 2: laut Suchergebnis längerfristiger Behandlungsbedarf",
+    "quellen": [
+      "https://tinana.de/blog/diagnosegruppen-heilmittelkatalog",
+      "https://heilmittelkatalog.de/aenderungen/heilmittelrichtlinie-01-01-2021/",
+      "https://www.g-ba.de/downloads/17-98-1085/RL-Heilmittel-Katalog-04-12-21.pdf"
+    ],
+    "verifikation": {
+      "gruppe": "gruppe_sekundaer_belegt",
+      "ziffer": "nicht_primaer_geprueft"
+    },
+    "hinweis": "Gruppenbezeichnung aus Zweitquelle (tinana.de) belegt. Die Ziffernbedeutung stammt aus einer Suchergebnis-Zusammenfassung und wurde nicht gegen den G-BA-Heilmittelkatalog geprüft (die PDF ließ sich maschinell nicht auslesen). Vor fachlicher Nutzung im Katalog nachschlagen."
+  }
+]

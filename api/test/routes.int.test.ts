@@ -124,4 +124,10 @@ describe('API', () => {
     expect((await post('/api/sim/selbstbuchung', { appointmentId: f.appointment.id })).statusCode).toBe(200);
     expect((await fallVon('Gisela Neumann')).status).toBe('selbst_gebucht');
   });
+
+  test('Diagnosegruppen: die API liefert Bezeichnung und Quelle je Kürzel', async () => {
+    const g = await get('/api/diagnosegruppen');
+    expect(g.WS2).toMatchObject({ kurz: 'Wirbelsäule' });
+    expect(g.EX3.quellen.length).toBeGreaterThan(0);
+  });
 });

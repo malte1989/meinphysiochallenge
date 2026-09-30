@@ -17,6 +17,7 @@ export function App() {
   const liste = useQuery({ queryKey: ['ausfall'], queryFn: api.ausfallListe });
   const ausfallId = liste.data?.[0]?.id;
   const faelle = useQuery({ queryKey: ['faelle', ausfallId], queryFn: () => api.faelle(ausfallId!), enabled: !!ausfallId, refetchInterval: REFRESH_MS });
+  const diagnosen = useQuery({ queryKey: ['diagnosegruppen'], queryFn: api.diagnosegruppen, staleTime: Infinity });
   const outbox = useQuery({ queryKey: ['outbox'], queryFn: api.outbox });
 
   const aktualisieren = () => Promise.all([qc.invalidateQueries({ queryKey: ['faelle'] }), qc.invalidateQueries({ queryKey: ['outbox'] }), qc.invalidateQueries({ queryKey: ['slots'] })]);
@@ -44,7 +45,7 @@ export function App() {
       />
       {hinweis && <div className="hinweis" role="alert">{hinweis} <button className="link" onClick={() => setHinweis(null)}>ok</button></div>}
       <main className="liste">
-        {sortiert.map((f) => <FallKarte key={f.appointment.id} fall={f} jetzt={daten.jetzt} onChanged={aktualisieren} onHinweis={setHinweis} />)}
+        {sortiert.map((f) => <FallKarte key={f.appointment.id} fall={f} jetzt={daten.jetzt} diagnosen={diagnosen.data} onChanged={aktualisieren} onHinweis={setHinweis} />)}
       </main>
       {outboxOffen && <OutboxDrawer onClose={() => setOutboxOffen(false)} />}
     </>

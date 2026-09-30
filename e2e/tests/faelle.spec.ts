@@ -147,3 +147,10 @@ test('Selbstbuchung: bucht Cem selbst, ist kein Anruf mehr nötig', async ({ pag
   await expect(k.locator('.status')).toHaveText('✓ selbst gebucht, kein Anruf nötig');
   await expect(page.getByText('13 offen')).toBeVisible();
 });
+
+test('Diagnosegruppe im Klartext: Sabine Czerny (EX2) zeigt „Extremitäten“ mit Quelle im Tooltip', async ({ page }) => {
+  const chip = karte(page, 'Sabine Czerny').locator('.chip.diagnose');
+  await expect(chip).toContainText('EX2');
+  await expect(chip).toContainText('Extremitäten');
+  await expect(chip).toHaveAttribute('title', /https:\/\//);
+});
