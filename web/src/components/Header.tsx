@@ -18,9 +18,10 @@ interface Props {
   outboxAnzahl: number;
   onReset: () => void;
   onVerlaengern: (bis: string) => void;
+  onNotfallliste: () => void;
 }
 
-export function Header({ daten, sortierung, onSortierung, onRefresh, fetching, aktualisiertUm, intervallMs, onExport, onOutbox, outboxAnzahl, onReset, onVerlaengern }: Props) {
+export function Header({ daten, sortierung, onSortierung, onRefresh, fetching, aktualisiertUm, intervallMs, onExport, onOutbox, outboxAnzahl, onReset, onVerlaengern, onNotfallliste }: Props) {
   const [menue, setMenue] = useState(false);
   const tage = [1, 2, 4].map((n) => {
     const bis = new Date(Date.parse(daten.ausfall.bis) + n * 86_400_000);
@@ -55,6 +56,7 @@ export function Header({ daten, sortierung, onSortierung, onRefresh, fetching, a
             </div>
           )}
         </div>
+        <button onClick={onNotfallliste}>Notfallliste</button>
         <button onClick={onOutbox}>Outbox ({outboxAnzahl})</button>
         <button className="link" onClick={onReset}>Demo zurücksetzen</button>
       </div>

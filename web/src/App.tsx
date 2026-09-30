@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { api } from './api';
 import { FallKarte } from './components/FallKarte';
 import { Header, type Sortierung } from './components/Header';
+import { Notfallliste } from './components/Notfallliste';
 import { OutboxDrawer } from './components/OutboxDrawer';
 import './styles.css';
 
@@ -13,6 +14,12 @@ export function App() {
   const [sortierung, setSortierung] = useState<Sortierung>('autopilot');
   const [outboxOffen, setOutboxOffen] = useState(false);
   const [hinweis, setHinweis] = useState<string | null>(null);
+  const [druck, setDruck] = useState(() => location.hash === '#druck');
+  useEffect(() => {
+    const f = () => setDruck(location.hash === '#druck');
+    window.addEventListener('hashchange', f);
+    return () => window.removeEventListener('hashchange', f);
+  }, []);
 
   const liste = useQuery({ queryKey: ['ausfall'], queryFn: api.ausfallListe });
   const ausfallId = liste.data?.[0]?.id;
@@ -32,6 +39,9 @@ export function App() {
   if (!faelle.data) return <main className="leer">Lade …</main>;
 
   const daten = faelle.data;
+  if (druck) {
+    return <Notfallliste faelle={daten.faelle} ausfallName={daten.ausfall.therapeutName} stand={daten.jetzt} onZurueck={() => { location.hash = ''; }} />;
+  }
   const sortiert = sortierung === 'autopilot'
     ? [...daten.faelle].sort((a, b) => a.anrufRang - b.anrufRang)
     : [...daten.faelle].sort((a, b) => a.appointment.startsAt.localeCompare(b.appointment.startsAt));
@@ -41,7 +51,7 @@ export function App() {
       <Header
         daten={daten} sortierung={sortierung} onSortierung={setSortierung} fetching={faelle.isFetching} aktualisiertUm={faelle.dataUpdatedAt} intervallMs={REFRESH_MS}
         onRefresh={aktualisieren} onExport={(s) => exportWechseln.mutate(s)} onOutbox={() => setOutboxOffen(true)}
-        outboxAnzahl={outbox.data?.length ?? 0} onReset={() => reset.mutate()} onVerlaengern={(bis) => verlaengern.mutate(bis)}
+        outboxAnzahl={outbox.data?.length ?? 0} onReset={() => reset.mutate()} onVerlaengern={(bis) => verlaengern.mutate(bis)} onNotfallliste={() => { location.hash = '#druck'; }}
       />
       {hinweis && <div className="hinweis" role="alert">{hinweis} <button className="link" onClick={() => setHinweis(null)}>ok</button></div>}
       <main className="liste">

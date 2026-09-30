@@ -154,3 +154,21 @@ test('Diagnosegruppe im Klartext: Sabine Czerny (EX2) zeigt „Extremitäten“ 
   await expect(chip).toContainText('Extremitäten');
   await expect(chip).toHaveAttribute('title', /https:\/\//);
 });
+
+test('Notfallliste: druckbare Anrufliste in Anrufreihenfolge, wenn Termino oder unser Service ausfällt', async ({ page }) => {
+  await page.getByRole('button', { name: 'Notfallliste' }).click();
+  await expect(page).toHaveURL(/#druck$/);
+  await expect(page.getByRole('heading', { name: /Notfallliste/ })).toBeVisible();
+  const zeilen = page.locator('.notfall tbody tr');
+  await expect(zeilen).toHaveCount(14);
+  await expect(zeilen.nth(0)).toContainText('Sabine Czerny');
+  await expect(zeilen.nth(0)).toContainText('+49 151 55011007');
+  await expect(page.locator('.notfall').getByText('keine Nummer').first()).toBeVisible();
+  await page.getByRole('button', { name: 'Zurück zur Oberfläche' }).click();
+  await expect(page.getByTestId('fall').first()).toBeVisible();
+});
+
+test('Notfallliste ist direkt über #druck erreichbar (z. B. als Lesezeichen)', async ({ page }) => {
+  await page.goto('/#druck');
+  await expect(page.locator('.notfall tbody tr')).toHaveCount(14);
+});
