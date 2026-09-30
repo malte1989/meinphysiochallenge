@@ -1,0 +1,56 @@
+:root {
+  --bg: #f5f6f8; --karte: #fff; --text: #1d2330; --gedaempft: #6b7280; --rand: #dfe3ea; --primaer: #0f766e;
+  --frist: #d64545; --hoch: #e8912d; --normal: #3a9d5d; --pruefen: #8a8f98; --warn: #b45309; --warn-bg: #fef3c7;
+}
+@media (prefers-color-scheme: dark) {
+  :root { --bg: #11151c; --karte: #1a2029; --text: #e7eaf0; --gedaempft: #9aa3b2; --rand: #2b3340; --warn-bg: #3a2f12; }
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--text); font: 15px/1.45 system-ui, -apple-system, 'Segoe UI', sans-serif; }
+button { font: inherit; padding: 6px 12px; border: 1px solid var(--rand); border-radius: 6px; background: var(--karte); color: var(--text); cursor: pointer; }
+button:hover:not(:disabled) { border-color: var(--primaer); }
+button:disabled { opacity: .5; cursor: default; }
+button.primary { background: var(--primaer); color: #fff; border-color: var(--primaer); }
+button.aktiv { background: var(--text); color: var(--bg); border-color: var(--text); }
+button.link { border: 0; background: none; color: var(--primaer); padding: 0 4px; text-decoration: underline; }
+.leer { padding: 48px 16px; text-align: center; color: var(--gedaempft); }
+.kopf { position: sticky; top: 0; z-index: 5; background: var(--karte); border-bottom: 1px solid var(--rand); padding: 12px 16px; display: flex; flex-wrap: wrap; gap: 12px 24px; justify-content: space-between; }
+.kopf h1 { margin: 0; font-size: 18px; }
+.unter { margin: 2px 0 0; color: var(--gedaempft); }
+.leiste { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.gruppe { display: flex; gap: 4px; align-items: center; }
+.label { color: var(--gedaempft); font-size: 13px; margin-right: 4px; }
+.hinweis { background: var(--warn-bg); color: var(--warn); padding: 8px 16px; border-bottom: 1px solid var(--rand); }
+.liste { max-width: 880px; margin: 0 auto; padding: 16px; display: grid; gap: 12px; }
+.karte { background: var(--karte); border: 1px solid var(--rand); border-left: 6px solid var(--pruefen); border-radius: 8px; padding: 12px 14px; }
+.karte.stufe-frist { border-left-color: var(--frist); } .karte.stufe-hoch { border-left-color: var(--hoch); }
+.karte.stufe-normal { border-left-color: var(--normal); } .karte.stufe-pruefen { border-left-color: var(--pruefen); }
+.karte.erledigt { opacity: .55; }
+.karte-kopf { display: flex; flex-wrap: wrap; gap: 4px 14px; align-items: baseline; }
+.uhrzeit { font-size: 20px; }
+.bis { margin-left: auto; font-weight: 600; }
+.stufe-badge { color: #fff; border-radius: 4px; padding: 1px 8px; font-size: 12px; font-weight: 700; text-transform: uppercase; background: var(--pruefen); }
+.stufe-badge.stufe-frist { background: var(--frist); } .stufe-badge.stufe-hoch { background: var(--hoch); } .stufe-badge.stufe-normal { background: var(--normal); }
+.person { display: flex; flex-wrap: wrap; gap: 4px 16px; margin: 6px 0; align-items: baseline; }
+.person a { color: var(--primaer); }
+.warn-text { color: var(--warn); font-weight: 600; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
+.chip { font-size: 13px; background: var(--bg); border: 1px solid var(--rand); border-radius: 12px; padding: 1px 10px; }
+.chip.warnung { background: var(--warn-bg); color: var(--warn); border-color: transparent; }
+.chip.stammdaten_fehlen { background: #fde2e2; color: #b91c1c; font-weight: 600; }
+.empfehlung { margin: 4px 0; color: var(--gedaempft); }
+.vorschlag { margin: 4px 0 10px; }
+.badge.ok { color: var(--normal); font-weight: 600; } .badge.warn { color: var(--warn); }
+.aktionen { display: flex; flex-wrap: wrap; gap: 8px; }
+.status { font-weight: 600; color: var(--normal); }
+.match { background: var(--bg); border: 1px solid var(--rand); border-radius: 6px; padding: 8px 10px; margin: 6px 0 10px; }
+.match table { border-collapse: collapse; margin: 6px 0; width: 100%; } .match td, .match th { padding: 2px 10px 2px 0; text-align: left; font-size: 14px; }
+.match .abweichung td { color: var(--warn); font-weight: 600; }
+.slotpicker { margin-top: 10px; border-top: 1px dashed var(--rand); padding-top: 8px; }
+.slotpicker-kopf, .drawer-kopf { display: flex; justify-content: space-between; margin-bottom: 6px; }
+.slot-tag { margin: 6px 0; } .slot-tag-name { font-weight: 600; margin-bottom: 4px; }
+.slot { display: block; width: 100%; text-align: left; margin-bottom: 4px; }
+.drawer { position: fixed; top: 0; right: 0; bottom: 0; width: min(420px, 100vw); background: var(--karte); border-left: 1px solid var(--rand); box-shadow: -8px 0 24px rgba(0,0,0,.15); padding: 14px; overflow: auto; z-index: 10; }
+.nachricht { border: 1px solid var(--rand); border-radius: 6px; padding: 8px 10px; margin-bottom: 8px; font-size: 14px; }
+.nachricht-kopf { color: var(--gedaempft); font-size: 13px; } .nachricht-betreff { font-weight: 600; margin: 2px 0; }
+@media (max-width: 600px) { .bis { margin-left: 0; } .kopf h1 { font-size: 16px; } }
