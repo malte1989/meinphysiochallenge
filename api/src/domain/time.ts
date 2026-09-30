@@ -37,3 +37,7 @@ export function berlinWallToUtc(date: string, hhmm: string): string {
   }
   return new Date(guess).toISOString();
 }
+
+const WOCHENTAGE = ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'];
+export const datumKurz = (date: string): string => `${date.slice(8, 10)}.${date.slice(5, 7)}.`;
+export const wochentagKurz = (iso: string): string => `${WOCHENTAGE[berlinWeekday(berlinDate(iso))]} ${datumKurz(berlinDate(iso))}`;
