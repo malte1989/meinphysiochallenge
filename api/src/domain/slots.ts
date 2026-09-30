@@ -67,7 +67,10 @@ export function freieSlots(fall: Pick<Fall, 'appointment' | 'heilmittel' | 'fris
     }
   }
   const tagVon = (s: Slot) => berlinDate(s.startsAt);
+  const minutenDesTages = (hhmm: string) => Number(hhmm.slice(0, 2)) * 60 + Number(hhmm.slice(3));
+  const abstand = (s: Slot) => Math.abs(minutenDesTages(berlinTime(s.startsAt)) - minutenDesTages(ursprungsUhrzeit));
   return slots.sort((x, y) =>
     x.rang - y.rang || tagVon(x).localeCompare(tagVon(y)) ||
-    Number(x.locationId !== a.locationId) - Number(y.locationId !== a.locationId) || x.startsAt.localeCompare(y.startsAt));
+    Number(x.locationId !== a.locationId) - Number(y.locationId !== a.locationId) ||
+    abstand(x) - abstand(y) || x.startsAt.localeCompare(y.startsAt));
 }
