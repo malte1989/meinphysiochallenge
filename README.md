@@ -112,8 +112,9 @@ Siehe Liste unten. Stand der Tests: 48 Unit-Tests, 12 Integrationstests und 11 P
 2. Button „Simuliere: Patient:in bucht selbst“ und Countdown bis zur nächsten Aktualisierung.
 3. `data/diagnosegruppen.json` mit belegter Quelle und Klartext in den Chips.
 4. Druckbare **Notfallliste** und Ausformulierung des IT-Notfallkonzepts (was tun, wenn unser Service oder Termino ausfällt).
-5. **CI und Security**: GitHub Actions (Typecheck, Tests, `npm audit`, Secret-Scan), Dependabot, Image-Scan, Accessibility-Check mit axe.
-6. Echte Termino-API, Warteliste, Kanalpräferenz und Opt-in der Patient:innen, Kennzahlen (Zeit, bis alle informiert sind, Anteil erfolgreich umgebucht).
+5. **Authentifizierung und Rollen**: Kunde (Magic Link aus der SMS/E-Mail), Mitarbeiter (Empfang, Therapeut:in, Standortleitung, Anmeldung per OIDC mit Zwei-Faktor, Rolle pro Standort) und Admin (Benutzer, Regeln, Audit-Log). Das Token trägt Mandant und Rolle für die Row-Level-Security.
+6. **CI und Security**: GitHub Actions (Typecheck, Tests, `npm audit`, Secret-Scan), Dependabot, Image-Scan, Accessibility-Check mit axe.
+7. Echte Termino-API, Warteliste, Kanalpräferenz und Opt-in der Patient:innen, Kennzahlen (Zeit, bis alle informiert sind, Anteil erfolgreich umgebucht).
 
 ## Wie ich mit dem Agenten gearbeitet habe
 

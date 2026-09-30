@@ -39,6 +39,17 @@ flowchart LR
 5. **DSGVO und Gesundheitsdaten.** Hosting in der EU, Verschlüsselung at rest und in transit, Audit-Log (wer hat wann was entschieden), Rollen und Zugriff nur auf eigene Standorte, Löschkonzept, Datensparsamkeit in Logs und Benachrichtigungen, Auftragsverarbeitung mit jedem Anbieter.
 6. **Betrieb.** Observability pro Mandant (Latenz, Fehler, Zeit bis alle Betroffenen informiert sind), Feature-Flags für schrittweises Ausrollen, Pilot an einem Standort, Notfallliste offline für IT-Ausfälle, Migrationen versioniert und ohne Downtime.
 
+## Authentifizierung und Rollen
+
+| Gruppe | Zugang | Darf |
+|---|---|---|
+| **Kunde** (Patient:in) | Magic Link aus SMS oder E-Mail: einmaliges, befristetes, signiertes Token, kein Konto | den eigenen Termin ansehen und neu buchen |
+| **Mitarbeiter** (Empfang, Therapeut:in, Standortleitung) | Identity Provider (OIDC/OAuth 2.0), Zwei-Faktor, Rolle pro Standort | Fälle des eigenen Standorts sehen und entscheiden, die Standortleitung zusätzlich Eskalationen |
+| **Admin** (Mandant bzw. Partner-Praxis) | wie Mitarbeiter, erhöhte Rolle | Benutzer, Standorte, Regeln und Vorlagen verwalten, Audit-Log lesen |
+| **Plattform-Admin** (meinphysio+) | wie Admin, mandantenübergreifend | Mandanten anlegen und konfigurieren |
+
+Das Token trägt Mandant und Rolle. Die API setzt daraus pro Anfrage `tenant_id` für die Row-Level-Security und schreibt jede Entscheidung mit Benutzerkennung ins Audit-Log.
+
 ## Was sich gegenüber dem Prototyp ändert
 
 | Prototyp | Ziel |
@@ -47,4 +58,4 @@ flowchart LR
 | Schemas `stamm`, `termino`, `ausfall` | Schema pro Verantwortung mit `tenant_id` und Row-Level-Security |
 | Mock-Termino im eigenen Schema | HTTP-Adapter je Anbieter, Inbox und Outbox |
 | Outbox-Tabelle ohne Versand | Benachrichtigungsservice mit Queue |
-| keine Auth | Anmeldung, Mandant und Rolle je Standort |
+| keine Auth | Anmeldung für Kunde, Mitarbeiter und Admin, Mandant und Rolle je Standort |
