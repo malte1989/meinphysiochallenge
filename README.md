@@ -145,9 +145,10 @@ Nicht erledigt oder nicht geprüft:
 1. **Authentifizierung und Rollen**: Kunde (Magic Link aus der SMS/E-Mail), Mitarbeiter (Empfang, Therapeut:in, Standortleitung, Anmeldung per OIDC mit Zwei-Faktor, Rolle pro Standort) und Admin (Benutzer, Regeln, Audit-Log). Das Token trägt Mandant und Rolle für die Row-Level-Security.
 2. **CI zum Laufen bringen** (Repository auf GitHub, erster Lauf), dazu Image-Scan (Trivy), Dockerfile-Lint (hadolint) und Accessibility-Check mit axe in den Playwright-Tests.
 3. **Diagnosegruppen** gegen den G-BA-Heilmittelkatalog prüfen (Ziffernbedeutung, ICD-10) und „Rückgängig“ für Entscheidungen und Buchungen.
-4. **Bruno-Requests** als Collection im Repo (`bruno/`) für alle Endpunkte (Fälle, Slots, Umbuchen, Absagen, Verknüpfen, Outbox, Sim), zum Ausprobieren und Demonstrieren der API.
-5. **Stellschrauben für den Empfang**: Fenster der Anrufreihenfolge, Absage-Schwelle, Fristfenster.
-6. Echte Termino-API statt Mock (Webhooks statt Polling), Warteliste und Nachbelegung von Annas frei gewordenen Slots, Kanalpräferenz und Opt-in der Patient:innen, echter Versand, Audit-Log, Kennzahlen (Zeit, bis alle informiert sind, Anteil erfolgreich umgebucht).
+4. **Design** an das meinphysio+-Buchungstool angleichen (Farben, Schrift, Karten, Seitenleiste), nur Optik.
+5. **Bruno-Requests** als Collection im Repo (`bruno/`) für alle Endpunkte (Fälle, Slots, Umbuchen, Absagen, Verknüpfen, Outbox, Sim), zum Ausprobieren und Demonstrieren der API.
+6. **Stellschrauben für den Empfang**: Fenster der Anrufreihenfolge, Absage-Schwelle, Fristfenster.
+7. Echte Termino-API statt Mock (Webhooks statt Polling), Warteliste und Nachbelegung von Annas frei gewordenen Slots, Kanalpräferenz und Opt-in der Patient:innen, echter Versand, Audit-Log, Kennzahlen (Zeit, bis alle informiert sind, Anteil erfolgreich umgebucht).
 
 ## Wie ich mit dem Agenten gearbeitet habe
 
