@@ -43,8 +43,8 @@ describe('Stufe und Empfehlung', () => {
     expect(fallFuer('Katrin Meier')).toMatchObject({ match: 'unsicher', verordnung: { diagnosegruppe: 'EX3' } });
     expect(fallFuer('Katrin Meier').warnungen.map((w) => w.code)).toContain('identitaet_pruefen');
   });
-  test('Lena Krause: Stammdaten fehlen → Stufe pruefen', () => {
-    expect(bewerte(fallFuer('Lena Krause')).stufe).toBe('pruefen');
+  test('Lena Krause: Stammdaten fehlen → Warnung (Stufe Hoch, weil sie in 40 Minuten beginnt)', () => {
+    expect(bewerte(fallFuer('Lena Krause')).stufe).toBe('hoch');
     expect(fallFuer('Lena Krause').warnungen.map((w) => w.code)).toContain('stammdaten_fehlen');
   });
   test('Gisela Neumann: keine Telefonnummer → nicht anrufbar', () => {
@@ -67,5 +67,28 @@ describe('selbst gebucht', () => {
     expect(reichereAn(cem, inp).status).toBe('abgesagt');
     inp.appointments.push({ ...cem, id: 'apt_selbst', startsAt: '2026-09-08T08:00:00Z', source: 'patient', bookedAt: '2026-09-07T05:50:00Z', updatedAt: '2026-09-07T05:50:00Z' });
     expect(reichereAn(cem, inp).status).toBe('selbst_gebucht');
+  });
+});
+
+describe('Zeit hebt die Stufe an', () => {
+  test('Sabine (sonst Normal) bekommt Hoch, weil ihr Termin in 20 Minuten beginnt, und einen erklärenden Chip', () => {
+    const b = bewerte(fallFuer('Sabine Czerny'));
+    expect(b.stufe).toBe('hoch');
+    expect(b.gruende).toContain('Beginnt in 20 Min');
+  });
+  test('Grenze: bei 60 Minuten bleibt Normal, bei 59 Minuten wird es Hoch', () => {
+    const sabine = fallFuer('Sabine Czerny');
+    expect(bewerte({ ...sabine, minutenBisStart: 60 }).stufe).toBe('normal');
+    expect(bewerte({ ...sabine, minutenBisStart: 59 }).stufe).toBe('hoch');
+  });
+  test('Frist bleibt über Hoch, auch wenn der Termin gleich beginnt', () => {
+    expect(bewerte({ ...fallFuer('Cem Oeztuerk'), minutenBisStart: 30 }).stufe).toBe('frist');
+  });
+  test('Die spätere Doppelbuchung bleibt Prüfen und wird nicht hochgestuft', () => {
+    const [, spaeter] = faelleFuer('Marek Kowalski');
+    expect(bewerte({ ...spaeter, minutenBisStart: 30 })).toMatchObject({ stufe: 'pruefen', empfehlung: 'doppelbuchung_stornieren' });
+  });
+  test('Ohne Nähe zum Termin ändert sich nichts: Sabine eine Stunde später wäre wieder Normal', () => {
+    expect(bewerte({ ...fallFuer('Sabine Czerny'), minutenBisStart: 120 }).gruende.some((g) => g.startsWith('Beginnt in'))).toBe(false);
   });
 });

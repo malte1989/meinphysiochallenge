@@ -32,6 +32,14 @@ describe('runAutopilot', () => {
     expect(ohne.every((f) => f.vorschlag === null)).toBe(true);
   });
 
+  test('Die Zeit hebt die Stufe an: Sabine (in 20 Min) und Lena (in 40 Min) sind Hoch, Frist-Fälle bleiben Frist', () => {
+    const stufe = (n: string) => faelle.find((f) => name(f) === n)!.stufe;
+    expect(stufe('Sabine Czerny')).toBe('hoch');
+    expect(stufe('Lena Krause')).toBe('hoch');
+    expect(stufe('Cem Oeztuerk')).toBe('frist');
+    expect(stufe('Renate Vogel')).toBe('frist');
+  });
+
   test('Anrufreihenfolge: Sabine Czerny (08:00) und Lena Krause (08:20) zuerst', () => {
     expect(faelle.slice(0, 2).map(name)).toEqual(['Sabine Czerny', 'Lena Krause']);
     expect(faelle.map((f) => f.anrufRang)).toEqual(faelle.map((_, i) => i));

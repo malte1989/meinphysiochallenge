@@ -1,11 +1,10 @@
 import { findeFaelle, reichereAn } from './enrich.js';
-import { bewerte } from './priority.js';
+import { bewerte, DRINGEND_MIN } from './priority.js';
 import { freieSlots, slotSchluessel } from './slots.js';
 import { berlinDate, berlinTime } from './time.js';
 import type { AutopilotInput, Fall, Slot, Stufe } from './types.js';
 
 const STUFEN: Stufe[] = ['frist', 'hoch', 'normal', 'pruefen'];
-const ANRUF_FENSTER_MIN = 60;
 
 const nachPrioritaet = (a: Fall, b: Fall) =>
   STUFEN.indexOf(a.stufe) - STUFEN.indexOf(b.stufe) || b.score - a.score || a.appointment.startsAt.localeCompare(b.appointment.startsAt);
@@ -31,8 +30,8 @@ export function runAutopilot(input: AutopilotInput): Fall[] {
   }
 
   const offen = faelle.filter((f) => f.status === 'offen');
-  const dringend = offen.filter((f) => f.minutenBisStart < ANRUF_FENSTER_MIN).sort((a, b) => a.appointment.startsAt.localeCompare(b.appointment.startsAt));
-  const uebrige = offen.filter((f) => f.minutenBisStart >= ANRUF_FENSTER_MIN).sort(nachPrioritaet);
+  const dringend = offen.filter((f) => f.minutenBisStart < DRINGEND_MIN).sort((a, b) => a.appointment.startsAt.localeCompare(b.appointment.startsAt));
+  const uebrige = offen.filter((f) => f.minutenBisStart >= DRINGEND_MIN).sort(nachPrioritaet);
   const erledigt = faelle.filter((f) => f.status !== 'offen').sort((a, b) => a.appointment.startsAt.localeCompare(b.appointment.startsAt));
   return [...dringend, ...uebrige, ...erledigt].map((f, i) => ({ ...f, anrufRang: i }));
 }

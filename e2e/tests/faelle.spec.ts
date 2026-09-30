@@ -197,3 +197,11 @@ test('Neuer Ausfall (simuliert): Jonas Brandt anlegen, Fälle öffnen, in der Ü
   await page.getByRole('button', { name: 'Alle Ausfälle' }).click();
   await expect(page.getByTestId('ausfall')).toHaveCount(2);
 });
+
+test('Die Zeit hebt die Stufe an: Sabine (in 20 Min) ist Hoch, Frist-Fälle bleiben Frist', async ({ page }) => {
+  const sabine = karte(page, 'Sabine Czerny');
+  await expect(sabine).toHaveClass(/stufe-hoch/);
+  await expect(sabine.locator('.chip', { hasText: 'Beginnt in 20 Min' })).toBeVisible();
+  await expect(karte(page, 'Cem Oeztuerk')).toHaveClass(/stufe-frist/);
+  await expect(page.getByTestId('fall').first()).toHaveAttribute('data-patient', 'Sabine Czerny');
+});
