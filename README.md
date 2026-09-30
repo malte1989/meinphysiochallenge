@@ -31,7 +31,9 @@ Die Datenbank wird beim Start angelegt und aus `data/*.json` befüllt.
 | Integrationstests | `docker compose up -d db`, dann `cd api && DATABASE_URL=postgres://ausfall:ausfall@localhost:5433/ausfall npm run test:int` |
 | Typecheck api, Build web | `cd api && npm run typecheck` · `cd web && npm run build` |
 | E2E (Stack muss laufen) | `cd e2e && npm ci && npx playwright install chromium && npm test` |
-| E2E sichtbar und langsam (zum Aufnehmen) | `cd e2e && SLOW_MO=400 npm run test:headed` |
+| E2E sichtbar und langsam (alle Fälle) | `cd e2e && SLOW_MO=400 npm run test:headed` |
+| **Drehbuch für den Loom**: ein durchgehender Ablauf in Loom-Reihenfolge, sichtbarer Browser, langsame Klicks | `cd e2e && npm run test:drehbuch` (Tempo: `SLOW_MO=700 PAUSE=1200`, in ms) |
+| **Playwright UI-Modus** mit Zeitleiste und Einzelschritten, ebenfalls langsam | `cd e2e && npm run test:ui` (Tempo wie oben einstellbar) |
 | E2E-Bericht mit Video und Trace | `cd e2e && npx playwright show-report` |
 | Schwachstellen prüfen | `cd api && npm audit` (ebenso `web`, `e2e`) |
 
@@ -131,7 +133,7 @@ Echte Seite zur Selbstbuchung, echter Versand von SMS und E-Mail, Warteliste und
 
 ## Wo ich abgebrochen habe
 
-Der Kern ist fertig und getestet: 51 Unit-Tests, 17 Integrationstests und 18 Playwright-Fälle laufen grün (frischer Start mit `docker compose down -v && docker compose up --build`), `npm audit` meldet für `api`, `web` und `e2e` keine Schwachstellen.
+Der Kern ist fertig und getestet: 51 Unit-Tests, 17 Integrationstests und 19 Playwright-Tests laufen grün (frischer Start mit `docker compose down -v && docker compose up --build`), `npm audit` meldet für `api`, `web` und `e2e` keine Schwachstellen.
 
 Nicht erledigt oder nicht geprüft:
 - Die **CI-Pipeline ist noch nie gelaufen** (siehe oben).

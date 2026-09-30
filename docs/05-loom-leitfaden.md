@@ -10,7 +10,7 @@ Maximal 5 Minuten. Die Notizen sind Stichpunkte zum Ablesen, nichts zum Vorlesen
 
 1. `docker compose up --build -d --wait`, dann im Browser http://localhost:5173 öffnen und **Demo zurücksetzen** klicken ([README, Start](../README.md#start)).
 2. Nicht-stören-Modus einschalten, Tabs vorbereiten: Oberfläche, [README](../README.md), [ARCHITECTURE.md](../ARCHITECTURE.md), dieses Dokument.
-3. Optional als Drehbuch: `cd e2e && SLOW_MO=400 npm run test:headed` ([e2e/tests/faelle.spec.ts](../e2e/tests/faelle.spec.ts)).
+3. Als Drehbuch: `cd e2e && npm run test:drehbuch` spielt den ganzen Ablauf in Loom-Reihenfolge mit langsamen Klicks ab ([e2e/tests/loom-drehbuch.spec.ts](../e2e/tests/loom-drehbuch.spec.ts), Schritte 1 bis 11 entsprechen den Abschnitten unten). Alternativ `npm run test:ui` für den Playwright-UI-Modus mit Zeitleiste. Tempo per `SLOW_MO` und `PAUSE` in Millisekunden.
 
 ## Ablauf
 
