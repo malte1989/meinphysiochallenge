@@ -526,7 +526,9 @@ Jeder Task: Worktree → umsetzen → Test bzw. Smoke-Test → Commit → Review
 - [ ] **Task 13, Diagnosegruppen (`feature/diagnosegruppen`):** `data/diagnosegruppen.json` mit `{code, bezeichnung, quelle}` für WS1, WS2, EX2, EX3, LY2 aus heilmittelkatalog.de (die Quelle wird vorher nachgeschlagen und nicht erfunden). Die API liefert die Bezeichnung mit, die Chips zeigen Klartext.
 - [ ] **Task 14, Notfallliste (`feature/notfallliste`):** Route `/#druck` rendert die Anrufreihenfolge als druckbare Tabelle (Zeit, Name, Telefon, Empfehlung, Vorschlag, Warnungen) mit `@media print`. README-Abschnitt „IT-Notfallkonzept“: Was tun, wenn unser Service, Termino oder beide ausfallen (Liste um 07:00 drucken, Telefon-Fallback, Nachpflege).
 
-- [ ] **Task 15, Playwright-Testfälle für das Loom (`feature/e2e`, Wunsch von Malte, nach den Tasks 1–9):** Playwright-Tests gegen `docker compose up` für die wichtigsten Fälle: (1) Anrufreihenfolge beginnt mit Sabine Czerny und Lena Krause, (2) Cem zeigt 🔴 Frist 09.09., (3) Kerstin zeigt „✓ gleiche Uhrzeit“ und Bestätigen erzeugt Outbox-Einträge, (4) Jan wird ersatzlos absagbar, (5) Marek zeigt die Doppelbuchung, (6) Katrin: Zusammenführen blendet die Warnung aus, (7) Toggle 08:05 bietet Cem den Slot Mi 09:20, (8) Gisela „nicht anrufbar“, (9) Doppelklick ergibt „bereits entschieden“. Vor jedem Test `POST /api/sim/reset`. Die Testfälle dienen zugleich als Drehbuch für das Loom.
+- [ ] **Task 15, Playwright-Testfälle für das Loom (PRIO von Malte: direkt nach Task 9, vor den Tasks 10–14, `feature/e2e`):** Playwright-Tests gegen `docker compose up` für die wichtigsten Fälle: (1) Anrufreihenfolge beginnt mit Sabine Czerny und Lena Krause, (2) Cem zeigt 🔴 Frist 09.09., (3) Kerstin zeigt „✓ gleiche Uhrzeit“ und Bestätigen erzeugt Outbox-Einträge, (4) Jan wird ersatzlos absagbar, (5) Marek zeigt die Doppelbuchung, (6) Katrin: Zusammenführen blendet die Warnung aus, (7) Toggle 08:05 bietet Cem den Slot Mi 09:20, (8) Gisela „nicht anrufbar“, (9) Doppelklick ergibt „bereits entschieden“. Vor jedem Test `POST /api/sim/reset`. Die Testfälle dienen zugleich als Drehbuch für das Loom: Konfiguration `video: 'on'`, `trace: 'on'` und ein Headed-Lauf mit `slowMo` für die Aufnahme. Ein Test pro Fall, Name des Tests = Überschrift im Loom.
+
+- [ ] **Task 16, CI und Security (`feature/ci`, Wunsch von Malte, Soll; laut Aufgabe nicht erwartet, daher nach Playwright):** `.github/workflows/ci.yml` mit Jobs (1) `typecheck` und `npm test` für api und web, (2) `test:int` mit Postgres-Service-Container, (3) `npm audit --audit-level=high` für api und web, (4) Secret-Scan mit gitleaks, (5) Playwright gegen `docker compose up -d --wait`, bei Fehlern als Artefakt mit Trace und Video. `.github/dependabot.yml` für npm und Docker. Lokal vorab: `npm audit` in beiden Projekten ausführen und das Ergebnis in die README schreiben. Optionale Ergänzungen: Image-Scan mit Trivy und Dockerfile-Lint mit hadolint.
 
 ---
 
@@ -534,7 +536,7 @@ Jeder Task: Worktree → umsetzen → Test bzw. Smoke-Test → Commit → Review
 
 ```
 Task 1 (develop) ──┬─▶ Task 2 termino-mock ─┐
-                   └─▶ Tasks 3–6 autopilot ─┴─▶ Task 7 api ─▶ Task 8 ui ─▶ Task 9 docs ─▶ Tasks 10–14 (Soll)
+                   └─▶ Tasks 3–6 autopilot ─┴─▶ Task 7 api ─▶ Task 8 ui ─▶ Task 9 docs ─▶ Task 15 Playwright (PRIO) ─▶ Tasks 10–14 (Soll) ─▶ Task 16 CI/Security
 ```
 
 Die Tasks 2 und 3–6 sind unabhängig voneinander und können parallel laufen. Am Ende wird `develop` nach `main` gemergt, nach Freigabe.
