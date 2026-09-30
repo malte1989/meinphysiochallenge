@@ -526,6 +526,8 @@ Jeder Task: Worktree → umsetzen → Test bzw. Smoke-Test → Commit → Review
 - [ ] **Task 13, Diagnosegruppen (`feature/diagnosegruppen`):** `data/diagnosegruppen.json` mit `{code, bezeichnung, quelle}` für WS1, WS2, EX2, EX3, LY2 aus heilmittelkatalog.de (die Quelle wird vorher nachgeschlagen und nicht erfunden). Die API liefert die Bezeichnung mit, die Chips zeigen Klartext.
 - [ ] **Task 14, Notfallliste (`feature/notfallliste`):** Route `/#druck` rendert die Anrufreihenfolge als druckbare Tabelle (Zeit, Name, Telefon, Empfehlung, Vorschlag, Warnungen) mit `@media print`. README-Abschnitt „IT-Notfallkonzept“: Was tun, wenn unser Service, Termino oder beide ausfallen (Liste um 07:00 drucken, Telefon-Fallback, Nachpflege).
 
+- [ ] **Task 15, Playwright-Testfälle für das Loom (`feature/e2e`, Wunsch von Malte, nach den Tasks 1–9):** Playwright-Tests gegen `docker compose up` für die wichtigsten Fälle: (1) Anrufreihenfolge beginnt mit Sabine Czerny und Lena Krause, (2) Cem zeigt 🔴 Frist 09.09., (3) Kerstin zeigt „✓ gleiche Uhrzeit“ und Bestätigen erzeugt Outbox-Einträge, (4) Jan wird ersatzlos absagbar, (5) Marek zeigt die Doppelbuchung, (6) Katrin: Zusammenführen blendet die Warnung aus, (7) Toggle 08:05 bietet Cem den Slot Mi 09:20, (8) Gisela „nicht anrufbar“, (9) Doppelklick ergibt „bereits entschieden“. Vor jedem Test `POST /api/sim/reset`. Die Testfälle dienen zugleich als Drehbuch für das Loom.
+
 ---
 
 ## Reihenfolge und Parallelität
