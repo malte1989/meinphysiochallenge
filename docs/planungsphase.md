@@ -101,26 +101,69 @@ Diagramme (Komponenten und Ablauf „Bestätigen“ mit 409): Spec, Abschnitt 4.
 | DSGVO und Gesundheitsdaten | Hosting in der EU, Verschlüsselung, Audit-Log, Rollen pro Standort, Löschkonzept |
 | Betrieb | Observability pro Mandant, Feature-Flags, Pilot an einem Standort, Notfallliste offline |
 
-## 7. Korrekturen und Fehler auf dem Weg (ehrlich)
+## 7. Todos und nächste Schritte
 
-- Ich habe zuerst „geänderte Datei im Git-Status“ gemeldet, der Arbeitsbaum war aber sauber. Ich hatte mich auf den Anfangs-Snapshot verlassen und danach neu geprüft.
-- Ich wollte `develop` anlegen, es existierte schon. Ich habe darauf weitergearbeitet.
-- Ich habe „idle cache“ zuerst als „weiter“ gedeutet. Es bedeutet „Cache warmhalten, nichts tun“ und ist jetzt in meinem Gedächtnis.
-- Der Plan nannte anfangs Node 22 und setzte Docker voraus. Durch deine Hinweise gilt jetzt Node 24, und Colima läuft.
+Stand: 22:30. Status: ✅ erledigt, 🔜 als Nächstes, ⬜ offen. Die Liste enthält alles, was im Gespräch genannt wurde.
 
-## 8. Noch offen
+| Todo | Wer | Status | Hinweis |
+|---|---|---|---|
+| Playwright-Testfälle für die wichtigsten Fälle (**Prio**) | [Du] | ✅ | 14 Fälle, je ein Test pro Loom-Fall, Video und Trace sind an |
+| Krankmeldung verlängern (falls Anna mittags nicht besser) | [Du] | ✅ | Button „Krankmeldung verlängern“, Entscheidungen bleiben, Reset nimmt sie zurück |
+| Countdown und automatischer Refresh alle 5 Minuten | [Du] | ✅ | per Playwright mit vorgespielter Uhr getestet |
+| Button „Simuliere: Patient:in bucht selbst“ | [Claude] | 🔜 | Task 12, zeigt „✓ selbst gebucht, kein Anruf nötig“ |
+| Notfallliste (druckbar) und IT-Notfallkonzept / Rollback | [Du] | ⬜ | Task 14, optional; bis dahin gilt Annahme „Konzept existiert“ |
+| `data/diagnosegruppen.json` mit belegter Quelle (ICD-10, heilmittelkatalog.de) | [Du] | ⬜ | Task 13, nachrangig, Bedeutung der Kürzel darf nicht erfunden werden |
+| CI mit GitHub Actions, `npm audit`, Security-Scans | [Du] | ⬜ | Task 16; lokal bereits geprüft: `npm audit` meldet 0 Schwachstellen |
+| Sicherheits-Ergänzungen: gitleaks, Dependabot, Trivy (Image), hadolint | [Claude] | ⬜ | Teil von Task 16 |
+| Accessibility-Check mit axe in den Playwright-Tests | [Claude] | ⬜ | für den hektischen Empfang sinnvoll |
+| Ausführungsmethode des Plans | [Du] | ✅ | Native, vor jedem Merge Tests und Diff-Review |
 
-- Ausführungsmethode: Native ist empfohlen, aber noch nicht ausdrücklich bestätigt.
-- Die Quelle für die Bezeichnungen der Diagnosegruppen (Soll) muss vor der Verwendung nachgeschlagen werden, nichts wird erfunden.
-- Kein Push, nichts ist veröffentlicht.
+**Weitere Ideen für „Nächste Schritte“ (nicht gebaut, in der README genannt):**
 
-## 9. Loom-Leitfaden (maximal 5 Minuten)
+- Echte Termino-API statt Mock, Webhooks statt Polling.
+- Warteliste und Nachbelegung von Annas frei gewordenen Slots (Nordstern: Auslastung).
+- Kanalpräferenz und Opt-in der Patient:innen (DSGVO), echter Versand von SMS und E-Mail.
+- Audit-Log: wer hat wann welchen Fall entschieden (heute gibt es keine Nutzer).
+- Kennzahlen: Zeit, bis alle Betroffenen informiert sind, Anteil erfolgreich umgebucht, Anrufe pro Ausfall.
+- Generierte Typen aus einem OpenAPI-Schema statt duplizierter Typen.
 
-| Zeit | Inhalt | Zeigen |
-|---|---|---|
-| 0:00–0:30 | Problem in einem Satz, Zeitdruck um 07:40 | Aufgabe, Fallliste der 14 Termine |
-| 0:30–1:30 | Datenfallen und was sie für das Design bedeuten (UTC, Doppelbuchung, Meier/Meyer, Cems Frist) | Tabelle in Abschnitt 3 |
-| 1:30–2:30 | **Produktbrille:** zwei Reihenfolgen, Fristen vor klinischer Dringlichkeit, Slots gemeinsam verteilen | Fallkarten in der Oberfläche |
-| 2:30–3:30 | Live: Bestätigen, Outbox, unsicherer Treffer zusammenführen, Toggle 08:05 | Oberfläche |
-| 3:30–4:15 | Wie ich mit dem Agenten gearbeitet habe: Skill, Freigaben, Korrekturen, Worktrees | Abschnitte 4, 5 und 7 |
-| 4:15–5:00 | Architekturannahmen, Weggelassenes, Skalierung auf 100+ Praxen | Abschnitt 6, ARCHITECTURE.md |
+**Offene Produktfragen an meinphysio+ (für das Gespräch mit dem CTO):**
+
+- Hat Termino eine Schreib-API, und wie schnell ist sie? (Annahme 1)
+- Wie wird heute zwischen Standorten umgebucht, und wer darf das?
+- Wie wird die Dringlichkeit klinisch eingeschätzt? Die Diagnosegruppe reicht dafür nicht.
+- Stellschrauben, die der Empfang selbst einstellen sollte: 60-Minuten-Fenster für die Anrufreihenfolge (Cem in 80 Minuten wird nach Renate angerufen), Absage-Schwelle von 2 Tagen, Fristfenster von 3 Tagen.
+
+**Abschluss (Reihenfolge):** Tests und `docker compose up` einmal frisch prüfen → README-Stand aktualisieren → Session mit `/export` sichern → Loom aufnehmen (Playwright-Lauf mit `SLOW_MO=400 npm run test:headed` als Drehbuch) → abgeben.
+
+## 8. Loom-Leitfaden (maximal 5 Minuten, mit Notizen)
+
+**0:00–0:30 · Problem.** Zeigen: Aufgabe, Fallliste mit 14 Terminen.
+- Montag, 07:40, Anna krank, der erste Termin ist um 08:00: Der Empfang hat Minuten, keine Stunden.
+- Heute: Lücken, Qualifikation und Verordnungsfristen von Hand suchen. Ziel: Der Empfang telefoniert und bestätigt.
+
+**0:30–1:30 · Datenfallen.** Zeigen: Tabelle in Abschnitt 3, Karten von Marek, Katrin, Lena.
+- Zeiten sind UTC, Marek ist doppelt gebucht, Katrin Meier ist Meyer, Lena fehlt in den Stammdaten, Gisela hat keine Nummer.
+- Haltung: Nichts still übergehen. Jeder Datenfehler wird sichtbar und, wo möglich, mit einem Klick behoben (Zusammenführen).
+
+**1:30–2:30 · Produktbrille.** Zeigen: Fallkarten, Sortierung Autopilot ↔ Uhrzeit.
+- Zwei Reihenfolgen: Slots nach Priorität, Anrufe nach Dringlichkeit (Sabine um 08:00 zuerst).
+- Harte Fristen vor „gefühlter“ Dringlichkeit: Cem und Renate, sonst verfällt die Verordnung. „Frisch operiert“ steht nicht in den Daten, die Diagnose ist nur Tie-Breaker.
+- Slots werden gemeinsam verteilt, damit niemand denselben Slot bekommt. „✓ gleiche Uhrzeit“ bleibt erhalten (Kerstin).
+- Ersatzlos absagbar, wenn der nächste Termin nah ist (Jan), das spart knappe Kapazität.
+
+**2:30–3:30 · Live.** Zeigen: Bestätigen bei Kerstin, Outbox, Zusammenführen bei Katrin, Toggle 08:05, Krankmeldung verlängern.
+- Bestätigen bucht in einem simulierten Termino, die Datenbank verhindert Überschneidungen (Doppelklick ergibt 409).
+- Toggle 08:05: Sofias Slot Mi 09:20 wird frei und erscheint für Cem. Auto-Refresh alle 5 Minuten mit Countdown.
+- Verlängern: Geht es Anna mittags nicht besser, kommen ihre Termine von Dienstag dazu.
+
+**3:30–4:15 · Arbeit mit dem Agenten.** Zeigen: Abschnitte 4 und 5, `docs/superpowers/`, Playwright-Bericht.
+- Erst Problem und Daten, dann Design in Abschnitten mit meiner Freigabe, dann Spec und Plan, dann TDD in Worktrees.
+- Wo ich dem Agenten widersprochen habe: Priorisierung, Termino-Schreibzugriff, Verlängern als Soll.
+- Wo der Agent mir widersprochen hat: klinische Dringlichkeit, Fristen, Slots gemeinsam verteilen.
+- Playwright-Fälle sind zugleich das Drehbuch.
+
+**4:15–5:00 · Annahmen, Weggelassenes, Skalierung.** Zeigen: README (Annahmen, Nächste Schritte), ARCHITECTURE.md.
+- Wichtigste Annahme: Termino hat eine Schreib-API. Weggelassen: echter Versand, Selbstbuchungsseite, Warteliste, Auth.
+- 100+ Praxen: gemeinsame DB mit `tenant_id` und Row-Level-Security, Adapter pro Buchungstool mit Inbox/Outbox, Autopilot zustandslos mit Regeln pro Mandant, Benachrichtigungsservice, DSGVO.
+- Schluss: Was ich als Nächstes bauen würde (Nachbelegung, Opt-in, Kennzahlen).
