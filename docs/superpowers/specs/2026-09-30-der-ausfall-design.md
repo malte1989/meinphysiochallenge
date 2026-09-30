@@ -56,6 +56,81 @@ docker compose up
 
 Monorepo: `api/`, `web/`, `data/` (Rohdaten, unverändert), `docs/`.
 
+### Komponenten
+
+```mermaid
+flowchart LR
+  subgraph Browser["Browser · Empfang"]
+    UI["React SPA<br/>Fallliste · Sortierung · Outbox-Drawer<br/>Export-Toggle · Refresh 5 Min"]
+  end
+
+  subgraph API["api · Fastify (Node/TS)"]
+    R["HTTP-Routen<br/>/ausfall · /faelle · /patienten<br/>/outbox · /sim/export"]
+    AP["Autopilot<br/>reine Funktion<br/>Anreicherung → Stufe/Score →<br/>Empfehlung → Slot-Verteilung"]
+    M["Patient-Matching<br/>exakt · unsicher · fehlt"]
+    TC{{"TerminoClient<br/>(Interface)"}}
+    TM["Termino-Mock<br/>book · cancel · list<br/>Export-Toggle"]
+    OB["Outbox-Service<br/>SMS/E-Mail-Vorlagen"]
+    SEED["Seed beim Start<br/>(idempotent)"]
+  end
+
+  subgraph DB["db · Postgres 16"]
+    S[("stamm<br/>praxis · therapeut · arbeitszeit<br/>patient · verordnung")]
+    T[("termino<br/>appointment + EXCLUDE-Constraint<br/>export_snapshot · sim_state")]
+    A[("ausfall<br/>ausfall · entscheidung · outbox")]
+  end
+
+  FILES[/"data/*.json<br/>Stammdaten + Exporte 08:00/08:05"/]
+  EXT["echte Termino-API<br/>(später)"]
+
+  UI -- "JSON / REST" --> R
+  R --> AP
+  AP --> M
+  R --> TC
+  R --> OB
+  TC -. "heute" .-> TM
+  TC -. "später: HTTP-Adapter" .-> EXT
+  AP -- "liest" --> S
+  AP -- "liest" --> T
+  AP -- "liest" --> A
+  M -- "verknüpfen" --> S
+  TM -- "schreibt" --> T
+  OB -- "schreibt" --> A
+  R -- "Entscheidung" --> A
+  FILES --> SEED
+  SEED --> S
+  SEED --> T
+```
+
+### Ablauf „Bestätigen“ (mit Schutz vor Überschneidung)
+
+```mermaid
+sequenceDiagram
+  actor E as Empfang
+  participant UI as React UI
+  participant R as API-Route
+  participant TC as TerminoClient (Mock)
+  participant DB as Postgres
+  participant OB as Outbox
+
+  E->>UI: telefoniert, klickt [Bestätigen]
+  UI->>R: POST /faelle/:id/umbuchen {practitioner, starts_at}
+  R->>TC: book(neuer Termin)
+  TC->>DB: INSERT termino.appointment (status=booked)
+  alt Slot inzwischen belegt
+    DB-->>TC: EXCLUDE-Verletzung
+    TC-->>R: Konflikt
+    R-->>UI: 409 „Slot inzwischen belegt“
+    UI->>R: GET /ausfall/:id/faelle (neu berechnen)
+  else frei
+    TC->>DB: UPDATE Original → cancelled
+    R->>DB: INSERT ausfall.entscheidung
+    R->>OB: Vorlage „verschoben“ (SMS falls Tel., E-Mail falls Adresse)
+    OB->>DB: INSERT ausfall.outbox
+    R-->>UI: 200 · Fall erledigt
+  end
+```
+
 **Libraries:** Fastify (schlank, gute TS-Typen), `pg` mit reinem SQL (transparent, ohne Codegenerierung), zod (Validierung), Vitest (Tests), TanStack Query (Refresh und Cache im Frontend), Intl-API für Zeitzonen (keine zusätzliche Library). Die Begründungen stehen in der README.
 
 ### 4.1 Datenbank: drei Schemas
