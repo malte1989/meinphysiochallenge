@@ -21,4 +21,4 @@ Weitere Dokumente:
 | [CLAUDE.md](../CLAUDE.md) | Arbeitsregeln des Agenten in diesem Repo |
 | [e2e/tests/faelle.spec.ts](../e2e/tests/faelle.spec.ts) | Playwright-Fälle, zugleich Drehbuch |
 
-Die vollständigen Prompts liegen im Session-Export (`/export`) und unter `~/.claude/projects/`.
+Die vollständigen Prompts und Antworten liegen im [Session-Export](prompts/session-export.txt) (`/export`, Stand 01.10. 00:53).
