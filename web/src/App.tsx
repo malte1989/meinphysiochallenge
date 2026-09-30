@@ -37,7 +37,7 @@ export function App() {
   return (
     <>
       <Header
-        daten={daten} sortierung={sortierung} onSortierung={setSortierung} fetching={faelle.isFetching}
+        daten={daten} sortierung={sortierung} onSortierung={setSortierung} fetching={faelle.isFetching} aktualisiertUm={faelle.dataUpdatedAt} intervallMs={REFRESH_MS}
         onRefresh={aktualisieren} onExport={(s) => exportWechseln.mutate(s)} onOutbox={() => setOutboxOffen(true)}
         outboxAnzahl={outbox.data?.length ?? 0} onReset={() => reset.mutate()}
       />
