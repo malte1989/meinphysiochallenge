@@ -1,0 +1,16 @@
+{
+  "name": "ausfall-e2e",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "playwright test",
+    "test:headed": "playwright test --headed",
+    "test:drehbuch": "SLOW_MO=${SLOW_MO:-700} PAUSE=${PAUSE:-1200} playwright test loom-drehbuch -g Komplettdurchlauf --headed",
+    "test:ui": "SLOW_MO=${SLOW_MO:-600} PAUSE=${PAUSE:-1000} playwright test --ui"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.63.0",
+    "@types/node": "^26.6.3",
+    "typescript": "^7.0.2"
+  }
+}
