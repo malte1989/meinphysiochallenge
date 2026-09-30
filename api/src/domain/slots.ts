@@ -8,8 +8,14 @@ const MIN = 60_000;
 
 const ueberlappt = (aStart: number, aEnde: number, bStart: number, bEnde: number) => aStart < bEnde && bStart < aEnde;
 
-/** Alle freien, passenden Slots für einen Fall, nach Rang sortiert. `reserviert` sind bereits vergebene Vorschläge. */
-export function freieSlots(fall: Pick<Fall, 'appointment' | 'heilmittel' | 'frist'>, input: AutopilotInput, reserviert: Slot[]): Slot[] {
+export const slotSchluessel = (locationId: string, tag: string, hhmm: string) => `${locationId}|${tag}|${hhmm}`;
+
+/**
+ * Alle freien, passenden Slots für einen Fall, nach Rang sortiert. `reserviert` sind bereits vergebene Vorschläge.
+ * `gemieden` enthält Schlüssel (Praxis|Tag|Uhrzeit), die für andere Fälle genau die Originaluhrzeit wären:
+ * bei sonst gleichem Rang wird ein anderer Slot vorgezogen, damit gleiche Uhrzeiten erhalten bleiben.
+ */
+export function freieSlots(fall: Pick<Fall, 'appointment' | 'heilmittel' | 'frist'>, input: AutopilotInput, reserviert: Slot[], gemieden: ReadonlySet<string> = new Set()): Slot[] {
   const a = fall.appointment;
   const dauer = a.durationMin;
   const fruehestens = Date.parse(input.jetzt) + VORLAUF_MIN * MIN;
@@ -68,9 +74,10 @@ export function freieSlots(fall: Pick<Fall, 'appointment' | 'heilmittel' | 'fris
   }
   const tagVon = (s: Slot) => berlinDate(s.startsAt);
   const minutenDesTages = (hhmm: string) => Number(hhmm.slice(0, 2)) * 60 + Number(hhmm.slice(3));
+  const gemiedenSlot = (s: Slot) => gemieden.has(slotSchluessel(s.locationId, berlinDate(s.startsAt), berlinTime(s.startsAt)));
   const abstand = (s: Slot) => Math.abs(minutenDesTages(berlinTime(s.startsAt)) - minutenDesTages(ursprungsUhrzeit));
   return slots.sort((x, y) =>
     x.rang - y.rang || tagVon(x).localeCompare(tagVon(y)) ||
     Number(x.locationId !== a.locationId) - Number(y.locationId !== a.locationId) ||
-    abstand(x) - abstand(y) || x.startsAt.localeCompare(y.startsAt));
+    Number(gemiedenSlot(x)) - Number(gemiedenSlot(y)) || abstand(x) - abstand(y) || x.startsAt.localeCompare(y.startsAt));
 }
