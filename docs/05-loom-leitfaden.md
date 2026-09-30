@@ -54,7 +54,7 @@ Maximal 5 Minuten. Die Notizen sind Stichpunkte zum Ablesen, nichts zum Vorlesen
 
 - Bestätigen bei Kerstin, dann Outbox zeigen. Die Datenbank verhindert Überschneidungen (Doppelklick ergibt 409).
 - Zusammenführen bei Katrin.
-- **Toggle 08:05** (Termino-Export von 08:00:41 auf 08:05:41, 1927 → 1928 Termine). Es ändern sich nur **drei Termine**, keiner gehört zu Annas Patient:innen:
+- **Toggle 08:05** in der Seitenleiste (Termino-Export von 08:00:41 auf 08:05:41, 1927 → 1928 Termine). Es ändern sich nur **drei Termine**, keiner gehört zu Annas Patient:innen:
   - Julia Conrad bei Sofia, Mi 09.09. 09:20: storniert, der Slot wird frei.
   - Helga Yildiz bei Tobias: von Di 08.09. 09:00 auf 13:40 verschoben, 09:00 wird frei, 13:40 belegt.
   - Georg Unger bei Jonas, Fr 11.09. 10:20: neu gebucht, der Slot wird belegt.
