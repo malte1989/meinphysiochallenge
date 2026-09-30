@@ -442,7 +442,7 @@ test('Faelle: 14 Stück, Anrufreihenfolge beginnt mit Sabine Czerny', ...);
 test('umbuchen doppelt → zweiter Aufruf 409 bereits_entschieden, nur eine Buchung', ...);
 test('umbuchen in belegten Slot → 409 slot_belegt', ...);   // prac_02, 2026-09-07T06:00:00Z
 test('verknuepfen Katrin Meyer → match exakt beim nächsten GET', ...);
-test('Toggle 0805 → Cem bekommt Vorschlag Mi 09.09. 09:20 bei Sofia', ...);  // nur prüfen, falls Rang und Priorität das ergeben; sonst: Slot in slotsFuerFall enthalten
+test('Toggle 0805 → GET /slots für Cem enthält prac_04 2026-09-09T07:20:00.000Z, bei 0800 nicht', ...);
 ```
 
 - [ ] **Step 3:** Die Tests ausführen, Erwartung: FAIL.
