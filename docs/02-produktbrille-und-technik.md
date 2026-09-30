@@ -1,6 +1,6 @@
 # Produktbrille und Technik
 
-[Übersicht](planungsphase.md) · [1 Problem und Daten](01-problem-und-daten.md) · [2 Produktbrille und Technik](02-produktbrille-und-technik.md) · [3 Architektur](03-architektur-annahmen.md) · [4 Todos](04-todos-und-naechste-schritte.md) · [5 Loom](05-loom-leitfaden.md) · [6 Hintergrund](06-hintergrund-rueckfragen.md)
+[Übersicht](planungsphase.md) · [1 Problem und Daten](01-problem-und-daten.md) · [2 Produktbrille und Technik](02-produktbrille-und-technik.md) · [3 Architektur](03-architektur-annahmen.md) · [4 Todos](04-todos-und-naechste-schritte.md) · [Loom-Leitfaden](00-loom-leitfaden.md)
 
 Kennzeichnung: **[Du]** Entscheidung oder Korrektur von Malte, **[Claude]** Vorschlag oder Befund des Agenten, **[F]** Fakt aus Daten oder Aufgabe, **[A]** Annahme, **[Q]** externe Quelle.
 
@@ -12,7 +12,7 @@ Kennzeichnung: **[Du]** Entscheidung oder Korrektur von Malte, **[Claude]** Vors
 | **Zwei Reihenfolgen:** Slots nach Priorität vergeben, Empfang ruft nach Dringlichkeit an (Start in < 60 Min zuerst) | [Claude], [Du] freigegeben | Sabine Czerny (08:00) muss zuerst angerufen werden, auch wenn sie nicht die höchste Priorität hat |
 | **Harte Fristen der Verordnung vor klinischer Dringlichkeit.** Diagnosegruppe nur als gekennzeichneter Tie-Breaker | [Claude] widerspricht der Annahme „frisch operiert/Schmerz“, [Du] akzeptiert | „Frisch operiert“ steht nicht in den Daten. Eine verfallene Verordnung ist nicht abrechenbar und schickt die Patient:in zurück zum Arzt |
 | **Vorschläge über alle Fälle gemeinsam berechnen (greedy nach Priorität)** | [Claude] | Bei etwa 10 freien Slots für 13 Bedarfe würden sonst mehrere Patient:innen denselben Slot **vorgeschlagen** bekommen. Die Datenbank verhindert nur das doppelte **Buchen**, erst beim Bestätigen (409), und dann wäre ein Anruf verschwendet |
-| **Die Zeit hebt die Stufe an: Termine unter 1 Stunde bekommen mindestens „Hoch“** (Frist bleibt darüber) | [Du] | Sabine (in 20 Min) trägt heute „Normal“, steht aber auf Platz 1 der Anrufliste. **Beschlossen, noch nicht umgesetzt.** Offen: Stufe „Prüfen“ (Lena) und eine gemeinsame Einstellung für den Grenzwert |
+| **Die Zeit hebt die Stufe an: Termine unter 1 Stunde bekommen mindestens „Hoch“** (Frist bleibt darüber) | [Du] | Sabine (in 20 Min) war „Normal“, stand aber auf Platz 1 der Anrufliste. **Gebaut:** Die Regel gilt auch für „Prüfen“ (Lena), nicht für die spätere Doppelbuchung, und der Grenzwert ist dieselbe Konstante wie das 60-Minuten-Fenster der Anrufreihenfolge. Ein Chip „Beginnt in X Min“ erklärt die Stufe |
 | **„Ersatzlos absagen“, wenn der nächste Termin ≤ 2 Tage entfernt ist und vor der Frist liegt** | [Du] (Behandlungsfrequenz), [Claude] ergänzt die Fristprüfung | Spart knappe Slots. Cem bleibt ausgenommen |
 | **Unsichere Treffer zusammenführbar** statt nur anzeigen | [Du] | Der Empfang soll Datenfehler direkt beheben können |
 | **Fehlende Stammdaten sichtbar anzeigen** | [Du] | Nichts still übergehen |

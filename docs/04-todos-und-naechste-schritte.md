@@ -1,6 +1,6 @@
 # Todos und nächste Schritte
 
-[Übersicht](planungsphase.md) · [1 Problem und Daten](01-problem-und-daten.md) · [2 Produktbrille und Technik](02-produktbrille-und-technik.md) · [3 Architektur](03-architektur-annahmen.md) · [4 Todos](04-todos-und-naechste-schritte.md) · [5 Loom](05-loom-leitfaden.md) · [6 Hintergrund](06-hintergrund-rueckfragen.md)
+[Übersicht](planungsphase.md) · [1 Problem und Daten](01-problem-und-daten.md) · [2 Produktbrille und Technik](02-produktbrille-und-technik.md) · [3 Architektur](03-architektur-annahmen.md) · [4 Todos](04-todos-und-naechste-schritte.md) · [Loom-Leitfaden](00-loom-leitfaden.md)
 
 Was im Gespräch genannt wurde, mit Status. Die kurze Fassung für Leser:innen steht in der [README, Abschnitt „Nächste Schritte“](../README.md#nächste-schritte).
 
@@ -20,7 +20,7 @@ Stand: 23:50.
 | CI mit GitHub Actions, `npm audit`, Security-Scans | [Du] | ✅ teilweise | Workflow und Dependabot geschrieben und lokal validiert, **nie auf GitHub gelaufen**; lokal meldet `npm audit` 0 Schwachstellen |
 | Sicherheits-Ergänzungen: gitleaks, Dependabot, Trivy (Image), hadolint | [Claude] | ✅ teilweise | gitleaks und Dependabot drin, Trivy und hadolint nicht |
 | Accessibility-Check mit axe in den Playwright-Tests | [Claude] | ⬜ | für den hektischen Empfang sinnvoll |
-| **Zeit hebt die Stufe an** (Termine unter 1 Stunde mindestens „Hoch“, Frist bleibt darüber) | [Du] | ⬜ beschlossen | im Loom ehrlich als „noch nicht gebaut“ sagen; klein, zwei Tests. Offen: Stufe „Prüfen“ (Lena), gemeinsame Einstellung des Grenzwerts mit dem 60-Minuten-Fenster der Anrufreihenfolge |
+| **Zeit hebt die Stufe an** (Termine unter 1 Stunde mindestens „Hoch“, Frist bleibt darüber) | [Du] | ✅ | gebaut mit Tests (Unit und Playwright). Gilt auch für „Prüfen“ (Lena), nicht für die spätere Doppelbuchung. Grenzwert ist dieselbe Konstante wie das 60-Minuten-Fenster der Anrufreihenfolge. Nebenwirkung: Sabine (KG) nimmt jetzt Jonas’ Nachmittags-Slot, den vorher Wiebke (MT) hatte, und Wiebke rutscht auf Di 08.09. Verbesserung: knappe Qualifikationen schonen |
 | **Design an das meinphysio+-Buchungstool angleichen** (Referenz: [Terminanfrage](https://patient.meinphysioplus.de/terminanfrage)) | [Du] | ✅ | Branch `feature/design`: Tokens aus dem Tailwind-Theme des Buchungstools, rechte Seitenleiste, Karten und Pillen; nur Optik, alle 32 Playwright-Tests unverändert grün. Screenshots für den Loom noch offen |
 | **Bruno-Requests** als Collection im Repo (`bruno/`) für alle API-Endpunkte | [Du] | ⬜ | git-freundlich, dient zum Ausprobieren und Demonstrieren der API; Umgebung `local` mit `http://localhost:3000` |
 | Ausführungsmethode des Plans | [Du] | ✅ | Native, vor jedem Merge Tests und Diff-Review |

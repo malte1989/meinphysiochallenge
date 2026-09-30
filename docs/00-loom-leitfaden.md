@@ -1,8 +1,8 @@
 # Loom-Leitfaden
 
-[Übersicht](planungsphase.md) · [1 Problem und Daten](01-problem-und-daten.md) · [2 Produktbrille und Technik](02-produktbrille-und-technik.md) · [3 Architektur](03-architektur-annahmen.md) · [4 Todos](04-todos-und-naechste-schritte.md) · [5 Loom](05-loom-leitfaden.md) · [6 Hintergrund](06-hintergrund-rueckfragen.md)
+[Übersicht](planungsphase.md) · [1 Problem und Daten](01-problem-und-daten.md) · [2 Produktbrille und Technik](02-produktbrille-und-technik.md) · [3 Architektur](03-architektur-annahmen.md) · [4 Todos](04-todos-und-naechste-schritte.md) · [Loom-Leitfaden](00-loom-leitfaden.md)
 
-Maximal 5 Minuten. Pro Abschnitt: die Seite (1 bis 4), das Gezeigte und wenige Stichpunkte zum Ablesen. Was nicht in 5 Minuten passt, steht in [6 Hintergrund für Rückfragen](06-hintergrund-rueckfragen.md).
+Maximal 5 Minuten. Pro Abschnitt: die Seite (1 bis 4), das Gezeigte und wenige Stichpunkte zum Ablesen.
 
 ## Vor der Aufnahme
 
@@ -24,7 +24,7 @@ Maximal 5 Minuten. Pro Abschnitt: die Seite (1 bis 4), das Gezeigte und wenige S
 ### 0:00–0:30 · Problem
 **Seite:** [1 Problem und Daten](01-problem-und-daten.md#problemerfassung) · **Zeigen:** Oberfläche mit den 14 Fällen
 
-- Montag 07:40, Anna krank, erster Termin um 08:00: 14 Termine an zwei Standorten, der Empfang hat Minuten.
+- Montag 07:40, Anna krank, erster Termin um 08:00: 14 Termine, der Empfang hat nur Minuten.
 - Heute sucht er Lücken, Qualifikation und Verordnungsfristen von Hand.
 - Ziel: Der Empfang bekommt automatisiert Vorschläge und bestätigt die wichtigsten Termine.
 
@@ -42,24 +42,29 @@ Maximal 5 Minuten. Pro Abschnitt: die Seite (1 bis 4), das Gezeigte und wenige S
 6. **Toggle 08:05** in der Seitenleiste. Nur drei Termine ändern sich, dadurch ändern sich nur die Alternativen. *Zeigen:* Cem, „Anderer Slot“: Der Mittwoch-Slot ist neu wählbar.
 7. **Cem bucht selbst** (Demo-Button): kein Anruf mehr nötig.
 8. **Krankmeldung verlängern**, dann „Alle Ausfälle“: neuen Ausfall anlegen (nur simuliert).
-9. **Ehrlich sagen:** Beschlossen, noch nicht gebaut: Termine unter 1 Stunde bekommen mindestens „Hoch“. Heute trägt Sabine „Normal“ und steht trotzdem auf Platz 1.
-
-*Wenn die Zeit knapp wird:* Schritt 7 und 8 weglassen. Das Drehbuch (Schritte 2 bis 10) deckt alles ab, nur die Reihenfolge ist leicht anders.
+9. **Dringlichkeit hebt die Stufe an:** Termine unter 1 Stunde bekommen mindestens „Hoch“, Frist bleibt darüber. Sabine (in 20 Minuten) trägt „Hoch“ und steht auf Platz 1, der Chip „Beginnt in 20 Min“ erklärt warum.
 
 ### 3:30–4:15 · Arbeit mit dem Agenten
 **Seite:** [2 Technik und Umfang](02-produktbrille-und-technik.md#technik-und-umfang) · **Zeigen:** [CLAUDE.md](../CLAUDE.md), [Spec](superpowers/specs/2026-09-30-der-ausfall-design.md), [Plan](superpowers/plans/2026-09-30-der-ausfall.md)
 
-- Erst Problem und Daten, dann Design in Abschnitten mit meiner Freigabe, dann Spec, Plan und TDD in Worktrees.
-- Ich habe widersprochen bei Priorisierung, Termino-Schreibzugriff und Verlängern. Der Agent bei klinischer Dringlichkeit, Fristen und gemeinsamen Vorschlägen.
-- 32 Playwright-Tests, je Loom-Fall einer, dazu das Drehbuch.
+- Erst selber gelesen: Problem und Daten verstehen. Dann habe ich einen langen Prompt geschrieben was ich verstanden habe und machen würde. Danach habe ich mit Claude und insbesondere dem Brainstorming Skill in Abschnitten mit meiner Freigabe, Spec, Plan und das Test Konzept erstellt.
+- **Fünf Themen, die ich mit Claude diskutiert habe:**
+  1. **Priorisierung:** Ich wollte frisch Operierte und Schmerzfälle zuerst. Claude: Das steht nicht in den Daten, also zählen die Fristen der Verordnung und die Frequenz.
+  2. **Termino:** Ich habe mich für eine (gemockte) Schreib-API entschieden.
+  3. **Krankmeldung verlängern:** Was, wenn es Anna mittags nicht besser geht? Ich habe es als Soll aufgenommen, später habe ich es gebaut.
+  4. **Dringlichkeit:** Sabine beginnt in 20 Minuten und war trotzdem „Normal“. Ich habe entschieden: Die Zeit hebt die Stufe an.
+- 32 Playwright-Tests und das Drehbuch, um die Haupt Anwendungsfälle zu visualisieren.
 
 ### 4:15–5:00 · Annahmen, Skalierung, nächste Schritte
 **Seiten:** [3 Architektur](03-architektur-annahmen.md), [4 Todos](04-todos-und-naechste-schritte.md) · **Zeigen:** [README, Annahmen](../README.md#annahmen), [ARCHITECTURE.md](../ARCHITECTURE.md)
 
 - Wichtigste Annahme: Termino hat eine Schreib-API (gemockt). Weggelassen: echter Versand, Selbstbuchungsseite, Warteliste, Auth.
-- 100+ Praxen: gemeinsame DB mit `tenant_id` und Row-Level-Security, Adapter pro Buchungstool, zustandsloser Autopilot mit Regeln pro Mandant, eigener Benachrichtigungsservice, DSGVO.
-- CI ist geschrieben. Das Notfallkonzept ist erstellt.
-- Nächste Schritte: Authentifizierung für Kunde, Mitarbeiter und Admin, Nachbelegung, Opt-in, Kennzahlen.
+- 100+ Praxen: gemeinsame DB mit `tenant_id` und Row-Level-Security (Datenbank blendet bei Abfragen fremde Zeilen aus), zustandsloser Autopilot mit Regeln pro Mandant, eigener Benachrichtigungsservice für Performance, DSGVO (Hosting in der EU, Löschkonzept, Audit Log, Rollenkonzept, etc).
+- CI ist geschrieben. Das Notfallkonzept bzw. Rollbackkonzept ist erstellt.
+- **Nächste Schritte:**
+  - **Produkt:** Authentifizierung für Kunde, Mitarbeiter und Admin. Nachbelegung der frei gewordenen Slots. Echter Versand von SMS und E-Mail mit Opt-in und Kanalpräferenz. Selbstbuchungsseite für Patient:innen. „Rückgängig“ und Audit-Log.
+  - **Integration und Skalierung:** Echte Termino-API statt Mock, Webhooks statt Abruf alle 5 Minuten. Mandantenfähigkeit mit `tenant_id` und Row-Level-Security. Regeln (Schwellen, Fenster) pro Mandant einstellbar.
+  - **Betrieb und Qualität:** Kennzahlen (Zeit, bis alle informiert sind, Anteil erfolgreich umgebucht, Anrufe pro Ausfall), Monitoring. CI wirklich laufen lassen, dazu Image-Scan und Barrierefreiheits-Test. Bessere Slot-Verteilung, die knappe Qualifikationen schont. Diagnosegruppen gegen die Primärquelle prüfen.
 
 ## Das Besondere an der Lösung (zum Nennen, nicht alles zeigen)
 
@@ -93,7 +98,7 @@ Wenn die Zeit knapp ist, reichen diese vier: **Fristen der Verordnung**, **gemei
 - **CI-Workflow** (geschrieben, nie gelaufen), `npm audit` ohne Funde, Dependabot, gitleaks.
 - **Dokumentation:** Spec, Plan, [ARCHITECTURE.md](../ARCHITECTURE.md) (100+ Praxen, Rollen für Auth), Planungsphase in Einzelseiten, benannte Grenzen.
 
-**Ehrlich nennen:** Die Zeit-hebt-Stufe-Regel ist beschlossen, aber nicht gebaut. Die Ziffernbedeutung der Diagnosegruppen ist nicht gegen die Primärquelle geprüft. Die CI ist nie gelaufen. „Rückgängig“ und Authentifizierung fehlen, das Notfallkonzept ist ein Entwurf.
+**Ehrlich nennen:** Die Ziffernbedeutung der Diagnosegruppen ist nicht gegen die Primärquelle geprüft. Die CI ist nie gelaufen. „Rückgängig“ und Authentifizierung fehlen, das Notfallkonzept ist ein Entwurf.
 
 ## Loom-Abschnitt → Playwright-Test
 

@@ -166,7 +166,7 @@ Eingabe: Ausfall, Termine, Stammdaten, Verordnungen, Arbeitszeiten, Entscheidung
 | Stufe | Regel |
 |---|---|
 | 🔴 Frist | Frist ≤ jetzt + 3 Tage |
-| 🟠 Hoch | Frequenz 2×/Woche, oder [A] Diagnosegruppe EX3/LY2 (Tie-Breaker, gekennzeichnet) |
+| 🟠 Hoch | Frequenz 2×/Woche, oder [A] Diagnosegruppe EX3/LY2 (Tie-Breaker, gekennzeichnet), oder der Termin beginnt in weniger als 60 Minuten (Entscheidung von Malte nach dem Bau: Die Zeit hebt die Stufe an, Frist bleibt darüber) |
 | 🟢 Normal | alle übrigen mit Verordnung |
 | ⚪ Prüfen | Doppelbuchung (der spätere Termin), Stammdaten fehlen |
 

@@ -90,7 +90,7 @@ Fristen der Heilmittel-Richtlinie [Q]: Behandlungsbeginn innerhalb von 28 Tagen 
 ## Priorisierung in Kurzform
 
 - **Stufe Frist**: Verordnung verfällt innerhalb von 3 Tagen, wenn nicht behandelt wird.
-- **Hoch**: 2× pro Woche oder Diagnose EX3/LY2 (Tie-Breaker).
+- **Hoch**: 2× pro Woche, Diagnose EX3/LY2 (Tie-Breaker) **oder der Termin beginnt in weniger als 1 Stunde** (Frist bleibt darüber, die spätere Doppelbuchung bleibt „Prüfen“).
 - **Normal**: 1× pro Woche. **Prüfen**: Doppelbuchung oder fehlende Stammdaten.
 - **Ersatzlos absagbar**: Der nächste Termin liegt höchstens 2 Tage entfernt und vor der Frist (Jan Ahrens). Dieser Fall verbraucht keinen Slot.
 - **Slots**: passende Qualifikation, innerhalb der Arbeitszeit, ohne Überschneidung, frühestens 20 Minuten nach „jetzt“, nicht nach der Frist, nicht an Tagen mit anderem Termin der Person. Rang: gleiche Uhrzeit und Praxis, gleicher Tag und Praxis, gleicher Tag andere Praxis, spätere Tage. Innerhalb eines Rangs gewinnt die Uhrzeit, die dem Original am nächsten liegt.
@@ -157,7 +157,7 @@ Nicht erledigt oder nicht geprüft:
 
 ## Wie ich mit dem Agenten gearbeitet habe
 
-- Agent-Instruktionen: [CLAUDE.md](CLAUDE.md). Planung und Entscheidungen: [docs/planungsphase.md](docs/planungsphase.md) (Übersicht der Einzeldokumente), Loom-Leitfaden: [docs/05-loom-leitfaden.md](docs/05-loom-leitfaden.md).
+- Agent-Instruktionen: [CLAUDE.md](CLAUDE.md). Planung und Entscheidungen: [docs/planungsphase.md](docs/planungsphase.md) (Übersicht der Einzeldokumente), Loom-Leitfaden: [docs/00-loom-leitfaden.md](docs/00-loom-leitfaden.md).
 - Ablauf: Spec ([docs/superpowers/specs/](docs/superpowers/specs/)), Plan ([docs/superpowers/plans/](docs/superpowers/plans/)), dann TDD in Worktrees pro Feature, Review vor jedem Merge nach `develop`.
 - Die vollständigen Prompts liegen im Session-Export.
 - Die ursprüngliche Datenbeschreibung steht in [data/README.md](data/README.md).
