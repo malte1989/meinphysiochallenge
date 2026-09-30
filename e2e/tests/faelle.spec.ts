@@ -172,3 +172,28 @@ test('Notfallliste ist direkt über #druck erreichbar (z. B. als Lesezeichen)', 
   await page.goto('/#druck');
   await expect(page.locator('.notfall tbody tr')).toHaveCount(14);
 });
+
+test('Ausfälle-Übersicht: neue Seite mit allen Ausfällen, von der Hauptseite erreichbar und zurück', async ({ page }) => {
+  await page.getByRole('button', { name: 'Alle Ausfälle' }).click();
+  await expect(page).toHaveURL(/#\/ausfaelle$/);
+  await expect(page.getByRole('heading', { name: /Ausfälle/ })).toBeVisible();
+  await expect(page.getByTestId('ausfall')).toHaveCount(1);
+  await expect(page.getByTestId('ausfall').first()).toContainText('Anna Weber');
+  await expect(page.getByTestId('ausfall').first()).toContainText('14');
+  await page.getByTestId('ausfall').first().getByRole('link', { name: /Fälle öffnen/ }).click();
+  await expect(page.getByTestId('fall')).toHaveCount(14);
+});
+
+test('Neuer Ausfall (simuliert): Jonas Brandt anlegen, Fälle öffnen, in der Übersicht erscheinen beide', async ({ page }) => {
+  await page.goto('/#/ausfaelle');
+  await page.getByRole('button', { name: 'Neuen Ausfall anlegen' }).click();
+  await expect(page.getByText(/simuliert/i).first()).toBeVisible();
+  await page.getByLabel('Mitarbeiter:in').selectOption({ label: 'Jonas Brandt' });
+  await page.getByLabel('Von').fill('2026-09-07');
+  await page.getByLabel('Bis').fill('2026-09-07');
+  await page.getByRole('button', { name: 'Ausfall anlegen', exact: true }).click();
+  await expect(page.getByTestId('fall')).toHaveCount(19);
+  await expect(page.getByRole('heading', { name: /Jonas Brandt/ })).toBeVisible();
+  await page.getByRole('button', { name: 'Alle Ausfälle' }).click();
+  await expect(page.getByTestId('ausfall')).toHaveCount(2);
+});

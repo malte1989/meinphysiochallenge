@@ -130,4 +130,57 @@ describe('API', () => {
     expect(g.WS2).toMatchObject({ kurz: 'Wirbelsäule' });
     expect(g.EX3.quellen.length).toBeGreaterThan(0);
   });
+
+  // Übersicht aller Ausfälle
+  const jonas = async () => (await get('/api/therapeuten')).find((t: any) => t.name === 'Jonas Brandt');
+  const anlegen = async (therapeutId: string, vonTag = '2026-09-07', bisTag = '2026-09-07') =>
+    post('/api/ausfall', { therapeutId, vonTag, bisTag });
+
+  test('Therapeut:innen: 7 Einträge mit Name und Qualifikationen', async () => {
+    const t = await get('/api/therapeuten');
+    expect(t).toHaveLength(7);
+    expect(t.find((x: any) => x.name === 'Anna Weber').qualifikationen).toEqual(['KG', 'MT', 'MLD45']);
+  });
+
+  test('Ausfälle: Liste mit Anzahl betroffener und offener Termine', async () => {
+    const liste = await get('/api/ausfall');
+    expect(liste).toHaveLength(1);
+    expect(liste[0]).toMatchObject({ therapeutName: 'Anna Weber', anzahl: 14, offen: 14 });
+  });
+
+  test('neuen Ausfall anlegen (simuliert): Jonas Brandt am 07.09. hat 19 betroffene Termine', async () => {
+    const r = await anlegen((await jonas()).id);
+    expect(r.statusCode).toBe(201);
+    const liste = await get('/api/ausfall');
+    expect(liste.map((a: any) => a.therapeutName)).toEqual(['Anna Weber', 'Jonas Brandt']);
+    expect(liste[1]).toMatchObject({ anzahl: 19, offen: 19 });
+    const faelle = await get(`/api/ausfall/${r.json().id}/faelle`);
+    expect(faelle.faelle).toHaveLength(19);
+  });
+
+  test('Ausfall anlegen: Enddatum vor Beginn ergibt 400, unbekannte Person 404', async () => {
+    expect((await anlegen((await jonas()).id, '2026-09-08', '2026-09-07')).statusCode).toBe(400);
+    expect((await anlegen('00000000-0000-4000-8000-000000000000')).statusCode).toBe(404);
+  });
+
+  test('Aktionen wirken auf den richtigen Ausfall, auch wenn ein neuerer existiert', async () => {
+    await anlegen((await jonas()).id);
+    const kerstin = await fallVon('Kerstin Nowak');
+    const r = await post(`/api/faelle/${kerstin.appointment.id}/umbuchen`, { practitionerId: kerstin.vorschlag.practitionerId, startsAt: kerstin.vorschlag.startsAt });
+    expect(r.statusCode).toBe(200);
+    const [jonasAusfall] = (await get('/api/ausfall')).filter((a: any) => a.therapeutName === 'Jonas Brandt');
+    const jonasFaelle = (await get(`/api/ausfall/${jonasAusfall.id}/faelle`)).faelle;
+    const eigener = jonasFaelle.find((f: any) => f.status === 'offen');
+    expect((await post(`/api/faelle/${eigener.appointment.id}/absagen`, { art: 'mit_link' })).statusCode).toBe(200);
+  });
+
+  test('Reset entfernt angelegte Ausfälle, Annas Ausfall behält seine ID', async () => {
+    const vorher = (await get('/api/ausfall'))[0].id;
+    await anlegen((await jonas()).id);
+    expect(await get('/api/ausfall')).toHaveLength(2);
+    await post('/api/sim/reset');
+    const nachher = await get('/api/ausfall');
+    expect(nachher).toHaveLength(1);
+    expect(nachher[0].id).toBe(vorher);
+  });
 });

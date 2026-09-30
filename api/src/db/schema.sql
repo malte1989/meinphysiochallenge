@@ -61,3 +61,4 @@ CREATE TABLE IF NOT EXISTS ausfall.outbox (
   kanal text NOT NULL CHECK (kanal IN ('sms','email')), empfaenger text NOT NULL,
   betreff text, text text NOT NULL, created_at timestamptz NOT NULL
 );
+ALTER TABLE ausfall.ausfall ADD COLUMN IF NOT EXISTS nr serial;

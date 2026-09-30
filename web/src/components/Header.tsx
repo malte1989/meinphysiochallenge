@@ -19,9 +19,10 @@ interface Props {
   onReset: () => void;
   onVerlaengern: (bis: string) => void;
   onNotfallliste: () => void;
+  onAlleAusfaelle: () => void;
 }
 
-export function Header({ daten, sortierung, onSortierung, onRefresh, fetching, aktualisiertUm, intervallMs, onExport, onOutbox, outboxAnzahl, onReset, onVerlaengern, onNotfallliste }: Props) {
+export function Header({ daten, sortierung, onSortierung, onRefresh, fetching, aktualisiertUm, intervallMs, onExport, onOutbox, outboxAnzahl, onReset, onVerlaengern, onNotfallliste, onAlleAusfaelle }: Props) {
   const [menue, setMenue] = useState(false);
   const tage = [1, 2, 4].map((n) => {
     const bis = new Date(Date.parse(daten.ausfall.bis) + n * 86_400_000);
@@ -31,6 +32,7 @@ export function Header({ daten, sortierung, onSortierung, onRefresh, fetching, a
   return (
     <header className="kopf">
       <div>
+        <button className="link zurueck" onClick={onAlleAusfaelle}>← Alle Ausfälle</button>
         <h1>meinphysio+ · Ausfall: {daten.ausfall.therapeutName} krank</h1>
         <p className="unter">{tag(daten.ausfall.von)} · <strong>{offen} offen</strong> / {daten.faelle.length - offen} erledigt</p>
       </div>
@@ -45,7 +47,7 @@ export function Header({ daten, sortierung, onSortierung, onRefresh, fetching, a
           <button className={daten.exportStand === '0805' ? 'aktiv' : ''} onClick={() => onExport('0805')}>08:05</button>
         </div>
         <Countdown seit={aktualisiertUm} intervallMs={intervallMs} />
-        <button onClick={onRefresh} disabled={fetching}>{fetching ? 'Aktualisiere …' : 'Jetzt aktualisieren'}</button>
+        <button onClick={onRefresh} disabled={fetching} title="Lädt Fälle, Vorschläge und Outbox sofort neu, ohne die 5 Minuten abzuwarten. Die Vorschläge werden dabei aus dem aktuellen Termino-Stand neu berechnet.">{fetching ? 'Aktualisiere …' : 'Jetzt aktualisieren'}</button>
         <div className="menue">
           <button onClick={() => setMenue(!menue)}>Krankmeldung verlängern</button>
           {menue && (

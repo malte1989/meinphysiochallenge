@@ -69,3 +69,17 @@ button.link { border: 0; background: none; color: var(--primaer); padding: 0 4px
   .notfall th, .notfall td { border-color: #000; }
   @page { size: A4 landscape; margin: 10mm; }
 }
+
+.zurueck { display: block; margin: 0 0 2px -4px; text-decoration: none; font-size: 13px; }
+.uebersicht { max-width: 880px; margin: 0 auto; padding: 16px; }
+.uebersicht-kopf { display: flex; flex-wrap: wrap; gap: 12px 24px; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; }
+.uebersicht h1 { margin: 0; font-size: 20px; }
+.knopf { display: inline-block; padding: 6px 12px; border: 1px solid var(--rand); border-radius: 6px; background: var(--karte); color: var(--text); text-decoration: none; }
+.knopf.primary { background: var(--primaer); color: #fff; border-color: var(--primaer); }
+.formular { display: grid; gap: 10px; background: var(--karte); border: 1px solid var(--rand); border-radius: 8px; padding: 12px 14px; margin-bottom: 16px; max-width: 420px; }
+.formular label { display: grid; gap: 4px; font-size: 14px; }
+.formular input, .formular select { font: inherit; padding: 6px 8px; border: 1px solid var(--rand); border-radius: 6px; background: var(--bg); color: var(--text); }
+.hinweis-simuliert { margin: 0; background: var(--warn-bg); color: var(--warn); padding: 6px 10px; border-radius: 6px; font-size: 14px; }
+.ausfaelle { display: grid; gap: 10px; }
+.ausfall { display: flex; justify-content: space-between; align-items: center; gap: 12px; background: var(--karte); border: 1px solid var(--rand); border-radius: 8px; padding: 12px 14px; }
+.ausfall h2 { margin: 0; font-size: 17px; } .ausfall p { margin: 2px 0; }

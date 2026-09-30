@@ -6,7 +6,7 @@ import { runAutopilot, slotsFuerFall } from '../domain/autopilot.js';
 import { freieSlots } from '../domain/slots.js';
 import type { Aktion, AutopilotInput, Fall } from '../domain/types.js';
 import { type NachrichtArt, nachrichten } from '../outbox/messages.js';
-import { aktuellerAusfallId, loadInput } from '../repo/load.js';
+import { inputFuerTermin } from '../repo/load.js';
 import { ConflictError } from '../termino/client.js';
 import { MockTerminoClient } from '../termino/mock.js';
 
@@ -23,11 +23,10 @@ export function faelleRoutes(app: FastifyInstance, pool: Pool) {
   const termino = new MockTerminoClient(pool);
 
   async function kontext(appointmentId: string): Promise<{ input: AutopilotInput; fall: Fall } | null> {
-    const ausfallId = await aktuellerAusfallId(pool);
-    if (!ausfallId) return null;
-    const input = await loadInput(pool, ausfallId);
-    const fall = runAutopilot(input).find((f) => f.appointment.id === appointmentId);
-    return fall ? { input, fall } : null;
+    const ctx = await inputFuerTermin(pool, appointmentId);
+    if (!ctx) return null;
+    const fall = runAutopilot(ctx.input).find((f) => f.appointment.id === appointmentId);
+    return fall ? { input: ctx.input, fall } : null;
   }
 
   /** Reserviert die Entscheidung atomar (Primärschlüssel). false, wenn schon jemand entschieden hat. */
