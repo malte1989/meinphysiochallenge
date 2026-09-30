@@ -17,6 +17,7 @@ async function req<T>(method: string, url: string, body?: unknown): Promise<T> {
 
 export const api = {
   ausfallListe: () => req<AusfallInfo[]>('GET', '/api/ausfall'),
+  verlaengern: (id: string, bis: string) => req<{ ok: true }>('PATCH', `/api/ausfall/${id}`, { bis }),
   faelle: (id: string) => req<FaelleAntwort>('GET', `/api/ausfall/${id}/faelle`),
   slots: (appointmentId: string) => req<SlotMitReservierung[]>('GET', `/api/faelle/${appointmentId}/slots`),
   umbuchen: (appointmentId: string, practitionerId: string, startsAt: string) =>

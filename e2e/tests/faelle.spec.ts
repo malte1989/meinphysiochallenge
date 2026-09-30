@@ -132,3 +132,11 @@ test('Automatischer Refresh: nach 5 Minuten fragt die Oberfläche die Fälle sel
   await page.clock.fastForward('05:01');
   await anfrage;
 });
+
+test('Krankmeldung verlängern: geht es Anna mittags nicht besser, kommen ihre Termine von Dienstag dazu', async ({ page }) => {
+  await expect(page.getByText('14 offen')).toBeVisible();
+  await page.getByRole('button', { name: 'Krankmeldung verlängern' }).click();
+  await page.getByRole('button', { name: 'bis Di 08.09.' }).click();
+  await expect(page.getByTestId('fall')).not.toHaveCount(14);
+  await expect(page.locator('.karte-kopf .tag', { hasText: 'Di 08.09.' }).first()).toBeVisible();
+});

@@ -13,9 +13,10 @@ export function simRoutes(app: FastifyInstance, pool: Pool) {
 
   app.post('/api/sim/export', async (req) => applySnapshot(pool, exportBody.parse(req.body).stand));
 
-  /** Setzt die Demo zurück: Entscheidungen, Outbox, eigene Buchungen, Verknüpfungen, Exportstand 08:00. */
+  /** Setzt die Demo zurück: Entscheidungen, Outbox, Verlängerung der Krankmeldung, eigene Buchungen, Verknüpfungen, Exportstand 08:00. */
   app.post('/api/sim/reset', async () => {
     await pool.query('truncate ausfall.entscheidung, ausfall.outbox');
+    await pool.query(`update ausfall.ausfall set bis = '2026-09-07T22:00:00Z'`);
     await pool.query(`delete from termino.appointment where source <> 'export'`);
     const patienten: { id: string; termino_patient_id: string | null }[] = JSON.parse(readFileSync(join(config.dataDir, 'patienten.json'), 'utf8'));
     await pool.query(

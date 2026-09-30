@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { api, ApiError } from '../api';
-import { LEISTUNG, PRAXIS, STUFE_LABEL, tagZeit, zeit } from '../format';
+import { LEISTUNG, PRAXIS, STUFE_LABEL, tag, tagZeit, zeit } from '../format';
 import type { Fall, Slot } from '../types';
 import { MatchVergleich } from './MatchVergleich';
 import { SlotPicker } from './SlotPicker';
@@ -17,7 +17,7 @@ const STATUS: Record<Exclude<Fall['status'], 'offen'>, string> = {
   umgebucht: '✓ umgebucht', abgesagt: '✓ abgesagt', selbst_gebucht: '✓ selbst gebucht, kein Anruf nötig',
 };
 
-export function FallKarte({ fall, onChanged, onHinweis }: { fall: Fall; onChanged: () => void; onHinweis: (t: string) => void }) {
+export function FallKarte({ fall, jetzt, onChanged, onHinweis }: { fall: Fall; jetzt: string; onChanged: () => void; onHinweis: (t: string) => void }) {
   const [picker, setPicker] = useState(false);
   const a = fall.appointment;
   const tel = fall.patient?.telefon ?? a.patient.phone;
@@ -39,6 +39,7 @@ export function FallKarte({ fall, onChanged, onHinweis }: { fall: Fall; onChange
     <article className={`karte stufe-${fall.stufe}${erledigt ? ' erledigt' : ''}`} data-testid="fall" data-patient={a.patient.name}>
       <header className="karte-kopf">
         <span className={`stufe-badge stufe-${fall.stufe}`}>{STUFE_LABEL[fall.stufe]}</span>
+        {tag(a.startsAt) !== tag(jetzt) && <strong className="tag">{tag(a.startsAt)}</strong>}
         <strong className="uhrzeit">{zeit(a.startsAt)}</strong>
         <span>{PRAXIS[a.locationId] ?? a.locationId}</span>
         <span>{LEISTUNG[fall.heilmittel] ?? fall.heilmittel} · {a.durationMin} Min</span>

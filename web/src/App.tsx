@@ -24,6 +24,7 @@ export function App() {
     mutationFn: api.setExport,
     onSuccess: (r) => { setHinweis(r.konflikte.length ? `Konflikt mit eigenen Buchungen bei: ${r.konflikte.join(', ')}` : null); aktualisieren(); },
   });
+  const verlaengern = useMutation({ mutationFn: (bis: string) => api.verlaengern(ausfallId!, bis), onSuccess: () => { qc.invalidateQueries({ queryKey: ['ausfall'] }); aktualisieren(); } });
   const reset = useMutation({ mutationFn: api.reset, onSuccess: () => { setHinweis(null); aktualisieren(); } });
 
   if (liste.isError || faelle.isError) return <main className="leer">Die API ist nicht erreichbar.</main>;
@@ -39,11 +40,11 @@ export function App() {
       <Header
         daten={daten} sortierung={sortierung} onSortierung={setSortierung} fetching={faelle.isFetching} aktualisiertUm={faelle.dataUpdatedAt} intervallMs={REFRESH_MS}
         onRefresh={aktualisieren} onExport={(s) => exportWechseln.mutate(s)} onOutbox={() => setOutboxOffen(true)}
-        outboxAnzahl={outbox.data?.length ?? 0} onReset={() => reset.mutate()}
+        outboxAnzahl={outbox.data?.length ?? 0} onReset={() => reset.mutate()} onVerlaengern={(bis) => verlaengern.mutate(bis)}
       />
       {hinweis && <div className="hinweis" role="alert">{hinweis} <button className="link" onClick={() => setHinweis(null)}>ok</button></div>}
       <main className="liste">
-        {sortiert.map((f) => <FallKarte key={f.appointment.id} fall={f} onChanged={aktualisieren} onHinweis={setHinweis} />)}
+        {sortiert.map((f) => <FallKarte key={f.appointment.id} fall={f} jetzt={daten.jetzt} onChanged={aktualisieren} onHinweis={setHinweis} />)}
       </main>
       {outboxOffen && <OutboxDrawer onClose={() => setOutboxOffen(false)} />}
     </>
