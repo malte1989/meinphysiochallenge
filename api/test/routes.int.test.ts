@@ -106,4 +106,22 @@ describe('API', () => {
     const r = await app.inject({ method: 'PATCH', url: `/api/ausfall/${a.id}`, payload: { bis: '2026-09-01T00:00:00.000Z' } });
     expect(r.statusCode).toBe(400);
   });
+
+  test('Selbstbuchung ohne Entscheidung: offener Fall wird selbst_gebucht, kein Anruf nötig, Original storniert', async () => {
+    const f = await fallVon('Cem Oeztuerk');
+    const r = await post('/api/sim/selbstbuchung', { appointmentId: f.appointment.id });
+    expect(r.statusCode).toBe(200);
+    const danach = await fallVon('Cem Oeztuerk');
+    expect(danach.status).toBe('selbst_gebucht');
+    expect((await pool.query(`select status from termino.appointment where id=$1`, [f.appointment.id])).rows[0].status).toBe('cancelled');
+    expect((await pool.query(`select count(*)::int n from termino.appointment where source='patient'`)).rows[0].n).toBe(1);
+  });
+
+  test('Selbstbuchung nach Absage mit Link: Fall wechselt von abgesagt zu selbst_gebucht', async () => {
+    const f = await fallVon('Gisela Neumann');
+    await post(`/api/faelle/${f.appointment.id}/absagen`, { art: 'mit_link' });
+    expect((await fallVon('Gisela Neumann')).status).toBe('abgesagt');
+    expect((await post('/api/sim/selbstbuchung', { appointmentId: f.appointment.id })).statusCode).toBe(200);
+    expect((await fallVon('Gisela Neumann')).status).toBe('selbst_gebucht');
+  });
 });

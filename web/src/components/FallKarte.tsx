@@ -32,8 +32,9 @@ export function FallKarte({ fall, jetzt, onChanged, onHinweis }: { fall: Fall; j
   };
   const umbuchen = useMutation({ mutationFn: (s: Slot) => api.umbuchen(a.id, s.practitionerId, s.startsAt), onSuccess: onChanged, onError: fehler });
   const absagen = useMutation({ mutationFn: (art: 'mit_link' | 'ersatzlos' | 'doppelbuchung') => api.absagen(a.id, art), onSuccess: onChanged, onError: fehler });
+  const selbst = useMutation({ mutationFn: () => api.selbstbuchung(a.id), onSuccess: onChanged, onError: fehler });
   const verknuepfen = useMutation({ mutationFn: () => api.verknuepfen(fall.patient!.id, a.patient.id), onSuccess: onChanged, onError: fehler });
-  const busy = umbuchen.isPending || absagen.isPending || verknuepfen.isPending;
+  const busy = umbuchen.isPending || absagen.isPending || verknuepfen.isPending || selbst.isPending;
 
   return (
     <article className={`karte stufe-${fall.stufe}${erledigt ? ' erledigt' : ''}`} data-testid="fall" data-patient={a.patient.name}>
@@ -77,6 +78,7 @@ export function FallKarte({ fall, jetzt, onChanged, onHinweis }: { fall: Fall; j
             {fall.empfehlung !== 'doppelbuchung_stornieren' && fall.empfehlung !== 'ersatzlos_absagen' && (
               <button disabled={busy} onClick={() => absagen.mutate('mit_link')}>Absagen mit Link</button>
             )}
+            <button className="link" disabled={busy} onClick={() => selbst.mutate()}>Demo: Patient:in bucht selbst</button>
           </div>
           {picker && <SlotPicker appointmentId={a.id} onClose={() => setPicker(false)} onPick={(s) => { setPicker(false); umbuchen.mutate(s); }} />}
         </>

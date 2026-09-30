@@ -51,7 +51,10 @@ export function reichereAn(a: Appointment, input: AutopilotInput): AngereichertF
   const entscheidung = input.entscheidungen.find((e) => e.appointmentId === a.id);
   const selbstGebucht = eigene.some((x) => x.source !== 'api' && x.bookedAt >= input.ausfall.createdAt && !fallIds.has(x.id));
   let status: FallStatus = 'offen';
-  if (entscheidung) status = entscheidung.aktion === 'umgebucht' ? 'umgebucht' : 'abgesagt';
+  if (entscheidung) {
+    if (entscheidung.aktion === 'umgebucht') status = 'umgebucht';
+    else status = entscheidung.aktion === 'abgesagt_mit_link' && selbstGebucht ? 'selbst_gebucht' : 'abgesagt';
+  }
   else if (selbstGebucht) status = 'selbst_gebucht';
   else if (a.status === 'cancelled') status = 'abgesagt';
 
