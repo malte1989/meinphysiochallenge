@@ -118,7 +118,7 @@ Siehe Liste unten. Stand der Tests: 48 Unit-Tests, 12 Integrationstests und 11 P
 
 ## Wie ich mit dem Agenten gearbeitet habe
 
-- Agent-Instruktionen: [CLAUDE.md](CLAUDE.md). Planung, Entscheidungen und Korrekturen: [docs/planungsphase.md](docs/planungsphase.md).
+- Agent-Instruktionen: [CLAUDE.md](CLAUDE.md). Planung und Entscheidungen: [docs/planungsphase.md](docs/planungsphase.md) (Übersicht der Einzeldokumente), Loom-Leitfaden: [docs/05-loom-leitfaden.md](docs/05-loom-leitfaden.md).
 - Ablauf: Spec ([docs/superpowers/specs/](docs/superpowers/specs/)), Plan ([docs/superpowers/plans/](docs/superpowers/plans/)), dann TDD in Worktrees pro Feature, Review vor jedem Merge nach `develop`.
 - Die vollständigen Prompts liegen im Session-Export.
 - Die ursprüngliche Datenbeschreibung steht in [data/README.md](data/README.md).
