@@ -44,6 +44,16 @@ describe('runAutopilot', () => {
     expect(berlinTime(renate.vorschlag!.startsAt) >= '14:00').toBe(true);
   });
 
+
+  test('gleiche Uhrzeit bleibt erhalten: Kerstin bekommt Jonas 09:20, Cem weicht auf einen anderen Slot aus', () => {
+    const kerstin = faelle.find((f) => name(f) === 'Kerstin Nowak')!;
+    expect(kerstin.vorschlag).toMatchObject({ gleicheUhrzeit: true, rang: 1, practitionerId: 'prac_02', startsAt: '2026-09-07T07:20:00.000Z' });
+    const cem = faelle.find((f) => name(f) === 'Cem Oeztuerk')!;
+    expect(cem.vorschlag).not.toBeNull();
+    expect(cem.vorschlag!.startsAt).not.toBe('2026-09-07T07:20:00.000Z');
+    expect(berlinDate(cem.vorschlag!.startsAt)).toBe('2026-09-07');
+  });
+
   test('ohne Vorschlag wird aus umbuchen absagen_mit_link oder bei Frist eskalieren', () => {
     const brigitte = faelle.find((f) => name(f) === 'Brigitte Hoffmann')!;
     expect(brigitte.vorschlag).toBeNull();

@@ -1,6 +1,7 @@
 import { findeFaelle, reichereAn } from './enrich.js';
 import { bewerte } from './priority.js';
-import { freieSlots } from './slots.js';
+import { freieSlots, slotSchluessel } from './slots.js';
+import { berlinDate, berlinTime } from './time.js';
 import type { AutopilotInput, Fall, Slot, Stufe } from './types.js';
 
 const STUFEN: Stufe[] = ['frist', 'hoch', 'normal', 'pruefen'];
@@ -17,8 +18,11 @@ export function runAutopilot(input: AutopilotInput): Fall[] {
   });
 
   const reserviert: Slot[] = [];
-  for (const f of faelle.filter((x) => x.status === 'offen' && x.empfehlung === 'umbuchen').sort(nachPrioritaet)) {
-    const slots = freieSlots(f, input, reserviert);
+  const umzubuchen = faelle.filter((x) => x.status === 'offen' && x.empfehlung === 'umbuchen').sort(nachPrioritaet);
+  const originalSlot = (f: Fall) => slotSchluessel(f.appointment.locationId, berlinDate(f.appointment.startsAt), berlinTime(f.appointment.startsAt));
+  for (const f of umzubuchen) {
+    const gemieden = new Set(umzubuchen.filter((x) => x !== f && !x.vorschlag).map(originalSlot));
+    const slots = freieSlots(f, input, reserviert, gemieden);
     f.vorschlag = slots[0] ?? null;
     f.alternativen = slots.slice(1, 3);
     if (f.vorschlag) reserviert.push(f.vorschlag);
