@@ -86,4 +86,24 @@ describe('API', () => {
     const f = await fallVon('Kerstin Nowak');
     expect((await post(`/api/faelle/${f.appointment.id}/absagen`, { art: 'quatsch' })).statusCode).toBe(400);
   });
+
+  // Krankmeldung verlängern
+  test('PATCH bis Di 08.09. nimmt Annas Termine vom 08.09. als Fälle auf, bestehende Entscheidungen bleiben', async () => {
+    const [a] = await get('/api/ausfall');
+    const f = await fallVon('Kerstin Nowak');
+    await post(`/api/faelle/${f.appointment.id}/absagen`, { art: 'mit_link' });
+    const vorher = (await faelle()).faelle.length;
+    const r = await app.inject({ method: 'PATCH', url: `/api/ausfall/${a.id}`, payload: { bis: '2026-09-08T22:00:00.000Z' } });
+    expect(r.statusCode).toBe(200);
+    const nachher = await faelle();
+    expect(nachher.faelle.length).toBeGreaterThan(vorher);
+    expect(nachher.faelle.some((x) => x.appointment.startsAt.startsWith('2026-09-08'))).toBe(true);
+    expect(nachher.faelle.find((x) => x.appointment.id === f.appointment.id).status).toBe('abgesagt');
+  });
+
+  test('PATCH mit bis vor dem Beginn ergibt 400', async () => {
+    const [a] = await get('/api/ausfall');
+    const r = await app.inject({ method: 'PATCH', url: `/api/ausfall/${a.id}`, payload: { bis: '2026-09-01T00:00:00.000Z' } });
+    expect(r.statusCode).toBe(400);
+  });
 });

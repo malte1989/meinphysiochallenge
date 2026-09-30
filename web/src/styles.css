@@ -55,3 +55,5 @@ button.link { border: 0; background: none; color: var(--primaer); padding: 0 4px
 .nachricht-kopf { color: var(--gedaempft); font-size: 13px; } .nachricht-betreff { font-weight: 600; margin: 2px 0; }
 @media (max-width: 600px) { .bis { margin-left: 0; } .kopf h1 { font-size: 16px; } }
 .countdown { color: var(--gedaempft); font-size: 13px; font-variant-numeric: tabular-nums; }
+.menue { position: relative; } .menue-liste { position: absolute; top: 100%; left: 0; z-index: 6; display: grid; gap: 4px; background: var(--karte); border: 1px solid var(--rand); border-radius: 6px; padding: 6px; margin-top: 4px; white-space: nowrap; }
+.tag { font-size: 15px; color: var(--primaer); }

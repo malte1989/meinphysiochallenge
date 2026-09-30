@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import type { FaelleAntwort } from '../types';
 import { tag } from '../format';
 import { Countdown } from './Countdown';
@@ -16,9 +17,15 @@ interface Props {
   onOutbox: () => void;
   outboxAnzahl: number;
   onReset: () => void;
+  onVerlaengern: (bis: string) => void;
 }
 
-export function Header({ daten, sortierung, onSortierung, onRefresh, fetching, aktualisiertUm, intervallMs, onExport, onOutbox, outboxAnzahl, onReset }: Props) {
+export function Header({ daten, sortierung, onSortierung, onRefresh, fetching, aktualisiertUm, intervallMs, onExport, onOutbox, outboxAnzahl, onReset, onVerlaengern }: Props) {
+  const [menue, setMenue] = useState(false);
+  const tage = [1, 2, 4].map((n) => {
+    const bis = new Date(Date.parse(daten.ausfall.bis) + n * 86_400_000);
+    return { bis: bis.toISOString(), label: tag(new Date(bis.getTime() - 60_000).toISOString()) };
+  });
   const offen = daten.faelle.filter((f) => f.status === 'offen').length;
   return (
     <header className="kopf">
@@ -38,6 +45,16 @@ export function Header({ daten, sortierung, onSortierung, onRefresh, fetching, a
         </div>
         <Countdown seit={aktualisiertUm} intervallMs={intervallMs} />
         <button onClick={onRefresh} disabled={fetching}>{fetching ? 'Aktualisiere …' : 'Jetzt aktualisieren'}</button>
+        <div className="menue">
+          <button onClick={() => setMenue(!menue)}>Krankmeldung verlängern</button>
+          {menue && (
+            <div className="menue-liste">
+              {tage.map((t) => (
+                <button key={t.bis} onClick={() => { setMenue(false); onVerlaengern(t.bis); }}>bis {t.label}</button>
+              ))}
+            </div>
+          )}
+        </div>
         <button onClick={onOutbox}>Outbox ({outboxAnzahl})</button>
         <button className="link" onClick={onReset}>Demo zurücksetzen</button>
       </div>
