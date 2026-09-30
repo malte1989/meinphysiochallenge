@@ -52,7 +52,7 @@ Maximal 5 Minuten. Die Notizen sind Stichpunkte zum Ablesen, nichts zum Vorlesen
 - Zusammenführen bei Katrin. Toggle 08:05: Sofias Slot Mi 09:20 wird frei und erscheint für Cem.
 - „Demo: Patient:in bucht selbst“ bei Cem: kein Anruf mehr nötig. Countdown und Auto-Refresh alle 5 Minuten.
 - Krankmeldung verlängern: Geht es Anna mittags nicht besser, kommen ihre Termine von Dienstag dazu.
-- „← Alle Ausfälle“: Übersicht aller Ausfälle auf einer eigenen Seite. Dort einen **neuen Ausfall** für eine andere Person anlegen (nur simuliert, kein Personalsystem, keine Benachrichtigung) und seine Fälle öffnen.
+- „Alle Ausfälle“ in der Seitenleiste: Übersicht aller Ausfälle auf einer eigenen Seite. Dort einen **neuen Ausfall** für eine andere Person anlegen (nur simuliert, kein Personalsystem, keine Benachrichtigung) und seine Fälle öffnen.
 
 ### 3:30–4:15 · Arbeit mit dem Agenten
 **Dateien:** [02 Technik](02-produktbrille-und-technik.md#technik-und-umfang), [CLAUDE.md](../CLAUDE.md), [Spec](superpowers/specs/2026-09-30-der-ausfall-design.md), [Plan](superpowers/plans/2026-09-30-der-ausfall.md)
