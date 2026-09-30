@@ -1,13 +1,9 @@
-import { addDays, berlinDate, daysBetween } from './time.js';
+import { addDays, berlinDate, datumKurz, daysBetween, wochentagKurz } from './time.js';
 import type { Empfehlung, Fall, Stufe } from './types.js';
 
 type Bewertbar = Omit<Fall, 'stufe' | 'score' | 'gruende' | 'empfehlung' | 'vorschlag' | 'alternativen' | 'anrufRang'>;
 
 const HOCH_DIAGNOSEN = ['EX3', 'LY2'];
-const WOCHENTAGE = ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'];
-const datumKurz = (d: string) => `${d.slice(8, 10)}.${d.slice(5, 7)}.`;
-const wochentagKurz = (iso: string) => `${WOCHENTAGE[new Date(`${berlinDate(iso)}T12:00:00Z`).getUTCDay()]} ${datumKurz(berlinDate(iso))}`;
-
 export function bewerte(f: Bewertbar, absageTage = 2): { stufe: Stufe; score: number; gruende: string[]; empfehlung: Empfehlung } {
   const jetzt = new Date(Date.parse(f.appointment.startsAt) - f.minutenBisStart * 60_000).toISOString();
   const heute = berlinDate(jetzt);
