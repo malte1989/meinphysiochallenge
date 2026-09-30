@@ -41,8 +41,12 @@ Maximal 5 Minuten. Die Notizen sind Stichpunkte zum Ablesen, nichts zum Vorlesen
 **Dateien:** [02 Produktbrille](02-produktbrille-und-technik.md#produktbrille-die-kernentscheidungen), [README, Priorisierung](../README.md#priorisierung-in-kurzform), [Spec §5](superpowers/specs/2026-09-30-der-ausfall-design.md)
 
 - Zwei Reihenfolgen: Slots nach Priorität, Anrufe nach Dringlichkeit (Sabine um 08:00 zuerst).
-- Harte Fristen vor „gefühlter“ Dringlichkeit: Cem und Renate, sonst verfällt die Verordnung. „Frisch operiert“ steht nicht in den Daten, die Diagnose ist nur Tie-Breaker.
-- Slots werden gemeinsam verteilt, damit niemand denselben Slot bekommt. „✓ gleiche Uhrzeit“ bleibt erhalten (Kerstin).
+- Harte Fristen vor „gefühlter“ Dringlichkeit: Cem und Renate, sonst verfällt die Verordnung.
+- **Vorschläge werden gemeinsam berechnet, nicht pro Fall einzeln.** Der Autopilot vergibt die Slots für alle Fälle in einem Durchlauf, nach Priorität (Frist zuerst), und merkt sich jeden vorgeschlagenen Slot. So bekommen nie zwei Patient:innen denselben Slot **vorgeschlagen**.
+  - **Zwei Schutzebenen, nicht verwechseln:** Die Datenbank (Überschneidungsschutz) verhindert, dass ein Slot zweimal **gebucht** wird. Sie greift erst beim Bestätigen und antwortet dann mit 409.
+  - **Warum die gemeinsame Verteilung trotzdem nötig ist:** Würde jeder Fall einzeln rechnen, bekämen viele denselben besten Slot vorgeschlagen. Der Empfang ruft die zweite Person an und bekommt beim Bestätigen einen 409: ein verschwendeter Anruf unter Zeitdruck. Nachweis: Unit-Test „kein Slot wird doppelt vergeben“.
+  - Im „Anderen Slot“ steht ein bereits vorgeschlagener Slot mit „Vorschlag für …“, bleibt aber wählbar.
+- „✓ gleiche Uhrzeit“ bleibt erhalten (Kerstin): Ein Slot, der für einen anderen Fall genau dessen Originaluhrzeit wäre, wird nicht an jemanden vergeben, der ohnehin gleichwertig ausweichen kann (Cem).
 - Ersatzlos absagbar, wenn der nächste Termin nah ist (Jan): spart knappe Kapazität.
 
 ### 2:30–3:30 · Live
@@ -69,7 +73,7 @@ Maximal 5 Minuten. Die Notizen sind Stichpunkte zum Ablesen, nichts zum Vorlesen
 
 - Erst Problem und Daten, dann Design in Abschnitten mit meiner Freigabe, dann Spec und Plan, dann TDD in Worktrees.
 - Wo ich dem Agenten widersprochen habe: Priorisierung, Termino-Schreibzugriff, Verlängern als Soll.
-- Wo der Agent mir widersprochen hat: klinische Dringlichkeit, Fristen, Slots gemeinsam verteilen.
+- Wo der Agent mir widersprochen hat: klinische Dringlichkeit, Fristen, Vorschläge gemeinsam berechnen statt pro Fall einzeln.
 - Die Playwright-Fälle sind zugleich das Drehbuch.
 
 ### 4:15–5:00 · Annahmen, Weggelassenes, Skalierung
