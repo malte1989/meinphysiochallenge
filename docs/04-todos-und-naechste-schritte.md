@@ -20,17 +20,18 @@ Stand: 22:30.
 | CI mit GitHub Actions, `npm audit`, Security-Scans | [Du] | ✅ teilweise | Workflow und Dependabot geschrieben und lokal validiert, **nie auf GitHub gelaufen**; `npm audit` 0 Schwachstellen | lokal bereits geprüft: `npm audit` meldet 0 Schwachstellen |
 | Sicherheits-Ergänzungen: gitleaks, Dependabot, Trivy (Image), hadolint | [Claude] | ✅ teilweise | gitleaks und Dependabot drin, Trivy und hadolint nicht |
 | Accessibility-Check mit axe in den Playwright-Tests | [Claude] | ⬜ | für den hektischen Empfang sinnvoll |
-| **Design an das meinphysio+-Buchungstool angleichen** (Referenz: [Terminanfrage](https://patient.meinphysioplus.de/terminanfrage), erst nach dem Zurücksetzen des Limits um 23:50) | [Du] | ⬜ | Merkmale siehe unten; nur Optik, keine Logik. Danach `npx playwright test` als Regressionsschutz, Screenshots in den Loom |
+| **Design an das meinphysio+-Buchungstool angleichen** (Referenz: [Terminanfrage](https://patient.meinphysioplus.de/terminanfrage), erst nach dem Zurücksetzen des Limits um 23:50) | [Du] | ✅ | Branch `feature/design`: Tokens aus dem Tailwind-Theme des Buchungstools, rechte Seitenleiste, Karten und Pillen; nur Optik, alle 32 Playwright-Tests unverändert grün. Screenshots für den Loom noch offen |
 | **Bruno-Requests** als Collection im Repo (`bruno/`) für alle API-Endpunkte | [Du] | ⬜ | git-freundlich, dient zum Ausprobieren und Demonstrieren der API; Umgebung `local` mit `http://localhost:3000` |
 | Ausführungsmethode des Plans | [Du] | ✅ | Native, vor jedem Merge Tests und Diff-Review |
 
 **Design-Referenz:** Buchungstool unter https://patient.meinphysioplus.de/terminanfrage (öffentlich erreichbar, Stand beim Anlegen des Todos nicht erneut geprüft). Screenshot liegt bei Malte, bewusst nicht im Repo, weil Fremdmaterial. Merkmale:
 
-- Großer dunkelgrüner Titel, der Fragezeichen-Akzent in Orangerot. Helle, ruhige Fläche, viel Weißraum. Geometrische Sans-Serif [A: vermutlich Poppins für Überschriften, Schrift nicht geprüft].
+- Großer dunkelgrüner Titel, der Fragezeichen-Akzent in Orangerot. Helle, ruhige Fläche, viel Weißraum. Titel in Poppins, Fließtext in DM Sans [Q: Tailwind-Theme des [Buchungstools](https://patient.meinphysioplus.de/terminanfrage), `--font-display` und `--font-sans`].
 - Karten mit großem Bild oben, abgerundeten Ecken und dünnem Rand. Die gewählte Karte hat einen dunkelgrünen, kräftigen Rand. Kleine graue Pillen für Hinweise („Termin in 2 Tagen“).
 - Rechte Seitenleiste mit Logo und Sprachwahl (DE), darunter ein Schritte-Menü mit Icon-Kacheln. Der aktive Schritt ist hell hinterlegt mit orangeroter Kachel, die übrigen sind grau.
 - Unten ein kleiner Vertrauenshinweis („Verschlüsselt · Server in Deutschland · DSGVO“) und das Team des Standorts als Avatare.
 - Umsetzung in `web/src/styles.css` über Design-Tokens (Farben, Radien, Schrift), Markenname immer „meinphysio+“. Keine Bilder oder Logos aus dem Fremdmaterial übernehmen, ohne dass Malte sie freigibt.
+- **Umgesetzt** (`feature/design`): Farben, Radien und Schatten stammen aus dem Tailwind-Theme des Buchungstools (von Malte bereitgestellt), der Kommentar neben jedem Token nennt den Namen dort, z. B. `--color-accent: #27372a`, `--color-primary: #eb3c00`, `--color-canvas-beige: #d5cfc7`. Die Wortmarke ist Text, das Team erscheint als Initialen. Statt „Verschlüsselt · Server in Deutschland · DSGVO“ steht ein ehrlicher Hinweis („Fiktive Daten · Nachrichten nur simuliert · läuft lokal“), weil der Prototyp lokal läuft. Einen Dark Mode hat das Buchungstool nicht, deshalb ist er entfallen.
 
 **Weitere Ideen für „Nächste Schritte" (nicht gebaut, in der README genannt):**
 

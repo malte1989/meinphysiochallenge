@@ -54,8 +54,9 @@ Unter Zeitdruck muss der Empfang für jeden Termin entscheiden (umbuchen, absage
 - **Selbstbuchung** (Demo-Button „Patient:in bucht selbst“): Der Fall gilt als „✓ selbst gebucht, kein Anruf nötig“, auch nach „Absagen mit Link“.
 - **Krankmeldung verlängern** (bis Di, Mi oder Fr): Annas Termine der Folgetage kommen als Fälle dazu, bestehende Entscheidungen bleiben.
 - **Diagnosegruppen im Klartext** als Chip (z. B. „EX2 · Extremitäten“), Quellen und Prüfstatus im Tooltip ([data/diagnosegruppen.json](data/diagnosegruppen.json)).
-- **Übersicht aller Ausfälle** (`#/ausfaelle`, Button „← Alle Ausfälle“): zeigt je Ausfall betroffene und offene Termine und erlaubt, den **Ausfall einer weiteren Person anzulegen** (nur simuliert: ein Datensatz, keine Anbindung an ein Personalsystem, keine Benachrichtigung).
+- **Übersicht aller Ausfälle** (`#/ausfaelle`, „Alle Ausfälle“ in der Seitenleiste): zeigt je Ausfall betroffene und offene Termine und erlaubt, den **Ausfall einer weiteren Person anzulegen** (nur simuliert: ein Datensatz, keine Anbindung an ein Personalsystem, keine Benachrichtigung).
 - **Notfallliste** zum Drucken (`/#druck`), siehe [IT-Notfallkonzept](#it-notfallkonzept-entwurf-nicht-geübt).
+- **Design wie das meinphysio+-Buchungstool** ([Terminanfrage](https://patient.meinphysioplus.de/terminanfrage)): Farben, Radien und Schatten aus dessen Tailwind-Theme als Tokens in [web/src/styles.css](web/src/styles.css), Poppins und DM Sans selbst gehostet, weißer Rahmen auf Beige mit rechter Seitenleiste (Bereiche als Icon-Kacheln, Termino-Steuerung, Team). Nur Optik: Wortmarke als Text, Team als Initialen, keine Bilder oder Logos übernommen.
 
 ## Was in den Daten steckt (per Code geprüft)
 
@@ -107,6 +108,8 @@ Details und Begründungen: [docs/superpowers/specs/2026-09-30-der-ausfall-design
 | **Vitest** | schnell, TypeScript ohne Konfiguration |
 | **Vite + React + TanStack Query** | `refetchInterval` liefert die 5-Minuten-Aktualisierung fast umsonst, Mutationen laden den Stand neu |
 | **Intl statt Datumsbibliothek** | Zeitzone `Europe/Berlin` ohne zusätzliche Abhängigkeit |
+| **lucide-react** | Linien-Icons im Stil des Buchungstools, nur die benutzten Icons landen im Bundle |
+| **@fontsource** (Poppins, DM Sans) | Schriften des Buchungstools, selbst gehostet statt Google Fonts: keine Anfragen an Dritte |
 | **Typen bewusst dupliziert** (api/web) | kein Shared-Package in 3 Stunden, nächster Schritt wäre ein generiertes OpenAPI-Schema |
 
 ## IT-Notfallkonzept (Entwurf, nicht geübt)
@@ -148,10 +151,9 @@ Nicht erledigt oder nicht geprüft:
 1. **Authentifizierung und Rollen**: Kunde (Magic Link aus der SMS/E-Mail), Mitarbeiter (Empfang, Therapeut:in, Standortleitung, Anmeldung per OIDC mit Zwei-Faktor, Rolle pro Standort) und Admin (Benutzer, Regeln, Audit-Log). Das Token trägt Mandant und Rolle für die Row-Level-Security.
 2. **CI zum Laufen bringen** (Repository auf GitHub, erster Lauf), dazu Image-Scan (Trivy), Dockerfile-Lint (hadolint) und Accessibility-Check mit axe in den Playwright-Tests.
 3. **Diagnosegruppen** gegen den G-BA-Heilmittelkatalog prüfen (Ziffernbedeutung, ICD-10) und „Rückgängig“ für Entscheidungen und Buchungen.
-4. **Design** an das meinphysio+-Buchungstool ([Terminanfrage](https://patient.meinphysioplus.de/terminanfrage)) angleichen (Farben, Schrift, Karten, Seitenleiste), nur Optik.
-5. **Bruno-Requests** als Collection im Repo (`bruno/`) für alle Endpunkte (Fälle, Slots, Umbuchen, Absagen, Verknüpfen, Outbox, Sim), zum Ausprobieren und Demonstrieren der API.
-6. **Stellschrauben für den Empfang**: Fenster der Anrufreihenfolge, Absage-Schwelle, Fristfenster.
-7. Echte Termino-API statt Mock (Webhooks statt Polling), Warteliste und Nachbelegung von Annas frei gewordenen Slots, Kanalpräferenz und Opt-in der Patient:innen, echter Versand, Audit-Log, Kennzahlen (Zeit, bis alle informiert sind, Anteil erfolgreich umgebucht).
+4. **Bruno-Requests** als Collection im Repo (`bruno/`) für alle Endpunkte (Fälle, Slots, Umbuchen, Absagen, Verknüpfen, Outbox, Sim), zum Ausprobieren und Demonstrieren der API.
+5. **Stellschrauben für den Empfang**: Fenster der Anrufreihenfolge, Absage-Schwelle, Fristfenster.
+6. Echte Termino-API statt Mock (Webhooks statt Polling), Warteliste und Nachbelegung von Annas frei gewordenen Slots, Kanalpräferenz und Opt-in der Patient:innen, echter Versand, Audit-Log, Kennzahlen (Zeit, bis alle informiert sind, Anteil erfolgreich umgebucht).
 
 ## Wie ich mit dem Agenten gearbeitet habe
 

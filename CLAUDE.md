@@ -4,7 +4,7 @@
 Bewerbungs-Case für meinphysio+ (Case Study „Der Ausfall“, 3 Stunden, lokal). Am Mo 07.09.2026, 07:40 meldet sich Anna Weber krank, 14 Termine an zwei Standorten. Ein Service mit Oberfläche soll dem Empfang pro Termin einen begründeten, konfliktfreien Vorschlag und eine Anrufreihenfolge liefern. Maßgeblich sind `docs/superpowers/specs/2026-09-30-der-ausfall-design.md` und der Plan in `docs/superpowers/plans/`.
 
 ## Stack und Befehle
-- TypeScript, Node 24 (`nvm use 24`), Fastify, `pg` (reines SQL), zod, Vitest, React + Vite + TanStack Query, Postgres 16.
+- TypeScript, Node 24 (`nvm use 24`), Fastify, `pg` (reines SQL), zod, Vitest, React + Vite + TanStack Query, lucide-react, Postgres 16.
 - Start: `docker compose up --build` (web :5173, api :3000, db :5433 auf dem Host).
 - E2E: `cd e2e && npm test` (Stack muss laufen, `docker compose up --build -d --wait`).
 - Unit-Tests: `cd api && npm test`. DB-Tests: `cd api && DATABASE_URL=postgres://ausfall:ausfall@localhost:5433/ausfall npm run test:int`.
@@ -20,3 +20,4 @@ Bewerbungs-Case für meinphysio+ (Case Study „Der Ausfall“, 3 Stunden, lokal
 5. UI-Texte auf Deutsch, Firmenname „meinphysio+“.
 6. Keine echten Patientendaten in externe Tools (die Daten sind fiktiv).
 7. Entscheidungen des Empfangs werden gespeichert, Vorschläge des Autopiloten nie.
+8. Optik nur über die Design-Tokens in `web/src/styles.css` (aus dem Tailwind-Theme des meinphysio+-Buchungstools). Schriften selbst gehostet (`@fontsource`), keine Bilder oder Logos aus Fremdmaterial.

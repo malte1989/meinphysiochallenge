@@ -15,13 +15,15 @@ export function SlotPicker({ appointmentId, onPick, onClose }: { appointmentId: 
       {[...gruppen].map(([t, slots]) => (
         <div key={t} className="slot-tag">
           <div className="slot-tag-name">{t}</div>
-          {slots.map((s) => (
-            <button key={s.practitionerId + s.startsAt} className="slot" onClick={() => onPick(s)}>
-              {zeit(s.startsAt)} · {s.therapeutName} · {s.praxisName}
-              {s.gleicheUhrzeit && <span className="badge ok"> ✓ gleiche Uhrzeit</span>}
-              {s.reserviertFuer && <span className="badge warn"> Vorschlag für {s.reserviertFuer}</span>}
-            </button>
-          ))}
+          <div className="slots">
+            {slots.map((s) => (
+              <button key={s.practitionerId + s.startsAt} className="slot" onClick={() => onPick(s)}>
+                <span><strong>{zeit(s.startsAt)}</strong> · {s.therapeutName} · {s.praxisName}</span>
+                {s.gleicheUhrzeit && <span className="badge ok">✓ gleiche Uhrzeit</span>}
+                {s.reserviertFuer && <span className="badge warn">Vorschlag für {s.reserviertFuer}</span>}
+              </button>
+            ))}
+          </div>
         </div>
       ))}
     </div>

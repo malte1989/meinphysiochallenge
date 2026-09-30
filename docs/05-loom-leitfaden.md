@@ -54,7 +54,7 @@ Maximal 5 Minuten. Die Notizen sind Stichpunkte zum Ablesen, nichts zum Vorlesen
 
 - Bestätigen bei Kerstin, dann Outbox zeigen. Die Datenbank verhindert Überschneidungen (Doppelklick ergibt 409).
 - Zusammenführen bei Katrin.
-- **Toggle 08:05** (Termino-Export von 08:00:41 auf 08:05:41, 1927 → 1928 Termine). Es ändern sich nur **drei Termine**, keiner gehört zu Annas Patient:innen:
+- **Toggle 08:05** in der Seitenleiste (Termino-Export von 08:00:41 auf 08:05:41, 1927 → 1928 Termine). Es ändern sich nur **drei Termine**, keiner gehört zu Annas Patient:innen:
   - Julia Conrad bei Sofia, Mi 09.09. 09:20: storniert, der Slot wird frei.
   - Helga Yildiz bei Tobias: von Di 08.09. 09:00 auf 13:40 verschoben, 09:00 wird frei, 13:40 belegt.
   - Georg Unger bei Jonas, Fr 11.09. 10:20: neu gebucht, der Slot wird belegt.
@@ -66,7 +66,7 @@ Maximal 5 Minuten. Die Notizen sind Stichpunkte zum Ablesen, nichts zum Vorlesen
 - **Ehrlich sagen:** Der Toggle ändert hier keinen Vorschlag und simuliert keine Selbstbuchung von Annas Patient:innen. Dafür gibt es den Button „Demo: Patient:in bucht selbst“ (nächster Stichpunkt). Idee für später: Meldung „Was hat sich geändert“ nach dem Umschalten.
 - „Demo: Patient:in bucht selbst“ bei Cem: kein Anruf mehr nötig. Countdown und Auto-Refresh alle 5 Minuten.
 - Krankmeldung verlängern: Geht es Anna mittags nicht besser, kommen ihre Termine von Dienstag dazu.
-- „← Alle Ausfälle“: Übersicht aller Ausfälle auf einer eigenen Seite. Dort einen **neuen Ausfall** für eine andere Person anlegen (nur simuliert, kein Personalsystem, keine Benachrichtigung) und seine Fälle öffnen.
+- „Alle Ausfälle“ in der Seitenleiste: Übersicht aller Ausfälle auf einer eigenen Seite. Dort einen **neuen Ausfall** für eine andere Person anlegen (nur simuliert, kein Personalsystem, keine Benachrichtigung) und seine Fälle öffnen.
 
 ### 3:30–4:15 · Arbeit mit dem Agenten
 **Dateien:** [02 Technik](02-produktbrille-und-technik.md#technik-und-umfang), [CLAUDE.md](../CLAUDE.md), [Spec](superpowers/specs/2026-09-30-der-ausfall-design.md), [Plan](superpowers/plans/2026-09-30-der-ausfall.md)

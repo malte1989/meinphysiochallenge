@@ -1,10 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, type ReactNode } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { api } from './api';
 import { FallKarte } from './components/FallKarte';
-import { Header, type Sortierung } from './components/Header';
+import { Header, TerminoSteuerung, type Sortierung } from './components/Header';
 import { Notfallliste } from './components/Notfallliste';
 import { OutboxDrawer } from './components/OutboxDrawer';
+import { Leer, Rahmen, Seitenleiste, type Bereich } from './components/Rahmen';
 import { Uebersicht } from './components/Uebersicht';
 import './styles.css';
 
@@ -37,6 +38,7 @@ export function App() {
   const faelle = useQuery({ queryKey: ['faelle', ausfallId], queryFn: () => api.faelle(ausfallId!), enabled: !!ausfallId && route.seite !== 'uebersicht', refetchInterval: REFRESH_MS });
   const diagnosen = useQuery({ queryKey: ['diagnosegruppen'], queryFn: api.diagnosegruppen, staleTime: Infinity });
   const outbox = useQuery({ queryKey: ['outbox'], queryFn: api.outbox });
+  const team = useQuery({ queryKey: ['therapeuten'], queryFn: api.therapeuten, staleTime: Infinity });
 
   const aktualisieren = () => Promise.all([qc.invalidateQueries({ queryKey: ['faelle'] }), qc.invalidateQueries({ queryKey: ['ausfall'] }), qc.invalidateQueries({ queryKey: ['outbox'] }), qc.invalidateQueries({ queryKey: ['slots'] })]);
   const exportWechseln = useMutation({
@@ -46,10 +48,29 @@ export function App() {
   const verlaengern = useMutation({ mutationFn: (bis: string) => api.verlaengern(ausfallId!, bis), onSuccess: () => aktualisieren() });
   const reset = useMutation({ mutationFn: api.reset, onSuccess: () => { setHinweis(null); aktualisieren(); } });
 
-  if (route.seite === 'uebersicht') return <Uebersicht />;
-  if (liste.isError) return <main className="leer">Die API ist nicht erreichbar.</main>;
-  if (faelle.isError) return <main className="leer">Dieser Ausfall existiert nicht mehr. <a href="#/ausfaelle">Alle Ausfälle</a></main>;
-  if (!faelle.data) return <main className="leer">Lade …</main>;
+  const zuBereich = (b: Bereich) => {
+    if (b === 'outbox') setOutboxOffen(true);
+    else if (b === 'ausfaelle') location.hash = '#/ausfaelle';
+    else if (b === 'notfallliste') location.hash = '#druck';
+    else if (route.seite === 'faelle') window.scrollTo({ top: 0, behavior: 'smooth' });
+    else location.hash = ausfallId ? `#/ausfall/${ausfallId}` : '#/';
+  };
+  const leiste = (aktiv: Bereich, abwesend: string[], extra?: ReactNode) => (
+    <Seitenleiste aktiv={aktiv} outboxAnzahl={outbox.data?.length ?? 0} team={team.data} abwesend={abwesend} onBereich={zuBereich}>{extra}</Seitenleiste>
+  );
+  const drawer = outboxOffen && <OutboxDrawer onClose={() => setOutboxOffen(false)} />;
+
+  if (route.seite === 'uebersicht') {
+    return (
+      <>
+        <Rahmen leiste={leiste('ausfaelle', liste.data?.map((a) => a.therapeutName) ?? [])}><Uebersicht gewaehlt={ausfallId} /></Rahmen>
+        {drawer}
+      </>
+    );
+  }
+  if (liste.isError) return <Leer>Die API ist nicht erreichbar.</Leer>;
+  if (faelle.isError) return <Leer>Dieser Ausfall existiert nicht mehr. <a href="#/ausfaelle">Alle Ausfälle</a></Leer>;
+  if (!faelle.data) return <Leer>Lade …</Leer>;
 
   const daten = faelle.data;
   if (route.seite === 'druck') {
@@ -59,19 +80,23 @@ export function App() {
     ? [...daten.faelle].sort((a, b) => a.anrufRang - b.anrufRang)
     : [...daten.faelle].sort((a, b) => a.appointment.startsAt.localeCompare(b.appointment.startsAt));
 
+  const termino = (
+    <TerminoSteuerung
+      exportStand={daten.exportStand} onExport={(s) => exportWechseln.mutate(s)} onRefresh={aktualisieren} fetching={faelle.isFetching}
+      aktualisiertUm={faelle.dataUpdatedAt} intervallMs={REFRESH_MS} onReset={() => reset.mutate()}
+    />
+  );
+
   return (
     <>
-      <Header
-        daten={daten} sortierung={sortierung} onSortierung={setSortierung} fetching={faelle.isFetching} aktualisiertUm={faelle.dataUpdatedAt} intervallMs={REFRESH_MS}
-        onRefresh={aktualisieren} onExport={(s) => exportWechseln.mutate(s)} onOutbox={() => setOutboxOffen(true)}
-        outboxAnzahl={outbox.data?.length ?? 0} onReset={() => reset.mutate()} onVerlaengern={(bis) => verlaengern.mutate(bis)}
-        onNotfallliste={() => { location.hash = '#druck'; }} onAlleAusfaelle={() => { location.hash = '#/ausfaelle'; }}
-      />
-      {hinweis && <div className="hinweis" role="alert">{hinweis} <button className="link" onClick={() => setHinweis(null)}>ok</button></div>}
-      <main className="liste">
-        {sortiert.map((f) => <FallKarte key={f.appointment.id} fall={f} jetzt={daten.jetzt} diagnosen={diagnosen.data} onChanged={aktualisieren} onHinweis={setHinweis} />)}
-      </main>
-      {outboxOffen && <OutboxDrawer onClose={() => setOutboxOffen(false)} />}
+      <Rahmen leiste={leiste('anrufliste', [daten.ausfall.therapeutName], termino)}>
+        <Header daten={daten} sortierung={sortierung} onSortierung={setSortierung} onVerlaengern={(bis) => verlaengern.mutate(bis)} />
+        {hinweis && <div className="hinweis" role="alert">{hinweis} <button className="link" onClick={() => setHinweis(null)}>ok</button></div>}
+        <main className="liste">
+          {sortiert.map((f) => <FallKarte key={f.appointment.id} fall={f} jetzt={daten.jetzt} diagnosen={diagnosen.data} onChanged={aktualisieren} onHinweis={setHinweis} />)}
+        </main>
+      </Rahmen>
+      {drawer}
     </>
   );
 }
