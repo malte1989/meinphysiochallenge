@@ -42,7 +42,7 @@ export function reichereAn(a: Appointment, input: AutopilotInput): AngereichertF
   const warnungen: Warnung[] = [];
   if (gleicherTag.length > 0) warnungen.push({ code: 'doppelbuchung', text: `Doppelbuchung? Weiterer Termin am selben Tag um ${berlinTime(gleicherTag[0].startsAt)} Uhr` });
   if (art === 'unsicher') warnungen.push({ code: 'identitaet_pruefen', text: 'Identität prüfen: Termino-Patient:in passt nur ungefähr zu den Stammdaten' });
-  if (art === 'fehlt') warnungen.push({ code: 'stammdaten_fehlen', text: 'Stammdaten fehlen: Patient:in nicht in der Verwaltung, keine Verordnung bekannt' });
+  if (art === 'fehlt') warnungen.push({ code: 'stammdaten_fehlen', text: 'Stammdaten fehlen: Patient:in nicht in der Verwaltung, keine Verordnung bekannt. Bitte prüfen, ob noch Patient!' });
   const telefon = patient?.telefon ?? a.patient.phone;
   const email = patient?.email ?? a.patient.email;
   if (!telefon && email) warnungen.push({ code: 'nicht_anrufbar', text: 'Keine Telefonnummer, nur E-Mail' });
