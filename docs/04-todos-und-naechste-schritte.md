@@ -6,7 +6,7 @@ Was im Gespräch genannt wurde, mit Status. Die kurze Fassung für Leser:innen s
 
 Status: ✅ erledigt, 🔜 als Nächstes, ⬜ offen.
 
-Stand: 22:20.
+Stand: 22:30.
 
 | Todo | Wer | Status | Hinweis |
 |---|---|---|---|
@@ -14,10 +14,10 @@ Stand: 22:20.
 | Krankmeldung verlängern (falls Anna mittags nicht besser) | [Du] | ✅ | Button „Krankmeldung verlängern“, Entscheidungen bleiben, Reset nimmt sie zurück |
 | Countdown und automatischer Refresh alle 5 Minuten | [Du] | ✅ | per Playwright mit vorgespielter Uhr getestet |
 | Button „Demo: Patient:in bucht selbst“ | [Claude] | ✅ | zeigt „✓ selbst gebucht, kein Anruf nötig“, auch nach „Absagen mit Link“ |
-| Notfallliste (druckbar) und IT-Notfallkonzept / Rollback | [Du] | 🔜 | optional; bis dahin gilt Annahme „Konzept existiert“ |
+| Notfallliste (druckbar) und IT-Notfallkonzept / Rollback | [Du] | ✅ teilweise | Notfallliste gebaut (`/#druck`), Konzept nur als Entwurf in der README, **„Rückgängig“/Rollback nicht gebaut** |
 | `data/diagnosegruppen.json` mit belegter Quelle (ICD-10, heilmittelkatalog.de) | [Du] | ✅ teilweise | Gruppenbezeichnung belegt (Zweitquelle), **Ziffernbedeutung nicht gegen G-BA-Primärquelle geprüft**, ICD-10-Zuordnung nicht erhoben; Status steht je Eintrag in der Datei |
-| CI mit GitHub Actions, `npm audit`, Security-Scans | [Du] | ⬜ | lokal bereits geprüft: `npm audit` meldet 0 Schwachstellen |
-| Sicherheits-Ergänzungen: gitleaks, Dependabot, Trivy (Image), hadolint | [Claude] | ⬜ | Teil von Task 16 |
+| CI mit GitHub Actions, `npm audit`, Security-Scans | [Du] | ✅ teilweise | Workflow und Dependabot geschrieben und lokal validiert, **nie auf GitHub gelaufen**; `npm audit` 0 Schwachstellen | lokal bereits geprüft: `npm audit` meldet 0 Schwachstellen |
+| Sicherheits-Ergänzungen: gitleaks, Dependabot, Trivy (Image), hadolint | [Claude] | ✅ teilweise | gitleaks und Dependabot drin, Trivy und hadolint nicht |
 | Accessibility-Check mit axe in den Playwright-Tests | [Claude] | ⬜ | für den hektischen Empfang sinnvoll |
 | Ausführungsmethode des Plans | [Du] | ✅ | Native, vor jedem Merge Tests und Diff-Review |
 

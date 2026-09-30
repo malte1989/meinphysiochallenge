@@ -44,7 +44,11 @@ Unter Zeitdruck muss der Empfang für jeden Termin entscheiden (umbuchen, absage
 - **Kein Slot wird doppelt vorgeschlagen**: Die Slots werden über alle Fälle gemeinsam nach Priorität verteilt.
 - **Bestätigen und Absagen** buchen über ein simuliertes Termino (mit Schutz vor Überschneidung) und erzeugen SMS und E-Mail in einer **Outbox** (nichts wird versendet).
 - **Datenprobleme sind sichtbar**: Doppelbuchung, unsicherer Patient:innen-Treffer (mit **Zusammenführen**), fehlende Stammdaten, keine Telefonnummer.
-- **Termino-Export 08:00 ↔ 08:05** schaltet zwischen den beiden Exporten um und simuliert neue Buchungen und Stornos. **Aktualisierung alle 5 Minuten** plus Button „Jetzt aktualisieren“.
+- **Termino-Export 08:00 ↔ 08:05** schaltet zwischen den beiden Exporten um und simuliert neue Buchungen und Stornos. **Automatische Aktualisierung alle 5 Minuten** mit Countdown, dazu Button „Jetzt aktualisieren“.
+- **Selbstbuchung** (Demo-Button „Patient:in bucht selbst“): Der Fall gilt als „✓ selbst gebucht, kein Anruf nötig“, auch nach „Absagen mit Link“.
+- **Krankmeldung verlängern** (bis Di, Mi oder Fr): Annas Termine der Folgetage kommen als Fälle dazu, bestehende Entscheidungen bleiben.
+- **Diagnosegruppen im Klartext** als Chip (z. B. „EX2 · Extremitäten“), Quellen und Prüfstatus im Tooltip ([data/diagnosegruppen.json](data/diagnosegruppen.json)).
+- **Notfallliste** zum Drucken (`/#druck`), siehe [IT-Notfallkonzept](#it-notfallkonzept-entwurf-nicht-geübt).
 
 ## Was in den Daten steckt (per Code geprüft)
 
@@ -68,10 +72,10 @@ Fristen der Heilmittel-Richtlinie [Q]: Behandlungsbeginn innerhalb von 28 Tagen 
 1. **Termino hat eine Schreib-API** (buchen, stornieren), hier gemockt. Ohne sie würde „Bestätigen“ nur eine Aufgabe anlegen. Nur der Adapter hinter `TerminoClient` ändert sich.
 2. **Die Krankmeldung gilt für heute.** Der Zeitraum ist ein Parameter. Annas Slots ab Dienstag sind mögliche Ersatztermine.
 3. **„Frontend in React“ ist eine SPA mit Vite.** Next.js wäre auch React. Im Team wäre das eine gemeinsame Architekturentscheidung.
-4. **Klinische Dringlichkeit** (frisch operiert, Schmerz) steht nicht in den Daten. Harte Regeln sind nur die Verordnungsfristen und die Frequenz. Die Diagnosegruppe (EX3, LY2) wirkt nur als gekennzeichneter Tie-Breaker. Die Bedeutung der Kürzel ist nicht belegt.
+4. **Klinische Dringlichkeit** (frisch operiert, Schmerz) steht nicht in den Daten. Harte Regeln sind nur die Verordnungsfristen und die Frequenz. Die Diagnosegruppe (EX3, LY2) wirkt nur als gekennzeichneter Tie-Breaker. Die Gruppenbezeichnung (WS, EX, LY) ist aus einer Zweitquelle belegt, die **Bedeutung der Ziffern ist nicht gegen den G-BA-Heilmittelkatalog geprüft** (siehe `verifikation` in `data/diagnosegruppen.json`).
 5. **„Jetzt“ ist fest 07:40 Berliner Zeit** (konfigurierbar per `NOW`).
 6. **SMS und E-Mail werden nur erzeugt.** Der Link zur Selbstbuchung ist ein Platzhalter.
-7. **Ein Notfallkonzept für IT-Ausfälle existiert.** Eine druckbare Notfallliste ist nur als Idee vorgesehen.
+7. **Ein Notfallkonzept für IT-Ausfälle existiert.** Die Anwendung liefert eine druckbare Notfallliste, der Rest ist ein ungeübter Entwurf (siehe unten).
 8. **Stammdaten und Verordnungen sind bei uns führend**, Termino ist führend für Termine. Zusammenführen schreibt nur die Termino-ID in unsere Stammdaten.
 9. **Selbst gebucht** heißt: ein neuer gebuchter Termin in Termino nach Anlage der Krankmeldung, nicht von uns angelegt.
 
@@ -123,17 +127,22 @@ Echte Seite zur Selbstbuchung, echter Versand von SMS und E-Mail, Warteliste und
 
 ## Wo ich abgebrochen habe
 
-Siehe Liste unten. Stand der Tests: 48 Unit-Tests, 12 Integrationstests und 11 Playwright-Fälle laufen grün. `npm audit` meldet für `api` und `web` keine Schwachstellen.
+Der Kern ist fertig und getestet: 51 Unit-Tests, 17 Integrationstests und 18 Playwright-Fälle laufen grün (frischer Start mit `docker compose down -v && docker compose up --build`), `npm audit` meldet für `api`, `web` und `e2e` keine Schwachstellen.
+
+Nicht erledigt oder nicht geprüft:
+- Die **CI-Pipeline ist noch nie gelaufen** (siehe oben).
+- Die **Ziffernbedeutung der Diagnosegruppen** und die ICD-10-Zuordnung sind nicht gegen die Primärquelle geprüft.
+- Das **IT-Notfallkonzept** ist ein Entwurf, eine „Rückgängig“-Funktion fehlt.
+- Die Oberfläche ist per Playwright und Screenshots geprüft, **nicht** mit Screenreader oder auf echten Mobilgeräten.
+- Die **Anrufreihenfolge** ist nur grob dringlichkeitsgesteuert: Cem (09:00, in 80 Minuten) wird nach Renate (15:40) angerufen, weil das 60-Minuten-Fenster erst darunter greift.
 
 ## Nächste Schritte
 
-1. **Krankmeldung verlängern**, falls es Anna mittags nicht besser geht: Zeitraum erweitern, der Autopilot rechnet neu, bestehende Entscheidungen bleiben.
-2. Button „Simuliere: Patient:in bucht selbst“ und Countdown bis zur nächsten Aktualisierung.
-3. `data/diagnosegruppen.json` mit belegter Quelle und Klartext in den Chips.
-4. Druckbare **Notfallliste** und Ausformulierung des IT-Notfallkonzepts (was tun, wenn unser Service oder Termino ausfällt).
-5. **Authentifizierung und Rollen**: Kunde (Magic Link aus der SMS/E-Mail), Mitarbeiter (Empfang, Therapeut:in, Standortleitung, Anmeldung per OIDC mit Zwei-Faktor, Rolle pro Standort) und Admin (Benutzer, Regeln, Audit-Log). Das Token trägt Mandant und Rolle für die Row-Level-Security.
-6. **CI und Security**: GitHub Actions (Typecheck, Tests, `npm audit`, Secret-Scan), Dependabot, Image-Scan, Accessibility-Check mit axe.
-7. Echte Termino-API, Warteliste, Kanalpräferenz und Opt-in der Patient:innen, Kennzahlen (Zeit, bis alle informiert sind, Anteil erfolgreich umgebucht).
+1. **Authentifizierung und Rollen**: Kunde (Magic Link aus der SMS/E-Mail), Mitarbeiter (Empfang, Therapeut:in, Standortleitung, Anmeldung per OIDC mit Zwei-Faktor, Rolle pro Standort) und Admin (Benutzer, Regeln, Audit-Log). Das Token trägt Mandant und Rolle für die Row-Level-Security.
+2. **CI zum Laufen bringen** (Repository auf GitHub, erster Lauf), dazu Image-Scan (Trivy), Dockerfile-Lint (hadolint) und Accessibility-Check mit axe in den Playwright-Tests.
+3. **Diagnosegruppen** gegen den G-BA-Heilmittelkatalog prüfen (Ziffernbedeutung, ICD-10) und „Rückgängig“ für Entscheidungen und Buchungen.
+4. **Stellschrauben für den Empfang**: Fenster der Anrufreihenfolge, Absage-Schwelle, Fristfenster.
+5. Echte Termino-API statt Mock (Webhooks statt Polling), Warteliste und Nachbelegung von Annas frei gewordenen Slots, Kanalpräferenz und Opt-in der Patient:innen, echter Versand, Audit-Log, Kennzahlen (Zeit, bis alle informiert sind, Anteil erfolgreich umgebucht).
 
 ## Wie ich mit dem Agenten gearbeitet habe
 
