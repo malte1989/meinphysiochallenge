@@ -62,7 +62,7 @@ Monorepo: `api/`, `web/`, `data/` (Rohdaten, unverändert), `docs/`.
 
 | Schema | Tabellen | Wer schreibt |
 |---|---|---|
-| `stamm` | `praxis`, `therapeut`, `arbeitszeit` (therapeut, wochentag, praxis, von, bis), `patient`, `verordnung` | nur der Seed |
+| `stamm` | `praxis`, `therapeut`, `arbeitszeit` (therapeut, wochentag, praxis, von, bis), `patient`, `verordnung` | der Seed. Die App schreibt nur `patient.termino_patient_id` beim Zusammenführen |
 | `termino` (Mock) | `appointment` (Felder wie im Export, `starts_at timestamptz`, `ends_at`, `status`, `source` = export/api, Patient als JSON), `export_snapshot` (Rohexporte), `sim_state` (aktiver Export) | nur der `TerminoClient` |
 | `ausfall` | `ausfall` (therapeut_id, von, bis, created_at), `entscheidung` (appointment_id, aktion, neuer_termin_id, created_at), `outbox` (kanal, empfänger, betreff, text, appointment_id, created_at) | die App |
 
@@ -104,7 +104,9 @@ Eingabe: Ausfall, Termine, Stammdaten, Verordnungen, Arbeitszeiten, Entscheidung
 - `absagen_mit_link`: 🟢 ohne Slot am selben Tag → markiert als „absagbar“, Link zur Selbstbuchung.
 - `eskalieren`: kein Slot vor der Frist → „Standortleitung: Vertretung anfragen (z. B. Clara Petersen, Mo frei)“.
 
-**Unsichere Daten:** Ein „unsicherer Treffer“ wird mit Verordnung wie ein Treffer behandelt, trägt aber die Warnung „Identität prüfen“. „Stammdaten fehlen“ bekommt `umbuchen` ohne Frist und wird in der Verteilung zuletzt bedient.
+**Unsichere Daten:**
+- Ein „unsicherer Treffer“ wird mit Verordnung wie ein Treffer behandelt. Er trägt die Warnung „Identität prüfen“ und bietet den Button **[Zusammenführen]**. Der schreibt die `termino_patient_id` in den Stammdatensatz. Danach ist der Treffer exakt, und die Warnung verschwindet beim nächsten Abruf.
+- „Stammdaten fehlen“ wird deutlich als Warnung angezeigt, bekommt `umbuchen` ohne Frist und wird in der Verteilung zuletzt bedient.
 
 ### 5.3 Verteilung der Slots
 
@@ -127,6 +129,7 @@ Eingabe: Ausfall, Termine, Stammdaten, Verordnungen, Arbeitszeiten, Entscheidung
 | `GET /api/faelle/:appointmentId/slots` | alle freien, passenden Slots |
 | `POST /api/faelle/:appointmentId/umbuchen` `{practitioner_id, starts_at}` | buchen und Original stornieren, danach Outbox. 409 bei Konflikt |
 | `POST /api/faelle/:appointmentId/absagen` `{mit_link}` | stornieren, danach Outbox |
+| `POST /api/patienten/:patientId/verknuepfen` `{termino_patient_id}` | unsicheren Treffer zusammenführen. 409, wenn die Termino-ID schon verknüpft ist |
 | `GET /api/outbox` | simulierte Nachrichten |
 | `GET /api/sim/export`, `POST /api/sim/export` `{export: "0800" \| "0805"}` | Toggle |
 
@@ -136,7 +139,7 @@ Outbox: SMS nur, wenn eine Telefonnummer vorhanden ist. E-Mail nur, wenn eine Ad
 
 - **Kopfzeile:** Ausfall (Name, Datum), Zähler offen/erledigt, Countdown „nächstes Update in m:ss“ (Soll), Button „jetzt aktualisieren“, Toggle für den Export.
 - **Sortierung:** Autopilot-Anrufreihenfolge | Uhrzeit.
-- **Fallkarte:** Rand in der Farbe der Stufe, Uhrzeit, Praxis, Leistung, Name, Telefon und E-Mail, „in X Min“. Chips mit Begründungen und Warnungen. Vorschlag mit Badge. Buttons [Bestätigen] [Anderer Slot ▾] [Absagen ▾]. Bei einem 409 erscheint der Hinweis „Slot inzwischen belegt“ und die Karte lädt neu.
+- **Fallkarte:** Rand in der Farbe der Stufe, Uhrzeit, Praxis, Leistung, Name, Telefon und E-Mail, „in X Min“. Chips mit Begründungen und Warnungen. Bei einem unsicheren Treffer: Gegenüberstellung Termino ↔ Stammdaten (Name, Geburtsdatum, Telefon, E-Mail) und [Zusammenführen]. „Stammdaten fehlen“ als rote Warnung. Vorschlag mit Badge. Buttons [Bestätigen] [Anderer Slot ▾] [Absagen ▾]. Bei einem 409 erscheint der Hinweis „Slot inzwischen belegt“ und die Karte lädt neu.
 - **Outbox-Drawer:** Vorschau der erzeugten SMS und E-Mails.
 
 ## 8. Umfang
@@ -163,7 +166,7 @@ Outbox: SMS nur, wenn eine Telefonnummer vorhanden ist. E-Mail nur, wenn eine Ad
   - kein Slot doppelt vergeben
   - Qualifikation: MLD45 nur Meltem oder Anna, MT nie bei Sofia, David oder Tobias
   - Umrechnung UTC → Berlin
-- **Abgleich der Patient:innen:** Meier → unsicher, Lena → nicht gefunden.
+- **Abgleich der Patient:innen:** Meier → unsicher, nach dem Zusammenführen → exakt. Lena → nicht gefunden.
 - **Integration (echtes Postgres):** Eine Buchung mit Überschneidung liefert 409.
 - **Smoke-Test vor jedem Merge:** `docker compose up` → UI zeigt 14 Fälle → einmal Bestätigen → einmal Toggle.
 
