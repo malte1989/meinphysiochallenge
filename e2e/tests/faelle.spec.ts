@@ -112,3 +112,23 @@ test('Doppelklick: zwei gleichzeitige Umbuchungen buchen nur einmal, die zweite 
   expect(antworten.map((r) => r.status()).sort()).toEqual([200, 409]);
   expect((await (await request.get('/api/outbox')).json()).length).toBe(2);
 });
+
+test('Countdown: zeigt die Zeit bis zum nächsten Update und springt nach „Jetzt aktualisieren“ zurück', async ({ page }) => {
+  await expect(page.locator('.countdown')).toHaveText(/nächstes Update in (4:5\d|5:00)/);
+  await page.clock.install();
+  await page.reload();
+  await page.waitForSelector('[data-testid=fall]');
+  await page.clock.fastForward('02:00');
+  await expect(page.locator('.countdown')).toHaveText(/nächstes Update in 2:5\d|3:00/);
+  await page.getByRole('button', { name: 'Jetzt aktualisieren' }).click();
+  await expect(page.locator('.countdown')).toHaveText(/nächstes Update in (4:5\d|5:00)/);
+});
+
+test('Automatischer Refresh: nach 5 Minuten fragt die Oberfläche die Fälle selbst neu ab', async ({ page }) => {
+  await page.clock.install();
+  await page.reload();
+  await page.waitForSelector('[data-testid=fall]');
+  const anfrage = page.waitForRequest((r) => r.url().includes('/faelle'));
+  await page.clock.fastForward('05:01');
+  await anfrage;
+});
