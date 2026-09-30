@@ -19,6 +19,7 @@ Stand: 22:30.
 | CI mit GitHub Actions, `npm audit`, Security-Scans | [Du] | ✅ teilweise | Workflow und Dependabot geschrieben und lokal validiert, **nie auf GitHub gelaufen**; `npm audit` 0 Schwachstellen | lokal bereits geprüft: `npm audit` meldet 0 Schwachstellen |
 | Sicherheits-Ergänzungen: gitleaks, Dependabot, Trivy (Image), hadolint | [Claude] | ✅ teilweise | gitleaks und Dependabot drin, Trivy und hadolint nicht |
 | Accessibility-Check mit axe in den Playwright-Tests | [Claude] | ⬜ | für den hektischen Empfang sinnvoll |
+| **Bruno-Requests** als Collection im Repo (`bruno/`) für alle API-Endpunkte | [Du] | ⬜ | git-freundlich, dient zum Ausprobieren und Demonstrieren der API; Umgebung `local` mit `http://localhost:3000` |
 | Ausführungsmethode des Plans | [Du] | ✅ | Native, vor jedem Merge Tests und Diff-Review |
 
 **Weitere Ideen für „Nächste Schritte“ (nicht gebaut, in der README genannt):**
