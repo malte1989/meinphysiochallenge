@@ -6,6 +6,7 @@ Bewerbungs-Case für meinphysio+ (Case Study „Der Ausfall“, 3 Stunden, lokal
 ## Stack und Befehle
 - TypeScript, Node 24 (`nvm use 24`), Fastify, `pg` (reines SQL), zod, Vitest, React + Vite + TanStack Query, Postgres 16.
 - Start: `docker compose up --build` (web :5173, api :3000, db :5433 auf dem Host).
+- E2E: `cd e2e && npm test` (Stack muss laufen, `docker compose up --build -d --wait`).
 - Unit-Tests: `cd api && npm test`. DB-Tests: `cd api && DATABASE_URL=postgres://ausfall:ausfall@localhost:5433/ausfall npm run test:int`.
 
 ## Git

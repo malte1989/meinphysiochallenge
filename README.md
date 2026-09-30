@@ -24,6 +24,15 @@ docker compose up -d db
 cd api && DATABASE_URL=postgres://ausfall:ausfall@localhost:5433/ausfall npm run test:int   # Integrationstests
 ```
 
+**E2E mit Playwright** (gegen den laufenden Stack, 11 Fälle, je ein Test pro Fall aus dem Loom):
+
+```bash
+docker compose up --build -d --wait
+cd e2e && npm ci && npx playwright install chromium
+npm test                          # Videos und Traces in e2e/test-results, Bericht: npx playwright show-report
+SLOW_MO=400 npm run test:headed   # langsam und sichtbar, z. B. zum Aufnehmen
+```
+
 ## Das Problem in einem Satz
 
 Unter Zeitdruck muss der Empfang für jeden Termin entscheiden (umbuchen, absagen, informieren) und sucht dafür von Hand Lücken, Qualifikationen und Verordnungsfristen zusammen.
@@ -95,17 +104,16 @@ Echte Seite zur Selbstbuchung, echter Versand von SMS und E-Mail, Warteliste und
 
 ## Wo ich abgebrochen habe
 
-Siehe Liste unten. Stand der Tests: Unit-Tests und Integrationstests laufen grün. `npm audit` meldet für `api` und `web` keine Schwachstellen.
+Siehe Liste unten. Stand der Tests: 48 Unit-Tests, 12 Integrationstests und 11 Playwright-Fälle laufen grün. `npm audit` meldet für `api` und `web` keine Schwachstellen.
 
 ## Nächste Schritte
 
-1. **Playwright-E2E-Tests** für die wichtigsten Fälle (Cem, Kerstin, Jan, Marek, Katrin, Toggle, Doppelklick). Die Tests dienen auch als Drehbuch für das Loom.
-2. **Krankmeldung verlängern**, falls es Anna mittags nicht besser geht: Zeitraum erweitern, der Autopilot rechnet neu, bestehende Entscheidungen bleiben.
-3. Button „Simuliere: Patient:in bucht selbst“ und Countdown bis zur nächsten Aktualisierung.
-4. `data/diagnosegruppen.json` mit belegter Quelle und Klartext in den Chips.
-5. Druckbare **Notfallliste** und Ausformulierung des IT-Notfallkonzepts (was tun, wenn unser Service oder Termino ausfällt).
-6. **CI und Security**: GitHub Actions (Typecheck, Tests, `npm audit`, Secret-Scan), Dependabot, Image-Scan, Accessibility-Check mit axe.
-7. Echte Termino-API, Warteliste, Kanalpräferenz und Opt-in der Patient:innen, Kennzahlen (Zeit, bis alle informiert sind, Anteil erfolgreich umgebucht).
+1. **Krankmeldung verlängern**, falls es Anna mittags nicht besser geht: Zeitraum erweitern, der Autopilot rechnet neu, bestehende Entscheidungen bleiben.
+2. Button „Simuliere: Patient:in bucht selbst“ und Countdown bis zur nächsten Aktualisierung.
+3. `data/diagnosegruppen.json` mit belegter Quelle und Klartext in den Chips.
+4. Druckbare **Notfallliste** und Ausformulierung des IT-Notfallkonzepts (was tun, wenn unser Service oder Termino ausfällt).
+5. **CI und Security**: GitHub Actions (Typecheck, Tests, `npm audit`, Secret-Scan), Dependabot, Image-Scan, Accessibility-Check mit axe.
+6. Echte Termino-API, Warteliste, Kanalpräferenz und Opt-in der Patient:innen, Kennzahlen (Zeit, bis alle informiert sind, Anteil erfolgreich umgebucht).
 
 ## Wie ich mit dem Agenten gearbeitet habe
 
