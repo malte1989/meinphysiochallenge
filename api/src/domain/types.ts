@@ -30,4 +30,5 @@ export interface Fall {
   frist: string | null; fristGrund: 'beginn' | 'unterbrechung' | null; letzteBehandlung: string | null; naechsterTermin: Appointment | null;
   stufe: Stufe; score: number; gruende: string[]; warnungen: Warnung[]; empfehlung: Empfehlung;
   vorschlag: Slot | null; alternativen: Slot[]; status: FallStatus; minutenBisStart: number; anrufRang: number;
+  spaetereDoppelbuchung: boolean;
 }
