@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Clock } from 'lucide-react';
 
 /** Zeigt, wann die nächste automatische Aktualisierung kommt (Termino liefert alle 5 Minuten einen Export). */
 export function Countdown({ seit, intervallMs }: { seit: number; intervallMs: number }) {
@@ -8,5 +9,5 @@ export function Countdown({ seit, intervallMs }: { seit: number; intervallMs: nu
     return () => clearInterval(t);
   }, []);
   const rest = Math.max(0, Math.ceil((seit + intervallMs - jetzt) / 1000));
-  return <span className="countdown">nächstes Update in {Math.floor(rest / 60)}:{String(rest % 60).padStart(2, '0')}</span>;
+  return <span className="countdown"><Clock aria-hidden />nächstes Update in {Math.floor(rest / 60)}:{String(rest % 60).padStart(2, '0')}</span>;
 }

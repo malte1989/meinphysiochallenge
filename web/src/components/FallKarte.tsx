@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
+import { CalendarCheck, ChevronDown, Clock, Mail, MapPin, Phone, PhoneOff, TriangleAlert } from 'lucide-react';
 import { api, ApiError } from '../api';
 import { LEISTUNG, PRAXIS, STUFE_LABEL, tag, tagZeit, zeit } from '../format';
 import type { Diagnosegruppe, Fall, Slot } from '../types';
@@ -42,14 +43,14 @@ export function FallKarte({ fall, jetzt, diagnosen, onChanged, onHinweis }: { fa
         <span className={`stufe-badge stufe-${fall.stufe}`}>{STUFE_LABEL[fall.stufe]}</span>
         {tag(a.startsAt) !== tag(jetzt) && <strong className="tag">{tag(a.startsAt)}</strong>}
         <strong className="uhrzeit">{zeit(a.startsAt)}</strong>
-        <span>{PRAXIS[a.locationId] ?? a.locationId}</span>
-        <span>{LEISTUNG[fall.heilmittel] ?? fall.heilmittel} · {a.durationMin} Min</span>
-        {!erledigt && <span className="bis">{fall.minutenBisStart > 0 ? `in ${fall.minutenBisStart} Min` : 'läuft'}</span>}
+        <span className="ort"><MapPin aria-hidden />{PRAXIS[a.locationId] ?? a.locationId}</span>
+        <span className="leistung">{LEISTUNG[fall.heilmittel] ?? fall.heilmittel} · {a.durationMin} Min</span>
+        {!erledigt && <span className="bis pille"><Clock aria-hidden />{fall.minutenBisStart > 0 ? `in ${fall.minutenBisStart} Min` : 'läuft'}</span>}
       </header>
       <div className="person">
-        <strong>{a.patient.name}</strong>
-        {tel ? <a href={`tel:${tel.replace(/\s/g, '')}`}>☎ {tel}</a> : <span className="warn-text">☎ keine Nummer</span>}
-        {mail && <span>✉ {mail}</span>}
+        <strong className="name">{a.patient.name}</strong>
+        {tel ? <a href={`tel:${tel.replace(/\s/g, '')}`}><Phone aria-hidden />{tel}</a> : <span className="warn-text"><PhoneOff aria-hidden />keine Nummer</span>}
+        {mail && <span className="mail"><Mail aria-hidden />{mail}</span>}
       </div>
       <div className="chips">
         {fall.verordnung && (() => {
@@ -58,7 +59,7 @@ export function FallKarte({ fall, jetzt, diagnosen, onChanged, onHinweis }: { fa
           return <span className="chip diagnose" title={titel}>{fall.verordnung.diagnosegruppe}{d ? ` · ${d.kurz}` : ''}</span>;
         })()}
         {fall.gruende.map((g) => <span key={g} className="chip">{g}</span>)}
-        {fall.warnungen.map((w) => <span key={w.code} className={`chip warnung ${w.code}`} title={w.text}>⚠ {w.text}</span>)}
+        {fall.warnungen.map((w) => <span key={w.code} className={`chip warnung ${w.code}`} title={w.text}><TriangleAlert aria-hidden />{w.text}</span>)}
       </div>
 
       {erledigt ? (
@@ -68,8 +69,10 @@ export function FallKarte({ fall, jetzt, diagnosen, onChanged, onHinweis }: { fa
           <p className="empfehlung">{EMPFEHLUNG[fall.empfehlung]}</p>
           {fall.vorschlag && (
             <p className="vorschlag">
-              Vorschlag: <strong>{tagZeit(fall.vorschlag.startsAt)}</strong> · {fall.vorschlag.therapeutName} · {fall.vorschlag.praxisName}
-              {fall.vorschlag.gleicheUhrzeit && <span className="badge ok"> ✓ gleiche Uhrzeit</span>}
+              <span className="vorschlag-label">Vorschlag</span>
+              <CalendarCheck aria-hidden />
+              <span><strong>{tagZeit(fall.vorschlag.startsAt)}</strong> · {fall.vorschlag.therapeutName} · {fall.vorschlag.praxisName}</span>
+              {fall.vorschlag.gleicheUhrzeit && <span className="badge ok">✓ gleiche Uhrzeit</span>}
             </p>
           )}
           {fall.match === 'unsicher' && <MatchVergleich fall={fall} busy={busy} onZusammenfuehren={() => verknuepfen.mutate()} />}
@@ -79,11 +82,11 @@ export function FallKarte({ fall, jetzt, diagnosen, onChanged, onHinweis }: { fa
             )}
             {fall.empfehlung === 'ersatzlos_absagen' && <button className="primary" disabled={busy} onClick={() => absagen.mutate('ersatzlos')}>Ersatzlos absagen</button>}
             {fall.empfehlung === 'doppelbuchung_stornieren' && <button className="primary" disabled={busy} onClick={() => absagen.mutate('doppelbuchung')}>Doppelbuchung stornieren</button>}
-            {fall.empfehlung !== 'doppelbuchung_stornieren' && <button disabled={busy} onClick={() => setPicker(!picker)}>Anderer Slot ▾</button>}
+            {fall.empfehlung !== 'doppelbuchung_stornieren' && <button disabled={busy} onClick={() => setPicker(!picker)} aria-expanded={picker}>Anderer Slot <ChevronDown aria-hidden /></button>}
             {fall.empfehlung !== 'doppelbuchung_stornieren' && fall.empfehlung !== 'ersatzlos_absagen' && (
               <button disabled={busy} onClick={() => absagen.mutate('mit_link')}>Absagen mit Link</button>
             )}
-            <button className="link" disabled={busy} onClick={() => selbst.mutate()}>Demo: Patient:in bucht selbst</button>
+            <button className="link demo" disabled={busy} onClick={() => selbst.mutate()}>Demo: Patient:in bucht selbst</button>
           </div>
           {picker && <SlotPicker appointmentId={a.id} onClose={() => setPicker(false)} onPick={(s) => { setPicker(false); umbuchen.mutate(s); }} />}
         </>

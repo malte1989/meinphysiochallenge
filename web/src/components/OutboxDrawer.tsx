@@ -5,7 +5,13 @@ export function OutboxDrawer({ onClose }: { onClose: () => void }) {
   const { data } = useQuery({ queryKey: ['outbox'], queryFn: api.outbox });
   return (
     <aside className="drawer" aria-label="Outbox">
-      <div className="drawer-kopf"><strong>Outbox (simuliert, nichts wird versendet)</strong><button className="link" onClick={onClose}>schließen</button></div>
+      <div className="drawer-kopf">
+        <div>
+          <h2 className="drawer-titel">Outbox<span className="akzent">.</span></h2>
+          <p className="drawer-unter">Simuliert, nichts wird versendet.</p>
+        </div>
+        <button className="link" onClick={onClose}>schließen</button>
+      </div>
       {data?.length === 0 && <p>Noch keine Nachrichten.</p>}
       {data?.map((m) => (
         <div key={m.id} className="nachricht">

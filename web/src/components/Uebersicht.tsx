@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { CalendarDays, Plus } from 'lucide-react';
 import { api, ApiError } from '../api';
 import { isoTag, zeitraum } from '../format';
+import { Avatar } from './Rahmen';
 
-/** Übersicht aller Ausfälle, dazu das (simulierte) Anlegen einer weiteren Krankmeldung. */
-export function Uebersicht() {
+/** Übersicht aller Ausfälle, dazu das (simulierte) Anlegen einer weiteren Krankmeldung. Der gewählte Ausfall ist umrandet. */
+export function Uebersicht({ gewaehlt }: { gewaehlt?: string }) {
   const qc = useQueryClient();
   const liste = useQuery({ queryKey: ['ausfall'], queryFn: api.ausfallListe });
   const personen = useQuery({ queryKey: ['therapeuten'], queryFn: api.therapeuten, staleTime: Infinity });
@@ -30,12 +32,12 @@ export function Uebersicht() {
     <main className="uebersicht">
       <div className="uebersicht-kopf">
         <div>
-          <h1>meinphysio+ · Ausfälle</h1>
-          <p className="unter">Alle gemeldeten Ausfälle von Mitarbeiter:innen. Wähle einen Ausfall, um seine Termine zu bearbeiten.</p>
+          <h1 className="titel">Alle Ausfälle<span className="akzent">.</span></h1>
+          <p className="lead">Alle gemeldeten Ausfälle von Mitarbeiter:innen. Wähle einen Ausfall, um seine Termine zu bearbeiten.</p>
         </div>
         <div className="leiste">
           <a className="knopf" href="#/">Zur Hauptseite</a>
-          <button className="primary" onClick={() => { setFormular(!formular); setFehler(null); }}>Neuen Ausfall anlegen</button>
+          <button className="primary" onClick={() => { setFormular(!formular); setFehler(null); }}><Plus aria-hidden /> Neuen Ausfall anlegen</button>
         </div>
       </div>
 
@@ -57,13 +59,17 @@ export function Uebersicht() {
 
       <div className="ausfaelle">
         {liste.data?.map((a) => (
-          <article key={a.id} className="ausfall" data-testid="ausfall">
-            <div>
+          <article key={a.id} className={`ausfall${a.id === gewaehlt ? ' gewaehlt' : ''}`} data-testid="ausfall">
+            <div className="ausfall-bild"><Avatar name={a.therapeutName} index={personen.data?.findIndex((t) => t.name === a.therapeutName) ?? 0} /></div>
+            <div className="ausfall-inhalt">
               <h2>{a.therapeutName}</h2>
               <p className="unter">{zeitraum(a.von, a.bis)}</p>
-              <p><strong>{a.anzahl}</strong> Termine betroffen · <strong>{a.offen}</strong> offen</p>
+              <p className="pillen">
+                <span className="pille"><CalendarDays aria-hidden /><strong>{a.anzahl}</strong> Termine betroffen</span>
+                <span className="pille"><strong>{a.offen}</strong> offen</span>
+              </p>
+              <a className="knopf primary" href={`#/ausfall/${a.id}`}>Fälle öffnen</a>
             </div>
-            <a className="knopf primary" href={`#/ausfall/${a.id}`}>Fälle öffnen</a>
           </article>
         ))}
         {liste.isLoading && <p>Lade …</p>}

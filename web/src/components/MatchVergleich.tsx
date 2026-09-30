@@ -1,3 +1,4 @@
+import { UserSearch } from 'lucide-react';
 import type { Fall } from '../types';
 
 export function MatchVergleich({ fall, onZusammenfuehren, busy }: { fall: Fall; onZusammenfuehren: () => void; busy: boolean }) {
@@ -12,7 +13,7 @@ export function MatchVergleich({ fall, onZusammenfuehren, busy }: { fall: Fall; 
   ];
   return (
     <div className="match">
-      <strong>Identität prüfen: Termino ↔ Stammdaten</strong>
+      <strong><UserSearch aria-hidden />Identität prüfen: Termino ↔ Stammdaten</strong>
       <table>
         <thead><tr><th></th><th>Termino</th><th>Stammdaten</th></tr></thead>
         <tbody>
