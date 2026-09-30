@@ -159,5 +159,5 @@ Nicht erledigt oder nicht geprüft:
 
 - Agent-Instruktionen: [CLAUDE.md](CLAUDE.md). Planung und Entscheidungen: [docs/planungsphase.md](docs/planungsphase.md) (Übersicht der Einzeldokumente), Loom-Leitfaden: [docs/00-loom-leitfaden.md](docs/00-loom-leitfaden.md).
 - Ablauf: Spec ([docs/superpowers/specs/](docs/superpowers/specs/)), Plan ([docs/superpowers/plans/](docs/superpowers/plans/)), dann TDD in Worktrees pro Feature, Review vor jedem Merge nach `develop`.
-- Die vollständigen Prompts liegen im Session-Export.
+- Die vollständigen Prompts und Antworten: [docs/prompts/session-export.txt](docs/prompts/session-export.txt) (Export mit `/export`, Stand 01.10. 00:53; der Google-Tracking-Parameter eines eingefügten Links ist geschwärzt).
 - Die ursprüngliche Datenbeschreibung steht in [data/README.md](data/README.md).
