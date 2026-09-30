@@ -98,6 +98,19 @@ Details und Begründungen: [docs/superpowers/specs/2026-09-30-der-ausfall-design
 | **Intl statt Datumsbibliothek** | Zeitzone `Europe/Berlin` ohne zusätzliche Abhängigkeit |
 | **Typen bewusst dupliziert** (api/web) | kein Shared-Package in 3 Stunden, nächster Schritt wäre ein generiertes OpenAPI-Schema |
 
+## IT-Notfallkonzept (Entwurf, nicht geübt)
+
+Annahme 7 sagt, dass ein Konzept existiert. Dieser Entwurf zeigt, wie sich die Anwendung darin einfügt.
+
+| Szenario | Was der Empfang tut | Was die Anwendung dazu liefert |
+|---|---|---|
+| **Unser Service ist nicht erreichbar** | direkt in Termino arbeiten, Liste abtelefonieren | **Notfallliste** (Button „Notfallliste“ oder `/#druck`): druckbare Anrufliste in Anrufreihenfolge mit Kontakt, Empfehlung, Vorschlag und Hinweisen. Bei Ausfall sofort zum Ausfallzeitpunkt vorab drucken oder als PDF ablegen |
+| **Termino ist nicht erreichbar** | Patient:innen nach Notfallliste anrufen, Buchungen auf Papier notieren | Die Liste zeigt den Stand des letzten Exports. Gebucht wird nach der Wiederherstellung |
+| **Nach dem Ausfall** | Papiernotizen in Termino nachtragen, Nachrichten (SMS/E-Mail) bei Bedarf nachholen | Entscheidungen und Nachrichten sind in `ausfall.entscheidung` und `ausfall.outbox` protokolliert und dienen als Nachweis |
+| **Rollback einer Fehlentscheidung** | Termin in Termino zurückbuchen, Patient:in informieren | **Nicht gebaut.** Jede Aktion ist protokolliert, eine „Rückgängig“-Funktion fehlt noch. **Demo zurücksetzen** gilt nur für die Demo |
+
+Prävention (nicht umgesetzt): regelmäßige Datenbanksicherung, Health-Check mit Alarm, Notfallkontakt je Standort, halbjährliche Übung mit gedruckter Liste.
+
 ## Bewusst weggelassen
 
 Echte Seite zur Selbstbuchung, echter Versand von SMS und E-Mail, Warteliste und Nachbelegung von Annas Slots, Authentifizierung, Mandanten im Code (nur [ARCHITECTURE.md](ARCHITECTURE.md)), vollständige Fehlerbehandlung, vollständige Testabdeckung.
