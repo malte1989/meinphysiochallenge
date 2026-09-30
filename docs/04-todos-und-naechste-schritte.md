@@ -19,11 +19,11 @@ Stand: 22:30.
 | CI mit GitHub Actions, `npm audit`, Security-Scans | [Du] | ✅ teilweise | Workflow und Dependabot geschrieben und lokal validiert, **nie auf GitHub gelaufen**; `npm audit` 0 Schwachstellen | lokal bereits geprüft: `npm audit` meldet 0 Schwachstellen |
 | Sicherheits-Ergänzungen: gitleaks, Dependabot, Trivy (Image), hadolint | [Claude] | ✅ teilweise | gitleaks und Dependabot drin, Trivy und hadolint nicht |
 | Accessibility-Check mit axe in den Playwright-Tests | [Claude] | ⬜ | für den hektischen Empfang sinnvoll |
-| **Design an das meinphysio+-Buchungstool angleichen** (Referenz-Screenshot von Malte, erst nach dem Zurücksetzen des Limits um 23:50) | [Du] | ⬜ | Merkmale siehe unten; nur Optik, keine Logik. Danach `npx playwright test` als Regressionsschutz, Screenshots in den Loom |
+| **Design an das meinphysio+-Buchungstool angleichen** (Referenz: [Terminanfrage](https://patient.meinphysioplus.de/terminanfrage), erst nach dem Zurücksetzen des Limits um 23:50) | [Du] | ⬜ | Merkmale siehe unten; nur Optik, keine Logik. Danach `npx playwright test` als Regressionsschutz, Screenshots in den Loom |
 | **Bruno-Requests** als Collection im Repo (`bruno/`) für alle API-Endpunkte | [Du] | ⬜ | git-freundlich, dient zum Ausprobieren und Demonstrieren der API; Umgebung `local` mit `http://localhost:3000` |
 | Ausführungsmethode des Plans | [Du] | ✅ | Native, vor jedem Merge Tests und Diff-Review |
 
-**Design-Referenz (Screenshot des Buchungstools, liegt bei Malte, bewusst nicht im Repo, weil Fremdmaterial):**
+**Design-Referenz:** Buchungstool unter https://patient.meinphysioplus.de/terminanfrage (öffentlich erreichbar, Stand beim Anlegen des Todos nicht erneut geprüft). Screenshot liegt bei Malte, bewusst nicht im Repo, weil Fremdmaterial. Merkmale:
 
 - Großer dunkelgrüner Titel, der Fragezeichen-Akzent in Orangerot. Helle, ruhige Fläche, viel Weißraum. Geometrische Sans-Serif [A: vermutlich Poppins für Überschriften, Schrift nicht geprüft].
 - Karten mit großem Bild oben, abgerundeten Ecken und dünnem Rand. Die gewählte Karte hat einen dunkelgrünen, kräftigen Rand. Kleine graue Pillen für Hinweise („Termin in 2 Tagen“).
