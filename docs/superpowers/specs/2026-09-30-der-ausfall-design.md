@@ -50,7 +50,7 @@ Fristen [Q]: Behandlungsbeginn innerhalb von 28 Kalendertagen nach Ausstellung. 
 ```
 docker compose up
  ├─ db   Postgres 16
- ├─ api  Node 22 + Fastify (Port 3000), migriert und seedet beim Start idempotent aus data/*.json
+ ├─ api  Node 24 + Fastify (Port 3000), migriert und seedet beim Start idempotent aus data/*.json
  └─ web  Vite + React (Port 5173), Proxy /api → api
 ```
 
