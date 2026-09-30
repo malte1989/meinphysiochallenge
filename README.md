@@ -111,6 +111,12 @@ Annahme 7 sagt, dass ein Konzept existiert. Dieser Entwurf zeigt, wie sich die A
 
 Prävention (nicht umgesetzt): regelmäßige Datenbanksicherung, Health-Check mit Alarm, Notfallkontakt je Standort, halbjährliche Übung mit gedruckter Liste.
 
+## CI und Security
+
+- [.github/workflows/ci.yml](.github/workflows/ci.yml): API (Typecheck, Unit- und Integrationstests mit Postgres-Service), Web (Typecheck, Build), `npm audit --audit-level=high` für api, web und e2e, Secret-Scan mit gitleaks, E2E mit Playwright gegen `docker compose`, Berichte als Artefakt.
+- [.github/dependabot.yml](.github/dependabot.yml): wöchentliche Updates für npm, Docker und GitHub Actions.
+- **Stand ehrlich:** Die Pipeline ist **noch nie auf GitHub gelaufen** (nichts gepusht, kein Run). Lokal geprüft sind die YAML-Syntax, dass alle genannten npm-Skripte existieren und dass `npm audit`, Typecheck und Build sauber durchlaufen. Image-Scan (Trivy), Dockerfile-Lint (hadolint) und ein Accessibility-Check mit axe sind **nicht** eingebaut.
+
 ## Bewusst weggelassen
 
 Echte Seite zur Selbstbuchung, echter Versand von SMS und E-Mail, Warteliste und Nachbelegung von Annas Slots, Authentifizierung, Mandanten im Code (nur [ARCHITECTURE.md](ARCHITECTURE.md)), vollständige Fehlerbehandlung, vollständige Testabdeckung.
