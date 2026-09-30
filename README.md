@@ -4,8 +4,10 @@ Case Study für meinphysio+. Am Montag, 07.09.2026, 07:40 meldet sich Anna Weber
 
 ## Start
 
+Voraussetzung: Docker mit Compose. Für die Tests zusätzlich Node 24 (`nvm use`).
+
 ```bash
-docker compose up --build
+docker compose up --build        # alles starten (db, api, web)
 ```
 
 | Dienst | URL |
@@ -14,24 +16,26 @@ docker compose up --build
 | API | http://localhost:3000/api/health |
 | Postgres (Host) | `postgres://ausfall:ausfall@localhost:5433/ausfall` |
 
-Die Datenbank wird beim Start automatisch angelegt und aus `data/*.json` befüllt. **Demo zurücksetzen** in der Oberfläche stellt den Ausgangszustand wieder her, damit sich jeder Fall beliebig oft vorführen lässt.
+Die Datenbank wird beim Start angelegt und aus `data/*.json` befüllt.
 
-Tests (Node 24, `nvm use`):
+## Befehle
 
-```bash
-cd api && npm test                                   # Unit-Tests, ohne Datenbank
-docker compose up -d db
-cd api && DATABASE_URL=postgres://ausfall:ausfall@localhost:5433/ausfall npm run test:int   # Integrationstests
-```
+| Zweck | Befehl |
+|---|---|
+| Starten, im Hintergrund, wartet bis alles gesund ist | `docker compose up --build -d --wait` |
+| Stoppen | `docker compose down` |
+| Frisch von Grund auf (Datenbank löschen) | `docker compose down -v && docker compose up --build` |
+| Logs der API | `docker compose logs -f api` |
+| Demo zurücksetzen (oder Button in der Oberfläche) | `curl -X POST localhost:5173/api/sim/reset` |
+| Unit-Tests (ohne Datenbank) | `cd api && npm ci && npm test` |
+| Integrationstests | `docker compose up -d db`, dann `cd api && DATABASE_URL=postgres://ausfall:ausfall@localhost:5433/ausfall npm run test:int` |
+| Typecheck api, Build web | `cd api && npm run typecheck` · `cd web && npm run build` |
+| E2E (Stack muss laufen) | `cd e2e && npm ci && npx playwright install chromium && npm test` |
+| E2E sichtbar und langsam (zum Aufnehmen) | `cd e2e && SLOW_MO=400 npm run test:headed` |
+| E2E-Bericht mit Video und Trace | `cd e2e && npx playwright show-report` |
+| Schwachstellen prüfen | `cd api && npm audit` (ebenso `web`, `e2e`) |
 
-**E2E mit Playwright** (gegen den laufenden Stack, 11 Fälle, je ein Test pro Fall aus dem Loom):
-
-```bash
-docker compose up --build -d --wait
-cd e2e && npm ci && npx playwright install chromium
-npm test                          # Videos und Traces in e2e/test-results, Bericht: npx playwright show-report
-SLOW_MO=400 npm run test:headed   # langsam und sichtbar, z. B. zum Aufnehmen
-```
+**Achtung:** Die Integrationstests löschen und befüllen die Datenbank des Compose-Stacks neu. Danach hilft **Demo zurücksetzen**.
 
 ## Das Problem in einem Satz
 
