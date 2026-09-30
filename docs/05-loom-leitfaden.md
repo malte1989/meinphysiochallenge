@@ -1,94 +1,103 @@
 # Loom-Leitfaden
 
-[Übersicht](planungsphase.md) · [1 Problem und Daten](01-problem-und-daten.md) · [2 Produktbrille und Technik](02-produktbrille-und-technik.md) · [3 Architektur](03-architektur-annahmen.md) · [4 Todos](04-todos-und-naechste-schritte.md) · [5 Loom](05-loom-leitfaden.md)
+[Übersicht](planungsphase.md) · [1 Problem und Daten](01-problem-und-daten.md) · [2 Produktbrille und Technik](02-produktbrille-und-technik.md) · [3 Architektur](03-architektur-annahmen.md) · [4 Todos](04-todos-und-naechste-schritte.md) · [5 Loom](05-loom-leitfaden.md) · [6 Hintergrund](06-hintergrund-rueckfragen.md)
 
-
-
-Maximal 5 Minuten. Die Notizen sind Stichpunkte zum Ablesen, nichts zum Vorlesen. Je Abschnitt stehen die Dateien, die dazu auf dem Bildschirm sein sollten.
+Maximal 5 Minuten. Pro Abschnitt: die Seite (1 bis 4), das Gezeigte und wenige Stichpunkte zum Ablesen. Was nicht in 5 Minuten passt, steht in [6 Hintergrund für Rückfragen](06-hintergrund-rueckfragen.md).
 
 ## Vor der Aufnahme
 
-1. `docker compose up --build -d --wait`, dann im Browser http://localhost:5173 öffnen und **Demo zurücksetzen** klicken ([README, Start](../README.md#start)).
-2. Nicht-stören-Modus einschalten, Tabs vorbereiten: Oberfläche, [README](../README.md), [ARCHITECTURE.md](../ARCHITECTURE.md), dieses Dokument.
-3. Als Drehbuch: `cd e2e && npm run test:drehbuch` spielt den Komplettdurchlauf in Loom-Reihenfolge mit langsamen Klicks ab (etwa 45 Sekunden, [e2e/tests/loom-drehbuch.spec.ts](../e2e/tests/loom-drehbuch.spec.ts), Schritte 1 bis 11 entsprechen den Abschnitten unten). Mit `npm run test:ui` wählst du im Playwright-UI-Modus **einen einzelnen Schritt** (Tests „1 · Problem“ bis „11 · Notfallliste“, jeder startet mit zurückgesetzter Demo) oder den „0 · Komplettdurchlauf“. Tempo per `SLOW_MO` und `PAUSE` in Millisekunden.
+1. `docker compose up --build -d --wait`, dann http://localhost:5173 öffnen und **Demo zurücksetzen** klicken ([README, Start](../README.md#start)).
+2. Nicht-stören-Modus an. Tabs: Oberfläche, [README](../README.md), [ARCHITECTURE.md](../ARCHITECTURE.md), dieses Dokument.
+3. Optional als Drehbuch: `cd e2e && npm run test:drehbuch` (Komplettdurchlauf, langsame Klicks, etwa 45 Sekunden) oder `npm run test:ui` (einzelne Schritte wählbar). Tempo per `SLOW_MO` und `PAUSE` in ms. Nach jedem Wiederholen **Demo zurücksetzen**.
 
 ## Ablauf
 
-| Zeit | Thema | Dateien auf dem Bildschirm |
+| Zeit | Thema | Seite |
 |---|---|---|
-| 0:00–0:30 | Problem | [01 Problem und Daten](01-problem-und-daten.md#problemerfassung), Oberfläche |
-| 0:30–1:30 | Datenfallen | [01 Problem und Daten](01-problem-und-daten.md#was-in-den-daten-steckt), [README, Was in den Daten steckt](../README.md#was-in-den-daten-steckt-per-code-geprüft) |
-| 1:30–2:30 | Produktbrille | [02 Produktbrille](02-produktbrille-und-technik.md#produktbrille-die-kernentscheidungen), [README, Priorisierung](../README.md#priorisierung-in-kurzform), [Spec §5](superpowers/specs/2026-09-30-der-ausfall-design.md) |
-| 2:30–3:30 | Live | Oberfläche, [e2e/tests/faelle.spec.ts](../e2e/tests/faelle.spec.ts) |
-| 3:30–4:15 | Arbeit mit dem Agenten | [02 Technik](02-produktbrille-und-technik.md#technik-und-umfang), [CLAUDE.md](../CLAUDE.md), [Spec](superpowers/specs/2026-09-30-der-ausfall-design.md), [Plan](superpowers/plans/2026-09-30-der-ausfall.md) |
-| 4:15–5:00 | Annahmen, Weggelassenes, Skalierung | [03 Architektur](03-architektur-annahmen.md), [README, Annahmen](../README.md#annahmen), [README, Bewusst weggelassen](../README.md#bewusst-weggelassen), [ARCHITECTURE.md](../ARCHITECTURE.md), [04 Todos](04-todos-und-naechste-schritte.md) |
+| 0:00–0:30 | Problem | [1 Problem und Daten](01-problem-und-daten.md#problemerfassung) |
+| 0:30–3:30 | Live (Datenfallen, Produktbrille, Demo) | [1 Problem und Daten](01-problem-und-daten.md#was-in-den-daten-steckt), [2 Produktbrille](02-produktbrille-und-technik.md#produktbrille-die-kernentscheidungen), Oberfläche ([Drehbuch](../e2e/tests/loom-drehbuch.spec.ts)) |
+| 3:30–4:15 | Arbeit mit dem Agenten | [2 Technik und Umfang](02-produktbrille-und-technik.md#technik-und-umfang) |
+| 4:15–5:00 | Annahmen, Skalierung, nächste Schritte | [3 Architektur](03-architektur-annahmen.md), [4 Todos](04-todos-und-naechste-schritte.md) |
 
-## Notizen je Abschnitt
+## Skript
 
 ### 0:00–0:30 · Problem
-**Dateien:** [01 Problem und Daten](01-problem-und-daten.md#problemerfassung), Oberfläche
+**Seite:** [1 Problem und Daten](01-problem-und-daten.md#problemerfassung) · **Zeigen:** Oberfläche mit den 14 Fällen
 
-- Montag, 07:40, Anna krank, der erste Termin ist um 08:00: Der Empfang hat Minuten, keine Stunden.
-- Heute: Lücken, Qualifikation und Verordnungsfristen von Hand suchen. Ziel: Der Empfang telefoniert und bestätigt.
+- Montag 07:40, Anna krank, erster Termin um 08:00: 14 Termine an zwei Standorten, der Empfang hat Minuten.
+- Heute sucht er Lücken, Qualifikation und Verordnungsfristen von Hand.
+- Ziel: Der Empfang bekommt automatisiert Vorschläge und bestätigt die wichtigsten Termine.
 
-### 0:30–1:30 · Datenfallen
-**Dateien:** [01 Problem und Daten](01-problem-und-daten.md#was-in-den-daten-steckt), [README, Was in den Daten steckt](../README.md#was-in-den-daten-steckt-per-code-geprüft)
+### 0:30–3:30 · Live
+**Seiten:** [1 Problem und Daten](01-problem-und-daten.md#was-in-den-daten-steckt), [2 Produktbrille](02-produktbrille-und-technik.md#produktbrille-die-kernentscheidungen) · **Zeigen:** Oberfläche, in dieser Reihenfolge
 
-- Zeiten sind UTC, Marek ist doppelt gebucht, Katrin Meier ist Meyer, Lena fehlt in den Stammdaten, Gisela hat keine Nummer.
-- Haltung: Nichts still übergehen. Jeder Datenfehler wird sichtbar und, wo möglich, mit einem Klick behoben (Zusammenführen).
+1. **Reihenfolge.** Zwei Reihenfolgen: Slots nach Priorität, Anrufe nach Dringlichkeit (Sabine, in 20 Minuten, zuerst). Zeiten kommen als UTC, angezeigt wird Berliner Zeit. *Zeigen:* Sortierung „Autopilot“ und „Uhrzeit“.
+2. **Datenfallen.**
+   - **Marek** steht zweimal (doppelt gebucht), der spätere Termin hat „Doppelbuchung stornieren“.
+   - **Katrin Meier** ist Meyer in den Stammdaten: **Zusammenführen** klicken, die Warnung verschwindet.
+   - **Lena** fehlt in den Stammdaten (rote Warnung). **Gisela** hat keine Nummer („keine Nummer“).
+3. **Fristen.** Harte Fristen vor „gefühlter“ Dringlichkeit: Die Verordnung von Cem und Renate verfällt am 09.09. „Frisch operiert“ steht nicht in den Daten, die Diagnose ist nur Tie-Breaker. *Zeigen:* Karten von Cem und Renate, Stufe „Frist“.
+4. **Kerstin bestätigen.** Vorschläge werden für alle Fälle gemeinsam berechnet, nie zwei Personen derselbe Slot. „✓ gleiche Uhrzeit“ bleibt erhalten. *Zeigen:* **Bestätigen**, dann Outbox: SMS und E-Mail (simuliert).
+5. **Jan.** Ersatzlos absagbar, sein nächster Termin ist am Mittwoch, das spart knappe Kapazität. *Zeigen:* **Ersatzlos absagen**.
+6. **Toggle 08:05** in der Seitenleiste. Nur drei Termine ändern sich, dadurch ändern sich nur die Alternativen. *Zeigen:* Cem, „Anderer Slot“: Der Mittwoch-Slot ist neu wählbar.
+7. **Cem bucht selbst** (Demo-Button): kein Anruf mehr nötig.
+8. **Krankmeldung verlängern**, dann „Alle Ausfälle“: neuen Ausfall anlegen (nur simuliert).
+9. **Ehrlich sagen:** Beschlossen, noch nicht gebaut: Termine unter 1 Stunde bekommen mindestens „Hoch“. Heute trägt Sabine „Normal“ und steht trotzdem auf Platz 1.
 
-### 1:30–2:30 · Produktbrille
-**Dateien:** [02 Produktbrille](02-produktbrille-und-technik.md#produktbrille-die-kernentscheidungen), [README, Priorisierung](../README.md#priorisierung-in-kurzform), [Spec §5](superpowers/specs/2026-09-30-der-ausfall-design.md)
-
-- Zwei Reihenfolgen: Slots nach Priorität, Anrufe nach Dringlichkeit (Sabine um 08:00 zuerst).
-- Harte Fristen vor „gefühlter“ Dringlichkeit: Cem und Renate, sonst verfällt die Verordnung.
-- **Vorschläge werden gemeinsam berechnet, nicht pro Fall einzeln.** Der Autopilot vergibt die Slots für alle Fälle in einem Durchlauf, nach Priorität (Frist zuerst), und merkt sich jeden vorgeschlagenen Slot. So bekommen nie zwei Patient:innen denselben Slot **vorgeschlagen**.
-  - **Zwei Schutzebenen, nicht verwechseln:** Die Datenbank (Überschneidungsschutz) verhindert, dass ein Slot zweimal **gebucht** wird. Sie greift erst beim Bestätigen und antwortet dann mit 409.
-  - **Warum die gemeinsame Verteilung trotzdem nötig ist:** Würde jeder Fall einzeln rechnen, bekämen viele denselben besten Slot vorgeschlagen. Der Empfang ruft die zweite Person an und bekommt beim Bestätigen einen 409: ein verschwendeter Anruf unter Zeitdruck. Nachweis: Unit-Test „kein Slot wird doppelt vergeben“.
-  - Im „Anderen Slot“ steht ein bereits vorgeschlagener Slot mit „Vorschlag für …“, bleibt aber wählbar.
-- „✓ gleiche Uhrzeit“ bleibt erhalten (Kerstin): Ein Slot, der für einen anderen Fall genau dessen Originaluhrzeit wäre, wird nicht an jemanden vergeben, der ohnehin gleichwertig ausweichen kann (Cem).
-- Ersatzlos absagbar, wenn der nächste Termin nah ist (Jan): spart knappe Kapazität.
-
-### 2:30–3:30 · Live
-**Dateien:** Oberfläche, [e2e/tests/faelle.spec.ts](../e2e/tests/faelle.spec.ts), [e2e/tests/loom-drehbuch.spec.ts](../e2e/tests/loom-drehbuch.spec.ts)
-
-- Bestätigen bei Kerstin, dann Outbox zeigen. Die Datenbank verhindert Überschneidungen (Doppelklick ergibt 409).
-- Zusammenführen bei Katrin.
-- **Toggle 08:05** in der Seitenleiste (Termino-Export von 08:00:41 auf 08:05:41, 1927 → 1928 Termine). Es ändern sich nur **drei Termine**, keiner gehört zu Annas Patient:innen:
-  - Julia Conrad bei Sofia, Mi 09.09. 09:20: storniert, der Slot wird frei.
-  - Helga Yildiz bei Tobias: von Di 08.09. 09:00 auf 13:40 verschoben, 09:00 wird frei, 13:40 belegt.
-  - Georg Unger bei Jonas, Fr 11.09. 10:20: neu gebucht, der Slot wird belegt.
-- **Was man sieht:** Keiner der 14 Vorschläge ändert sich, nur die **Alternativen** unter „Anderer Slot“:
-  - Neu dabei: Di 08.09. 09:00 bei Tobias und Mi 09.09. 09:20 bei Sofia.
-  - Weg: Di 08.09. 13:40 bei Tobias und Fr 11.09. 10:20 bei Jonas (bei manchen Fällen nur einer davon).
-  - Für Cem (Frist 09.09.) ist der Mittwoch-Slot damit neu wählbar.
-- **Was technisch passiert:** Der Export wird in einer Transaktion eingespielt. Nur Export-Termine werden angefasst, eigene Buchungen bleiben. Kollidiert ein Export-Termin mit einer eigenen Buchung, wird er übersprungen und als Konflikt gemeldet. Danach rechnet der Autopilot alles neu.
-- **Ehrlich sagen:** Der Toggle ändert hier keinen Vorschlag und simuliert keine Selbstbuchung von Annas Patient:innen. Dafür gibt es den Button „Demo: Patient:in bucht selbst“ (nächster Stichpunkt). Idee für später: Meldung „Was hat sich geändert“ nach dem Umschalten.
-- „Demo: Patient:in bucht selbst“ bei Cem: kein Anruf mehr nötig. Countdown und Auto-Refresh alle 5 Minuten.
-- Krankmeldung verlängern: Geht es Anna mittags nicht besser, kommen ihre Termine von Dienstag dazu.
-- „Alle Ausfälle“ in der Seitenleiste: Übersicht aller Ausfälle auf einer eigenen Seite. Dort einen **neuen Ausfall** für eine andere Person anlegen (nur simuliert, kein Personalsystem, keine Benachrichtigung) und seine Fälle öffnen.
+*Wenn die Zeit knapp wird:* Schritt 7 und 8 weglassen. Das Drehbuch (Schritte 2 bis 10) deckt alles ab, nur die Reihenfolge ist leicht anders.
 
 ### 3:30–4:15 · Arbeit mit dem Agenten
-**Dateien:** [02 Technik](02-produktbrille-und-technik.md#technik-und-umfang), [CLAUDE.md](../CLAUDE.md), [Spec](superpowers/specs/2026-09-30-der-ausfall-design.md), [Plan](superpowers/plans/2026-09-30-der-ausfall.md)
+**Seite:** [2 Technik und Umfang](02-produktbrille-und-technik.md#technik-und-umfang) · **Zeigen:** [CLAUDE.md](../CLAUDE.md), [Spec](superpowers/specs/2026-09-30-der-ausfall-design.md), [Plan](superpowers/plans/2026-09-30-der-ausfall.md)
 
-- Erst Problem und Daten, dann Design in Abschnitten mit meiner Freigabe, dann Spec und Plan, dann TDD in Worktrees.
-- Wo ich dem Agenten widersprochen habe: Priorisierung, Termino-Schreibzugriff, Verlängern als Soll.
-- Wo der Agent mir widersprochen hat: klinische Dringlichkeit, Fristen, Vorschläge gemeinsam berechnen statt pro Fall einzeln.
-- Die Playwright-Fälle sind zugleich das Drehbuch.
+- Erst Problem und Daten, dann Design in Abschnitten mit meiner Freigabe, dann Spec, Plan und TDD in Worktrees.
+- Ich habe widersprochen bei Priorisierung, Termino-Schreibzugriff und Verlängern. Der Agent bei klinischer Dringlichkeit, Fristen und gemeinsamen Vorschlägen.
+- 32 Playwright-Tests, je Loom-Fall einer, dazu das Drehbuch.
 
-### 4:15–5:00 · Annahmen, Weggelassenes, Skalierung
-**Dateien:** [03 Architektur](03-architektur-annahmen.md), [README, Annahmen](../README.md#annahmen), [README, Bewusst weggelassen](../README.md#bewusst-weggelassen), [ARCHITECTURE.md](../ARCHITECTURE.md), [04 Todos](04-todos-und-naechste-schritte.md)
+### 4:15–5:00 · Annahmen, Skalierung, nächste Schritte
+**Seiten:** [3 Architektur](03-architektur-annahmen.md), [4 Todos](04-todos-und-naechste-schritte.md) · **Zeigen:** [README, Annahmen](../README.md#annahmen), [ARCHITECTURE.md](../ARCHITECTURE.md)
 
-- Wichtigste Annahme: Termino hat eine Schreib-API. Weggelassen: echter Versand, Selbstbuchungsseite, Warteliste, Auth.
-- 100+ Praxen: gemeinsame DB mit `tenant_id` und Row-Level-Security, Adapter pro Buchungstool mit Inbox/Outbox, Autopilot zustandslos mit Regeln pro Mandant, Benachrichtigungsservice, DSGVO.
+- Wichtigste Annahme: Termino hat eine Schreib-API (gemockt). Weggelassen: echter Versand, Selbstbuchungsseite, Warteliste, Auth.
+- 100+ Praxen: gemeinsame DB mit `tenant_id` und Row-Level-Security, Adapter pro Buchungstool, zustandsloser Autopilot mit Regeln pro Mandant, eigener Benachrichtigungsservice, DSGVO.
+- CI ist geschrieben. Das Notfallkonzept ist erstellt.
 - Nächste Schritte: Authentifizierung für Kunde, Mitarbeiter und Admin, Nachbelegung, Opt-in, Kennzahlen.
+
+## Das Besondere an der Lösung (zum Nennen, nicht alles zeigen)
+
+Wenn die Zeit knapp ist, reichen diese vier: **Fristen der Verordnung**, **gemeinsame Vorschläge**, **Datenbank-Schutz vor Doppelbuchung** und **Playwright**.
+
+**Produkt, für den Empfang**
+- **Anrufreihenfolge („Autopilot“)**, dazu Sortierung nach Uhrzeit. Termine unter 60 Minuten zuerst.
+- **Begründeter Vorschlag je Fall** mit bis zu zwei Alternativen, „✓ gleiche Uhrzeit“ und Auswahl aus allen freien Slots.
+- **Gemeinsame Berechnung:** nie zwei Personen derselbe vorgeschlagene Slot.
+- **Fristen der Heilmittel-Richtlinie** (Behandlungsbeginn 28 Tage, Unterbrechung 14 Tage) bestimmen die Priorität.
+- **Ersatzlos absagen**, wenn der nächste Termin nah ist, und **Absagen mit Link** zur Selbstbuchung.
+- **Datenprobleme werden sichtbar:** Doppelbuchung, unsicherer Treffer mit **Zusammenführen**, fehlende Stammdaten, keine Telefonnummer. Diagnosegruppen im Klartext, Quelle im Tooltip.
+- **Outbox:** SMS und E-Mail werden erzeugt (simuliert).
+- **Termino-Export 08:00 ↔ 08:05**, automatische Aktualisierung alle 5 Minuten mit Countdown, „Jetzt aktualisieren“.
+- **Selbstbuchung wird erkannt:** „✓ selbst gebucht, kein Anruf nötig“.
+- **Krankmeldung verlängern** und **Übersicht aller Ausfälle** mit simuliertem neuem Ausfall.
+- **Notfallliste zum Drucken** für den IT-Ausfall.
+- **Design** wie das meinphysio+-Buchungstool.
+
+**Zuverlässigkeit und Technik**
+- **Datenbank-Überschneidungsschutz** (Exclusion Constraint): kein Slot wird zweimal gebucht. Doppelklick bucht nur einmal, der zweite Aufruf bekommt 409.
+- **Autopilot als reine Funktion:** Er rechnet bei jedem Abruf neu, gespeichert werden nur Entscheidungen.
+- **`TerminoClient` als Schnittstelle** (heute Mock, später echter Adapter), **Outbox-Muster** für Nachrichten.
+- **UTC speichern, Berliner Zeit anzeigen.** TypeScript, Postgres, React, Start mit `docker compose up` (mit Healthcheck).
+- **Demo wiederholbar:** Seed beim Start und Button „Demo zurücksetzen“.
+
+**Qualität und Arbeitsweise**
+- **51 Unit-, 23 Integrations- und 32 Playwright-Tests.**
+- **Playwright:** je Loom-Fall ein Test, dazu ein **Drehbuch mit langsamen Klicks** (`test:drehbuch`), der **UI-Modus** zum Wählen einzelner Schritte (`test:ui`), Video und Trace, simulierte Uhr für den 5-Minuten-Refresh.
+- **TDD**, ein Worktree pro Feature, Review vor jedem Merge, Mutationstests für die Verteilung der Slots.
+- **CI-Workflow** (geschrieben, nie gelaufen), `npm audit` ohne Funde, Dependabot, gitleaks.
+- **Dokumentation:** Spec, Plan, [ARCHITECTURE.md](../ARCHITECTURE.md) (100+ Praxen, Rollen für Auth), Planungsphase in Einzelseiten, benannte Grenzen.
+
+**Ehrlich nennen:** Die Zeit-hebt-Stufe-Regel ist beschlossen, aber nicht gebaut. Die Ziffernbedeutung der Diagnosegruppen ist nicht gegen die Primärquelle geprüft. Die CI ist nie gelaufen. „Rückgängig“ und Authentifizierung fehlen, das Notfallkonzept ist ein Entwurf.
 
 ## Loom-Abschnitt → Playwright-Test
 
 | Loom | Test in [e2e/tests/faelle.spec.ts](../e2e/tests/faelle.spec.ts) |
 |---|---|
 | Problem | Überblick: 14 Fälle, Anrufreihenfolge … |
-| Produktbrille | Frist: Cem und Renate …, Gleiche Uhrzeit: Kerstin …, Ersatzlos absagen: Jan …, Sortierung nach Uhrzeit |
-| Datenfallen | Doppelbuchung: Marek …, Unsicherer Treffer: Katrin …, Stammdaten fehlen: Lena …, Keine Telefonnummer: Gisela … |
-| Live | Toggle 08:05 …, Selbstbuchung …, Countdown …, Krankmeldung verlängern …, Doppelklick … |
-
+| Live (Datenfallen, Produktbrille, Demo) | Frist: Cem und Renate …, Gleiche Uhrzeit: Kerstin …, Ersatzlos absagen: Jan …, Sortierung nach Uhrzeit, Doppelbuchung: Marek …, Unsicherer Treffer: Katrin …, Stammdaten fehlen: Lena …, Keine Telefonnummer: Gisela …, Toggle 08:05 …, Selbstbuchung …, Countdown …, Krankmeldung verlängern …, Doppelklick … |

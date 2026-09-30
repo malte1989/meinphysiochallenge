@@ -1,26 +1,27 @@
 # Todos und nächste Schritte
 
-[Übersicht](planungsphase.md) · [1 Problem und Daten](01-problem-und-daten.md) · [2 Produktbrille und Technik](02-produktbrille-und-technik.md) · [3 Architektur](03-architektur-annahmen.md) · [4 Todos](04-todos-und-naechste-schritte.md) · [5 Loom](05-loom-leitfaden.md)
+[Übersicht](planungsphase.md) · [1 Problem und Daten](01-problem-und-daten.md) · [2 Produktbrille und Technik](02-produktbrille-und-technik.md) · [3 Architektur](03-architektur-annahmen.md) · [4 Todos](04-todos-und-naechste-schritte.md) · [5 Loom](05-loom-leitfaden.md) · [6 Hintergrund](06-hintergrund-rueckfragen.md)
 
 Was im Gespräch genannt wurde, mit Status. Die kurze Fassung für Leser:innen steht in der [README, Abschnitt „Nächste Schritte“](../README.md#nächste-schritte).
 
 Status: ✅ erledigt, 🔜 als Nächstes, ⬜ offen.
 
-Stand: 22:30.
+Stand: 23:50.
 
 | Todo | Wer | Status | Hinweis |
 |---|---|---|---|
-| Playwright-Testfälle für die wichtigsten Fälle (**Prio**) | [Du] | ✅ | 14 Fälle, je ein Test pro Loom-Fall, Video und Trace sind an |
+| Playwright-Testfälle für die wichtigsten Fälle (**Prio**) | [Du] | ✅ | 32 Tests, je ein Test pro Loom-Fall plus Drehbuch (`npm run test:drehbuch`, `npm run test:ui`), Video und Trace sind an |
 | Krankmeldung verlängern (falls Anna mittags nicht besser) | [Du] | ✅ | Button „Krankmeldung verlängern“, Entscheidungen bleiben, Reset nimmt sie zurück |
 | Countdown und automatischer Refresh alle 5 Minuten | [Du] | ✅ | per Playwright mit vorgespielter Uhr getestet |
 | Übersichtsseite aller Ausfälle, „zurück“ dorthin, neuen Ausfall einer anderen Person anlegen (**nur gemockt**) | [Du] | ✅ | eigene Seite `#/ausfaelle`, Hauptseite bleibt unverändert; Anlegen erzeugt nur einen Datensatz |
 | Button „Demo: Patient:in bucht selbst“ | [Claude] | ✅ | zeigt „✓ selbst gebucht, kein Anruf nötig“, auch nach „Absagen mit Link“ |
 | Notfallliste (druckbar) und IT-Notfallkonzept / Rollback | [Du] | ✅ teilweise | Notfallliste gebaut (`/#druck`), Konzept nur als Entwurf in der README, **„Rückgängig“/Rollback nicht gebaut** |
 | `data/diagnosegruppen.json` mit belegter Quelle (ICD-10, heilmittelkatalog.de) | [Du] | ✅ teilweise | Gruppenbezeichnung belegt (Zweitquelle), **Ziffernbedeutung nicht gegen G-BA-Primärquelle geprüft**, ICD-10-Zuordnung nicht erhoben; Status steht je Eintrag in der Datei |
-| CI mit GitHub Actions, `npm audit`, Security-Scans | [Du] | ✅ teilweise | Workflow und Dependabot geschrieben und lokal validiert, **nie auf GitHub gelaufen**; `npm audit` 0 Schwachstellen | lokal bereits geprüft: `npm audit` meldet 0 Schwachstellen |
+| CI mit GitHub Actions, `npm audit`, Security-Scans | [Du] | ✅ teilweise | Workflow und Dependabot geschrieben und lokal validiert, **nie auf GitHub gelaufen**; lokal meldet `npm audit` 0 Schwachstellen |
 | Sicherheits-Ergänzungen: gitleaks, Dependabot, Trivy (Image), hadolint | [Claude] | ✅ teilweise | gitleaks und Dependabot drin, Trivy und hadolint nicht |
 | Accessibility-Check mit axe in den Playwright-Tests | [Claude] | ⬜ | für den hektischen Empfang sinnvoll |
-| **Design an das meinphysio+-Buchungstool angleichen** (Referenz: [Terminanfrage](https://patient.meinphysioplus.de/terminanfrage), erst nach dem Zurücksetzen des Limits um 23:50) | [Du] | ✅ | Branch `feature/design`: Tokens aus dem Tailwind-Theme des Buchungstools, rechte Seitenleiste, Karten und Pillen; nur Optik, alle 32 Playwright-Tests unverändert grün. Screenshots für den Loom noch offen |
+| **Zeit hebt die Stufe an** (Termine unter 1 Stunde mindestens „Hoch“, Frist bleibt darüber) | [Du] | ⬜ beschlossen | im Loom ehrlich als „noch nicht gebaut“ sagen; klein, zwei Tests. Offen: Stufe „Prüfen“ (Lena), gemeinsame Einstellung des Grenzwerts mit dem 60-Minuten-Fenster der Anrufreihenfolge |
+| **Design an das meinphysio+-Buchungstool angleichen** (Referenz: [Terminanfrage](https://patient.meinphysioplus.de/terminanfrage)) | [Du] | ✅ | Branch `feature/design`: Tokens aus dem Tailwind-Theme des Buchungstools, rechte Seitenleiste, Karten und Pillen; nur Optik, alle 32 Playwright-Tests unverändert grün. Screenshots für den Loom noch offen |
 | **Bruno-Requests** als Collection im Repo (`bruno/`) für alle API-Endpunkte | [Du] | ⬜ | git-freundlich, dient zum Ausprobieren und Demonstrieren der API; Umgebung `local` mit `http://localhost:3000` |
 | Ausführungsmethode des Plans | [Du] | ✅ | Native, vor jedem Merge Tests und Diff-Review |
 

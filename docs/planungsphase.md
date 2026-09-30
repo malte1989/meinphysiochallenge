@@ -9,6 +9,7 @@ Entscheidungsspur von der Aufgabe bis zum Prototyp. Jede Datei ist für sich les
 | [03 Architektur: Annahmen und Entscheidungen](03-architektur-annahmen.md) | Annahmen mit „was gilt, wenn falsch“, Entscheidungen im Prototyp, Zielbild für 100+ Praxen |
 | [04 Todos und nächste Schritte](04-todos-und-naechste-schritte.md) | alles, was genannt wurde, mit Status, dazu Ideen und offene Produktfragen |
 | [05 Loom-Leitfaden](05-loom-leitfaden.md) | Ablauf in 5 Minuten mit Notizen und Verweisen auf die Dateien |
+| [06 Hintergrund für Rückfragen](06-hintergrund-rueckfragen.md) | Details für das Gespräch: Toggle 08:05, Schutzebenen, Fristen, offene Punkte |
 
 Weitere Dokumente:
 
