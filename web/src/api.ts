@@ -28,5 +28,6 @@ export const api = {
     req<{ ok: true }>('POST', `/api/patienten/${patientId}/verknuepfen`, { terminoPatientId }),
   outbox: () => req<OutboxEintrag[]>('GET', '/api/outbox'),
   setExport: (stand: '0800' | '0805') => req<{ stand: string; konflikte: string[] }>('POST', '/api/sim/export', { stand }),
+  selbstbuchung: (appointmentId: string) => req<{ neuerTerminId: string }>('POST', '/api/sim/selbstbuchung', { appointmentId }),
   reset: () => req<{ ok: true }>('POST', '/api/sim/reset'),
 };

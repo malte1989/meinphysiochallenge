@@ -4,9 +4,15 @@ import type { FastifyInstance } from 'fastify';
 import type { Pool } from 'pg';
 import { z } from 'zod';
 import { config } from '../config.js';
+import { runAutopilot } from '../domain/autopilot.js';
+import { freieSlots } from '../domain/slots.js';
+import { aktuellerAusfallId, loadInput } from '../repo/load.js';
+import { ConflictError } from '../termino/client.js';
+import { MockTerminoClient } from '../termino/mock.js';
 import { applySnapshot } from '../termino/snapshot.js';
 
 const exportBody = z.object({ stand: z.enum(['0800', '0805']) });
+const selbstBody = z.object({ appointmentId: z.string().min(1) });
 
 export function simRoutes(app: FastifyInstance, pool: Pool) {
   app.get('/api/sim/export', async () => ({ stand: (await pool.query('select stand from termino.sim_state')).rows[0]?.stand ?? null }));
@@ -26,5 +32,32 @@ export function simRoutes(app: FastifyInstance, pool: Pool) {
       [patienten.map((p) => p.id), patienten.map((p) => p.termino_patient_id)]);
     const r = await applySnapshot(pool, '0800');
     return { ok: true, konflikte: r.konflikte };
+  });
+
+  /** Demo: Die Patient:in bucht über den Link selbst einen Slot (source=patient) und storniert den alten Termin. */
+  app.post('/api/sim/selbstbuchung', async (req, reply) => {
+    const { appointmentId } = selbstBody.parse(req.body);
+    const ausfallId = await aktuellerAusfallId(pool);
+    if (!ausfallId) return reply.code(404).send({ fehler: 'nicht_gefunden' });
+    const input = await loadInput(pool, ausfallId);
+    const fall = runAutopilot(input).find((f) => f.appointment.id === appointmentId);
+    if (!fall) return reply.code(404).send({ fehler: 'nicht_gefunden' });
+    if (fall.status === 'selbst_gebucht' || fall.status === 'umgebucht') return reply.code(409).send({ fehler: 'bereits_entschieden' });
+    const slot = fall.vorschlag ?? freieSlots(fall, input, [])[0];
+    if (!slot) return reply.code(409).send({ fehler: 'kein_slot' });
+    const at = new Date(Date.parse(config.now) + 5 * 60_000).toISOString();
+    const termino = new MockTerminoClient(pool);
+    const a = fall.appointment;
+    try {
+      const neu = await termino.book({
+        locationId: slot.locationId, practitionerId: slot.practitionerId, service: a.service, startsAt: slot.startsAt,
+        durationMin: a.durationMin, patient: a.patient, source: 'patient', at,
+      });
+      if (a.status === 'booked') await termino.cancel(a.id, at);
+      return { neuerTerminId: neu.id };
+    } catch (e) {
+      if (e instanceof ConflictError) return reply.code(409).send({ fehler: 'slot_belegt' });
+      throw e;
+    }
   });
 }

@@ -140,3 +140,10 @@ test('Krankmeldung verlängern: geht es Anna mittags nicht besser, kommen ihre T
   await expect(page.getByTestId('fall')).not.toHaveCount(14);
   await expect(page.locator('.karte-kopf .tag', { hasText: 'Di 08.09.' }).first()).toBeVisible();
 });
+
+test('Selbstbuchung: bucht Cem selbst, ist kein Anruf mehr nötig', async ({ page }) => {
+  const k = karte(page, 'Cem Oeztuerk');
+  await k.getByRole('button', { name: 'Demo: Patient:in bucht selbst' }).click();
+  await expect(k.locator('.status')).toHaveText('✓ selbst gebucht, kein Anruf nötig');
+  await expect(page.getByText('13 offen')).toBeVisible();
+});

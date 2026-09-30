@@ -58,3 +58,14 @@ describe('Stufe und Empfehlung', () => {
     expect(m1.naechsterTermin).toBeNull();
   });
 });
+
+describe('selbst gebucht', () => {
+  test('nach „Absagen mit Link“ gilt der Fall als selbst gebucht, sobald die Patient:in neu gebucht hat', () => {
+    const inp = loadFixtureInput();
+    const cem = findeFaelle(inp).find((a) => a.patient.name === 'Cem Oeztuerk')!;
+    inp.entscheidungen.push({ appointmentId: cem.id, aktion: 'abgesagt_mit_link', neuerTerminId: null, createdAt: inp.jetzt });
+    expect(reichereAn(cem, inp).status).toBe('abgesagt');
+    inp.appointments.push({ ...cem, id: 'apt_selbst', startsAt: '2026-09-08T08:00:00Z', source: 'patient', bookedAt: '2026-09-07T05:50:00Z', updatedAt: '2026-09-07T05:50:00Z' });
+    expect(reichereAn(cem, inp).status).toBe('selbst_gebucht');
+  });
+});
