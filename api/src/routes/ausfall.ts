@@ -1,3 +1,5 @@
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import type { FastifyInstance } from 'fastify';
 import type { Pool } from 'pg';
 import { z } from 'zod';
@@ -33,5 +35,11 @@ export function ausfallRoutes(app: FastifyInstance, pool: Pool) {
     if (new Date(bis) <= new Date(rows[0].von)) return reply.code(400).send({ fehler: 'bis_vor_beginn' });
     await pool.query('update ausfall.ausfall set bis=$2 where id=$1', [id, bis]);
     return { ok: true };
+  });
+
+  /** Diagnosegruppen mit Klartext und Quellen (data/diagnosegruppen.json), als Map nach Kürzel. */
+  app.get('/api/diagnosegruppen', async () => {
+    const liste: { code: string }[] = JSON.parse(readFileSync(join(config.dataDir, 'diagnosegruppen.json'), 'utf8'));
+    return Object.fromEntries(liste.map((g) => [g.code, g]));
   });
 }

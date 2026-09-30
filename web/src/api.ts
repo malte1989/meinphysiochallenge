@@ -1,4 +1,4 @@
-import type { AusfallInfo, FaelleAntwort, OutboxEintrag, SlotMitReservierung } from './types';
+import type { AusfallInfo, Diagnosegruppe, FaelleAntwort, OutboxEintrag, SlotMitReservierung } from './types';
 
 export class ApiError extends Error {
   constructor(public status: number, public fehler: string) { super(fehler); }
@@ -18,6 +18,7 @@ async function req<T>(method: string, url: string, body?: unknown): Promise<T> {
 export const api = {
   ausfallListe: () => req<AusfallInfo[]>('GET', '/api/ausfall'),
   verlaengern: (id: string, bis: string) => req<{ ok: true }>('PATCH', `/api/ausfall/${id}`, { bis }),
+  diagnosegruppen: () => req<Record<string, Diagnosegruppe>>('GET', '/api/diagnosegruppen'),
   faelle: (id: string) => req<FaelleAntwort>('GET', `/api/ausfall/${id}/faelle`),
   slots: (appointmentId: string) => req<SlotMitReservierung[]>('GET', `/api/faelle/${appointmentId}/slots`),
   umbuchen: (appointmentId: string, practitionerId: string, startsAt: string) =>
