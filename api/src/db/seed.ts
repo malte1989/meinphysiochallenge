@@ -4,7 +4,9 @@ import type { Pool } from 'pg';
 import { config } from '../config.js';
 import { pool } from './pool.js';
 
-const ANNA_ID = '2a3bbf28-bd84-438e-91ca-604f8cd93fb2';
+export const ANNA_ID = '2a3bbf28-bd84-438e-91ca-604f8cd93fb2';
+/** Feste ID des Ausfalls aus dem Fall, damit Reset und Links stabil bleiben. */
+export const SEED_AUSFALL_ID = '5a1e0000-0000-4000-8000-00000000a001';
 const WOCHENTAG: Record<string, number> = { mo: 1, di: 2, mi: 3, do: 4, fr: 5 };
 
 const read = (name: string) => JSON.parse(readFileSync(join(config.dataDir, name), 'utf8'));
@@ -54,6 +56,6 @@ export async function seed(): Promise<void> {
     await p.query(`insert into termino.sim_state values (1,'0800') on conflict do nothing`);
   }
   if (await isEmpty(p, 'ausfall.ausfall')) {
-    await p.query('insert into ausfall.ausfall values (gen_random_uuid(),$1,$2,$3,$4)', [ANNA_ID, '2026-09-06T22:00:00Z', '2026-09-07T22:00:00Z', config.now]);
+    await p.query('insert into ausfall.ausfall (id, therapeut_id, von, bis, created_at) values ($1,$2,$3,$4,$5)', [SEED_AUSFALL_ID, ANNA_ID, '2026-09-06T22:00:00Z', '2026-09-07T22:00:00Z', config.now]);
   }
 }

@@ -4,9 +4,10 @@ import type { FastifyInstance } from 'fastify';
 import type { Pool } from 'pg';
 import { z } from 'zod';
 import { config } from '../config.js';
+import { ANNA_ID, SEED_AUSFALL_ID } from '../db/seed.js';
 import { runAutopilot } from '../domain/autopilot.js';
 import { freieSlots } from '../domain/slots.js';
-import { aktuellerAusfallId, loadInput } from '../repo/load.js';
+import { inputFuerTermin } from '../repo/load.js';
 import { ConflictError } from '../termino/client.js';
 import { MockTerminoClient } from '../termino/mock.js';
 import { applySnapshot } from '../termino/snapshot.js';
@@ -22,7 +23,10 @@ export function simRoutes(app: FastifyInstance, pool: Pool) {
   /** Setzt die Demo zurück: Entscheidungen, Outbox, Verlängerung der Krankmeldung, eigene Buchungen, Verknüpfungen, Exportstand 08:00. */
   app.post('/api/sim/reset', async () => {
     await pool.query('truncate ausfall.entscheidung, ausfall.outbox');
-    await pool.query(`update ausfall.ausfall set bis = '2026-09-07T22:00:00Z'`);
+    await pool.query('delete from ausfall.ausfall where id <> $1', [SEED_AUSFALL_ID]);
+    await pool.query(
+      `insert into ausfall.ausfall (id, therapeut_id, von, bis, created_at) values ($1,$2,'2026-09-06T22:00:00Z','2026-09-07T22:00:00Z',$3)
+       on conflict (id) do update set bis = excluded.bis`, [SEED_AUSFALL_ID, ANNA_ID, config.now]);
     await pool.query(`delete from termino.appointment where source <> 'export'`);
     const patienten: { id: string; termino_patient_id: string | null }[] = JSON.parse(readFileSync(join(config.dataDir, 'patienten.json'), 'utf8'));
     await pool.query(
@@ -37,9 +41,9 @@ export function simRoutes(app: FastifyInstance, pool: Pool) {
   /** Demo: Die Patient:in bucht über den Link selbst einen Slot (source=patient) und storniert den alten Termin. */
   app.post('/api/sim/selbstbuchung', async (req, reply) => {
     const { appointmentId } = selbstBody.parse(req.body);
-    const ausfallId = await aktuellerAusfallId(pool);
-    if (!ausfallId) return reply.code(404).send({ fehler: 'nicht_gefunden' });
-    const input = await loadInput(pool, ausfallId);
+    const ctx = await inputFuerTermin(pool, appointmentId);
+    if (!ctx) return reply.code(404).send({ fehler: 'nicht_gefunden' });
+    const { input } = ctx;
     const fall = runAutopilot(input).find((f) => f.appointment.id === appointmentId);
     if (!fall) return reply.code(404).send({ fehler: 'nicht_gefunden' });
     if (fall.status === 'selbst_gebucht' || fall.status === 'umgebucht') return reply.code(409).send({ fehler: 'bereits_entschieden' });

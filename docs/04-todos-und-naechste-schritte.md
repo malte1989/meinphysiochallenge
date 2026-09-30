@@ -13,6 +13,7 @@ Stand: 22:30.
 | Playwright-Testfälle für die wichtigsten Fälle (**Prio**) | [Du] | ✅ | 14 Fälle, je ein Test pro Loom-Fall, Video und Trace sind an |
 | Krankmeldung verlängern (falls Anna mittags nicht besser) | [Du] | ✅ | Button „Krankmeldung verlängern“, Entscheidungen bleiben, Reset nimmt sie zurück |
 | Countdown und automatischer Refresh alle 5 Minuten | [Du] | ✅ | per Playwright mit vorgespielter Uhr getestet |
+| Übersichtsseite aller Ausfälle, „zurück“ dorthin, neuen Ausfall einer anderen Person anlegen (**nur gemockt**) | [Du] | ✅ | eigene Seite `#/ausfaelle`, Hauptseite bleibt unverändert; Anlegen erzeugt nur einen Datensatz |
 | Button „Demo: Patient:in bucht selbst“ | [Claude] | ✅ | zeigt „✓ selbst gebucht, kein Anruf nötig“, auch nach „Absagen mit Link“ |
 | Notfallliste (druckbar) und IT-Notfallkonzept / Rollback | [Du] | ✅ teilweise | Notfallliste gebaut (`/#druck`), Konzept nur als Entwurf in der README, **„Rückgängig“/Rollback nicht gebaut** |
 | `data/diagnosegruppen.json` mit belegter Quelle (ICD-10, heilmittelkatalog.de) | [Du] | ✅ teilweise | Gruppenbezeichnung belegt (Zweitquelle), **Ziffernbedeutung nicht gegen G-BA-Primärquelle geprüft**, ICD-10-Zuordnung nicht erhoben; Status steht je Eintrag in der Datei |

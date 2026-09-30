@@ -29,3 +29,5 @@ export interface Diagnosegruppe {
   code: string; kurz: string; bezeichnung: string; ziffer_hinweis: string | null; quellen: string[];
   verifikation: { gruppe: string; ziffer: string }; hinweis: string;
 }
+export interface AusfallZeile extends AusfallInfo { anzahl: number; offen: number }
+export interface Therapeut { id: string; name: string; qualifikationen: string[] }

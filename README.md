@@ -54,6 +54,7 @@ Unter Zeitdruck muss der Empfang für jeden Termin entscheiden (umbuchen, absage
 - **Selbstbuchung** (Demo-Button „Patient:in bucht selbst“): Der Fall gilt als „✓ selbst gebucht, kein Anruf nötig“, auch nach „Absagen mit Link“.
 - **Krankmeldung verlängern** (bis Di, Mi oder Fr): Annas Termine der Folgetage kommen als Fälle dazu, bestehende Entscheidungen bleiben.
 - **Diagnosegruppen im Klartext** als Chip (z. B. „EX2 · Extremitäten“), Quellen und Prüfstatus im Tooltip ([data/diagnosegruppen.json](data/diagnosegruppen.json)).
+- **Übersicht aller Ausfälle** (`#/ausfaelle`, Button „← Alle Ausfälle“): zeigt je Ausfall betroffene und offene Termine und erlaubt, den **Ausfall einer weiteren Person anzulegen** (nur simuliert: ein Datensatz, keine Anbindung an ein Personalsystem, keine Benachrichtigung).
 - **Notfallliste** zum Drucken (`/#druck`), siehe [IT-Notfallkonzept](#it-notfallkonzept-entwurf-nicht-geübt).
 
 ## Was in den Daten steckt (per Code geprüft)
@@ -133,7 +134,7 @@ Echte Seite zur Selbstbuchung, echter Versand von SMS und E-Mail, Warteliste und
 
 ## Wo ich abgebrochen habe
 
-Der Kern ist fertig und getestet: 51 Unit-Tests, 17 Integrationstests und 30 Playwright-Tests laufen grün (frischer Start mit `docker compose down -v && docker compose up --build`), `npm audit` meldet für `api`, `web` und `e2e` keine Schwachstellen.
+Der Kern ist fertig und getestet: 51 Unit-Tests, 23 Integrationstests und 32 Playwright-Tests laufen grün (frischer Start mit `docker compose down -v && docker compose up --build`), `npm audit` meldet für `api`, `web` und `e2e` keine Schwachstellen.
 
 Nicht erledigt oder nicht geprüft:
 - Die **CI-Pipeline ist noch nie gelaufen** (siehe oben).

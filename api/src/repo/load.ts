@@ -1,13 +1,19 @@
 import type { Pool } from 'pg';
 import { config } from '../config.js';
+import { findeFaelle } from '../domain/enrich.js';
 import type { AutopilotInput, Heilmittel } from '../domain/types.js';
 import { MockTerminoClient } from '../termino/mock.js';
 
 const iso = (d: Date) => d.toISOString();
 
-export async function aktuellerAusfallId(pool: Pool): Promise<string | null> {
-  const { rows } = await pool.query('select id from ausfall.ausfall order by created_at desc limit 1');
-  return rows[0]?.id ?? null;
+/** Findet den Ausfall, zu dem ein Termin als betroffener Fall gehört (neuester zuerst), samt geladenen Eingaben. */
+export async function inputFuerTermin(pool: Pool, appointmentId: string): Promise<{ ausfallId: string; input: AutopilotInput } | null> {
+  const { rows } = await pool.query('select id from ausfall.ausfall order by nr desc');
+  for (const r of rows) {
+    const input = await loadInput(pool, r.id);
+    if (findeFaelle(input).some((a) => a.id === appointmentId)) return { ausfallId: r.id, input };
+  }
+  return null;
 }
 
 export async function loadInput(pool: Pool, ausfallId: string): Promise<AutopilotInput> {

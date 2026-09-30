@@ -14,3 +14,12 @@ export const PRAXIS: Record<string, string> = { loc_01: 'Mitte', loc_02: 'Kreuzb
 
 export const STUFE_LABEL = { frist: 'Frist', hoch: 'Hoch', normal: 'Normal', pruefen: 'Prüfen' } as const;
 export const LEISTUNG: Record<string, string> = { KG: 'Krankengymnastik', MT: 'Manuelle Therapie', MLD45: 'Lymphdrainage 45', KGG: 'Geräte-KG' };
+
+const berlinTag = new Intl.DateTimeFormat('en-CA', { timeZone: TZ, year: 'numeric', month: '2-digit', day: '2-digit' });
+/** Kalendertag in Berlin als YYYY-MM-DD. */
+export const isoTag = (iso: string) => berlinTag.format(new Date(iso));
+/** Zeitraum eines Ausfalls („bis“ ist der Beginn des Folgetages), z. B. „Mo 07.09.“ oder „Mo 07.09. bis Di 08.09.“. */
+export const zeitraum = (von: string, bis: string) => {
+  const a = tag(von), b = tag(new Date(Date.parse(bis) - 60_000).toISOString());
+  return a === b ? a : `${a} bis ${b}`;
+};
